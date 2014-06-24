@@ -1,6 +1,6 @@
 var app = require('express')();
 
-app.get("/:id", function reply(req, res){
+app.get("/", function reply(req, res){
   res.send("42");
 });
 
