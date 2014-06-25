@@ -252,8 +252,21 @@ _types.AssignmentExpression = {
 _types.Identifier = {
   enter: function(n, c) {
 
-    // TODO bad design
+    // c.currentFlx.outputs.forEach(function(output) {
+
+    //   if ()
+
+    // })
+
+    // if (c.currentScope) // TODO if declared in this scope, don't register
     c.registerId(n);
+
+
+
+    if (n.name === "_rep") {
+      console.log(c.currentFlx);
+      // console.log(c.currentFlx);
+    }
   },
   leave: function(n, c) {
   }

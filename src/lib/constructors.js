@@ -162,6 +162,8 @@ FnScope.prototype.registerId = function(id) {
 
     var source = findVar(this, id.name);
 
+    console.log(">>>> ", source);
+
     // if (source) {
     //   // log.reg("Signature", id.name, "in", source.name);
     //   source.registerSign(id);

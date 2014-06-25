@@ -28,7 +28,7 @@ The server of problem #1 reply a constant value to every request.
 There isn't any variable used.
 
 
-The simplest program is in `examples/count1.js`.
+The source program is in `examples/count1.js` :
 
 ```
 var app = require('express')();
@@ -41,29 +41,30 @@ app.listen(8080);
 console.log(">> listening 8080");
 ```
 
-The compiled result is in `results/count1.js`:
+The compiled result is in `results/count1.js` :
+
 
 ```
-  var flx = require("flx");
-  var app = require('express')();
-  
-  app.get("/", function placeholder() {
-    return flx.start(flx.m("reply", {
-      _args: arguments,
-      _sign: {}
-    }));
-  });
-  
-  app.listen(8080);
-  console.log(">> listening 8080");
+var flx = require("flx");
+var app = require('express')();
+
+app.get("/", function placeholder() {
+  return flx.start(flx.m("reply", {
+    _args: arguments,
+    _sign: {}
+  }));
+});
+
+app.listen(8080);
+console.log(">> listening 8080");
 
 // reply >> ø
 
-  flx.register("reply", function capsule(msg) {
-      (function reply(req, res) {
-        res.send("42");
-      }).apply(this, msg._args);
-  });
+flx.register("reply", function capsule(msg) {
+    (function reply(req, res) {
+      res.send("42");
+    }).apply(this, msg._args);
+});
 ```
 
 Output fluxion should be ...
@@ -74,6 +75,7 @@ Output fluxion should be ...
 The server of problem #2 reply a constant value to every request, using a variable declared inside the reply function.
 This variable shouldn't be exchanged between fluxions, as it's declared and used in the same function.
 
+The source program is in `examples/count2.js`
 
 ```
 var app = require('express')();
@@ -87,8 +89,32 @@ app.listen(8080);
 console.log(">> listening 8080");
 ```
 
-The compiled result is in `results/count2.js`
+The compiled result is in `results/count2.js`  :
 
+
+```
+var flx = require("flx");
+var app = require('express')();
+
+app.get("/", function placeholder() {
+  return flx.start(flx.m("reply", {
+    _args: arguments,
+    _sign: {}
+  }));
+});
+
+app.listen(8080);
+console.log(">> listening 8080");
+
+// reply >> ø
+
+flx.register("reply", function capsule(msg) {
+    (function reply(req, res) {
+      var _rep = "42";
+      res.send(_rep);
+    }).apply(this, msg._args);
+});
+```
 
 
 # Problem #3
