@@ -6,5 +6,34 @@
   "dependencies": {
     "recast": "*"
   },
-  "engine": "node >= 0.10.0"
+  "devdependencies": {
+  	"mocha": "*"
+  },
+  "engine": "node >= 0.10.0",
+  "main": "src/index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "mocha",
+    "graph": "for i in graphs/*; do dot -Tpdf $i -o ${i/%.dot}.pdf; done;",
+    "compile": "for i in examples/*.js; do node src $i; done;",
+    "clean-pdf": "rm ./graphs/*.pdf; true",
+    "clean-dot": "rm ./graphs/*.dot; true",
+    "clean-res": "rm ./results/*.js; true",
+    "clean": "npm run-script clean-dot; npm run-script clean-pdf; npm run-script clean-res"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/etnbrd/flx-compiler.git"
+  },
+  "keywords": [
+    "Fluxion",
+    "Compiler"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/etnbrd/flx-compiler/issues"
+  },
+  "homepage": "https://github.com/etnbrd/flx-compiler"
 }

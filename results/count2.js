@@ -15,6 +15,7 @@ console.log(">> listening 8080");
 
 flx.register("reply", function capsule(msg) {
     (function reply(req, res) {
-      res.send("42");
+      var _rep = "42";
+      res.send(_rep);
     }).apply(this, msg._args);
 });
