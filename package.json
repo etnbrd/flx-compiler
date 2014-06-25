@@ -1,6 +1,6 @@
 {
-  "name": "blender",
-  "description": "A simple library to generate dependency graph from abstract syntax tree",
+  "name": "flx-compiler",
+  "description": "A compiler to transform javascript to execute on the fluxionnal execution model",
   "version": "0.0.1",
   "author": "Etienne Brodu <etn@etnbrd.com>",
   "dependencies": {
