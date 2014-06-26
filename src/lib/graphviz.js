@@ -117,11 +117,6 @@ function ctxToGraph(ctx, name) {
     })
 
     if (flx.outputs && flx.outputs.length > 0) flx.outputs.map(function(o) {
-
-
-    console.log(">>>>> HERE " + o.name + " <<<<<<");
-    console.log(o.params);
-
       _graph.edges.push({
         id: flx.name,
         to: o.name,
