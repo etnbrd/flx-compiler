@@ -4,10 +4,11 @@
   "version": "0.0.1",
   "author": "Etienne Brodu <etn@etnbrd.com>",
   "dependencies": {
-    "recast": "*"
+    "recast": "*",
   },
-  "devdependencies": {
-  	"mocha": "*"
+  "devDependencies": {
+  	"mocha": "*",
+    "express": "*"
   },
   "engine": "node >= 0.10.0",
   "main": "src/index.js",
