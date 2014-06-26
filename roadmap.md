@@ -67,12 +67,15 @@ flx.register("reply", function capsule(msg) {
 });
 ```
 
-Output fluxion should be ...
+The intermediary representation :
 
+![graph/count1](graphs/count1.pdf)
+
+TODO graphs
 
 # Problem #2
 
-The server of problem #2 reply a constant value to every request, using a variable declared inside the reply function.
+The server of problem #2 reply a constant value to every request, using a variable declared **inside** the reply function.
 This variable shouldn't be exchanged between fluxions, as it's declared and used in the same function.
 
 The source program is in `examples/count2.js`
@@ -121,6 +124,9 @@ flx.register("reply", function capsule(msg) {
 
 Same with a variable declared outside, and used inside a fluxion.
 This variable should be in the signature of this fluxion.
+
+The server of problem #3 reply a constant value to every request, using a variable declared **outside** the reply function.
+This variable shouldn't be exchanged between fluxions, as it's declared and used in the same function.
 
 
 # Problem #4

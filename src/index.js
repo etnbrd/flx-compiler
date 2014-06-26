@@ -5,7 +5,11 @@ var t = require("./lib/tools");
 
 var graphviz = require("./lib/graphviz");
 
-var compile = require("./compile");
+// var compile = require("./compile");
+var parse = require("recast").parse;
+var transform = require("./lib/transform");
+var link = require("./lib/link");
+var print = require("recast").print;
 
 var filename = process.argv[2];
 if (!filename) {
@@ -23,7 +27,10 @@ basename = basename[basename.length-1];
 // Enable logs;
 process.env.verbose = true;
 
-var res = compile(fs.readFileSync(filename).toString());
+var ast = parse(fs.readFileSync(filename).toString());
+var ctx = transform(ast);
+var res = link(ctx);
+
 t.writeFile(basename, res, "./results/");
 
 
@@ -46,57 +53,57 @@ t.writeFile(basename, res, "./results/");
 // }
 
 // GRAPHVIZ DISPLAY
-// var _graph = {
-//   nodes: [],
-//   edges: [],
-//   name: filename
-// }
+var _graph = {
+  nodes: [],
+  edges: [],
+  name: filename
+}
 
-// function toName(id) {
-//   return id.split('-')[0];
-// }
+function toName(id) {
+  return id.split('-')[0];
+}
 
-// for (var _flx in ctx._flx) { var flx = ctx._flx[_flx];
+for (var _flx in ctx._flx) { var flx = ctx._flx[_flx];
 
-//   _graph.nodes.push({
-//     name: toName(flx.name),
-//     id: flx.name
-//   })
+  _graph.nodes.push({
+    name: toName(flx.name),
+    id: flx.name
+  })
 
-//   if (flx.outputs && flx.outputs.length > 0) flx.outputs.map(function(o) {
-//     _graph.edges.push({
-//       id: flx.name,
-//       to: o.name,
-//       signature: o.signature
-//     })
-//   })
-// }
+  if (flx.outputs && flx.outputs.length > 0) flx.outputs.map(function(o) {
+    _graph.edges.push({
+      id: flx.name,
+      to: o.name,
+      signature: o.signature
+    })
+  })
+}
 
-// var graph = graphviz.toString.call(_graph);
-// t.writeFile(basename.replace(".js", ".dot"), graph, "./graphs/");
+var graph = graphviz.toString.call(_graph);
+t.writeFile(basename.replace(".js", ".dot"), graph, "./graphs/");
 
 
-// function displayCtx(ctx) {
+function displayCtx(ctx) {
 
-//   console.log("\n== Scopes ==");
+  console.log("\n== Scopes ==");
 
-//   ctx._scopes.forEach(function(scope) {
-//     console.log("  " + scope.name + "[" + (scope.parent ? scope.parent.name : "ø") + "]" + " // " + scope.flx.name);
-//   })
+  ctx._scopes.forEach(function(scope) {
+    console.log("  " + scope.name + "[" + (scope.parent ? scope.parent.name : "ø") + "]" + " // " + scope.flx.name);
+  })
 
-//   console.log("== Fluxions ==");
+  console.log("== Fluxions ==");
 
-//   for (var _flx in ctx._flx) { var flx = ctx._flx[_flx];
-//     console.log("\n" + flx.name + " >> " + ((flx.outputs.length) ? flx.outputs.map(function(o) {return o.name + " [" + Object.keys(o.signature) + "]"}).join(", ") : "ø") );
+  for (var _flx in ctx._flx) { var flx = ctx._flx[_flx];
+    console.log("\n" + flx.name + " >> " + ((flx.outputs.length) ? flx.outputs.map(function(o) {return o.name + " [" + Object.keys(o.signature) + "]"}).join(", ") : "ø") );
 
-//     flx.parents.forEach(function(parent) {
-//       // console.log(parent);
-//       if (parent.output.dest === flx)
-//         console.log(Object.keys(parent.output.signature));
-//     })
+    flx.parents.forEach(function(parent) {
+      // console.log(parent);
+      if (parent.output.dest === flx)
+        console.log(Object.keys(parent.output.signature));
+    })
 
-//     console.log(print(flx.ast));
-//   }
-// }
+    console.log(print(flx.ast).code);
+  }
+}
 
-// displayCtx(ctx);
+displayCtx(ctx);

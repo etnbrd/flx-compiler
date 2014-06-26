@@ -258,14 +258,29 @@ _types.Identifier = {
 
     // })
 
-    // if (c.currentScope) // TODO if declared in this scope, don't register
-    c.registerId(n);
+    if (!c.currentScope._var[n.name]) {
+      var source = c.registerId(n);
+
+      // If register said it's outside of scope, then replace futur occurence (in this fluxion) with msg._my_var_
+      if (source) {
+        if (!c.currentFlx.modifiers[n.name]) {
+          c.currentFlx.modifiers[n.name] = {
+            target : bld.signatureModifier(n.name)
+          }
+        }
+      }
+    }
 
 
 
-    if (n.name === "_rep") {
-      console.log(c.currentFlx);
-      // console.log(c.currentFlx);
+
+
+
+    // TODO Before modification, make sure, it's not in a MemberExpression
+    // For exemple, if the variable send is in the signature, we don't want to modify rep.send into rep.msg.send
+
+    if (c.currentFlx.modifiers[n.name]) {
+      return bld.signatureModifier(n.name);
     }
   },
   leave: function(n, c) {

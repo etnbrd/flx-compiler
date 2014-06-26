@@ -16,9 +16,10 @@
   },
   "scripts": {
     "test": "mocha",
-    "graph": "for i in graphs/*; do dot -Tpdf $i -o ${i/%.dot}.pdf; done;",
+    "graph": "for i in graphs/*; do dot -Tpng $i -o ${i/%.dot}.png; done;",
     "compile": "for i in examples/*.js; do node src $i; done;",
-    "clean-pdf": "rm ./graphs/*.pdf; true",
+    "all": "npm run-script compile && npm run-script graph",
+    "clean-pdf": "rm ./graphs/*.{pdf,png}; true",
     "clean-dot": "rm ./graphs/*.dot; true",
     "clean-res": "rm ./results/*.js; true",
     "clean": "npm run-script clean-dot; npm run-script clean-pdf; npm run-script clean-res"

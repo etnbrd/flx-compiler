@@ -15,6 +15,8 @@ module.exports = {
   register: register,
   start: startPlaceholder,
   post: postPlaceholder,
+
+  signatureModifier: signatureModifier,
 }
 
 
@@ -310,4 +312,16 @@ function register(name, fn) {
   }
 
   return _register(name, _capsule(fn))
+}
+
+function signatureModifier(name) {
+  return b.memberExpression(
+    b.identifier("msg"),
+    b.memberExpression(
+      b.identifier("_sign"),
+      b.identifier(name),
+      false
+    ),
+    false
+  )
 }

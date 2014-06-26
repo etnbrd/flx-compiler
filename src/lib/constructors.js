@@ -90,6 +90,7 @@ function FlxScope(name, ast) {
   this.name = name;
   this.ast = ast;
   this.outputs = [];
+  this.modifiers = {};
   this.parents = [];
 }
 
@@ -162,8 +163,6 @@ FnScope.prototype.registerId = function(id) {
 
     var source = findVar(this, id.name);
 
-    console.log(">>>> ", source);
-
     // if (source) {
     //   // log.reg("Signature", id.name, "in", source.name);
     //   source.registerSign(id);
@@ -176,6 +175,8 @@ FnScope.prototype.registerId = function(id) {
       log.use(id.name + log.grey(" // " + this.name));
       // throw errors.identifierConflict([id, this._ids[id.name]]);
     }
+
+    return source;
   }
 }
 
