@@ -187,7 +187,7 @@ _types.CallExpression = {
     
     // if (_c.id === "res.send") { // POSTERS
     //   var name = _c.id + "-" + h.salt();
-    //   c.enterFlx(name, bld.postFlx(name, n), "post");
+    //   c.enterFlx(name, bld.postFlx(name, n), n.params "post");
     //   c.enterScope(name);
     //   n._placeholder = {type: "Placeholder", name: name, kind: "post"};
     // }

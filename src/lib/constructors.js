@@ -33,7 +33,8 @@ Context.prototype.enterFlx = function(name, ast, type) {
   this._flxStack.push(_newFlx);
 
   if (type) {
-    var _out = new Output(name, type, _oldFlx, this.currentFlx);
+    var _out = new Output(name, type, ast.params, _oldFlx, this.currentFlx);
+
     _newFlx.registerParent(_oldFlx, _out);
     // if (_oldFlx) // TODO scope problem, resolved partially. There should always be an encapsulating Fluxion.
       _oldFlx.registerOutput(_out);
@@ -89,6 +90,7 @@ Context.prototype.registerOutput = function(output) {
 function FlxScope(name, ast) {
   this.name = name;
   this.ast = ast;
+  this.input = [];
   this.outputs = [];
   this.modifiers = {};
   this.parents = [];
@@ -194,9 +196,19 @@ FnScope.prototype.registerVar = function(_var) {
 // Output                                                                     //
 ////////////////////////////////////////////////////////////////////////////////
 
-function Output(name, type, sourceFlx, destFlx) {
+function Output(name, type, params, sourceFlx, destFlx) {
+
+
+  function formatParam(param) {
+    return {
+      ast: param,
+      name: param.name
+    }
+  }
+
   this.name = name;
   this.type = type;
+  this.params = params.map(formatParam);
   this.source = sourceFlx;
   this.dest = destFlx;
   this.signature = {};

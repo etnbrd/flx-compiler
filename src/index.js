@@ -33,11 +33,9 @@ var res = link(ctx);
 
 t.writeFile(basename, res, "./results/");
 
+var graph = graphviz.ctxToGraph(ctx, filename);
 
-
-
-// console.log("\n ============================================= ")
-
+t.writeFile(basename.replace(".js", ".dot"), graph, "./graphs/");
 
 // // SOURCE CODE DISPLAY
 // for (var _flx in ctx._flx) { var flx = ctx._flx[_flx];
@@ -52,58 +50,28 @@ t.writeFile(basename, res, "./results/");
 //  console.log(print(flx.ast));
 // }
 
-// GRAPHVIZ DISPLAY
-var _graph = {
-  nodes: [],
-  edges: [],
-  name: filename
-}
 
-function toName(id) {
-  return id.split('-')[0];
-}
+// function displayCtx(ctx) {
 
-for (var _flx in ctx._flx) { var flx = ctx._flx[_flx];
+//   console.log("\n== Scopes ==");
 
-  _graph.nodes.push({
-    name: toName(flx.name),
-    id: flx.name
-  })
+//   ctx._scopes.forEach(function(scope) {
+//     console.log("  " + scope.name + "[" + (scope.parent ? scope.parent.name : "ø") + "]" + " // " + scope.flx.name);
+//   })
 
-  if (flx.outputs && flx.outputs.length > 0) flx.outputs.map(function(o) {
-    _graph.edges.push({
-      id: flx.name,
-      to: o.name,
-      signature: o.signature
-    })
-  })
-}
+//   console.log("== Fluxions ==");
 
-var graph = graphviz.toString.call(_graph);
-t.writeFile(basename.replace(".js", ".dot"), graph, "./graphs/");
+//   for (var _flx in ctx._flx) { var flx = ctx._flx[_flx];
+//     console.log("\n" + flx.name + " >> " + ((flx.outputs.length) ? flx.outputs.map(function(o) {return o.name + " [" + Object.keys(o.signature) + "]"}).join(", ") : "ø") );
 
+//     flx.parents.forEach(function(parent) {
+//       // console.log(parent);
+//       if (parent.output.dest === flx)
+//         console.log(Object.keys(parent.output.signature));
+//     })
 
-function displayCtx(ctx) {
+//     console.log(print(flx.ast).code);
+//   }
+// }
 
-  console.log("\n== Scopes ==");
-
-  ctx._scopes.forEach(function(scope) {
-    console.log("  " + scope.name + "[" + (scope.parent ? scope.parent.name : "ø") + "]" + " // " + scope.flx.name);
-  })
-
-  console.log("== Fluxions ==");
-
-  for (var _flx in ctx._flx) { var flx = ctx._flx[_flx];
-    console.log("\n" + flx.name + " >> " + ((flx.outputs.length) ? flx.outputs.map(function(o) {return o.name + " [" + Object.keys(o.signature) + "]"}).join(", ") : "ø") );
-
-    flx.parents.forEach(function(parent) {
-      // console.log(parent);
-      if (parent.output.dest === flx)
-        console.log(Object.keys(parent.output.signature));
-    })
-
-    console.log(print(flx.ast).code);
-  }
-}
-
-displayCtx(ctx);
+// displayCtx(ctx);

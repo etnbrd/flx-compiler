@@ -1,5 +1,6 @@
 module.exports = {
-  toString: inspect
+  toString: inspect,
+  ctxToGraph: ctxToGraph
 }
 
 function safe(str) {
@@ -18,7 +19,17 @@ function edge(edge) {
     console.log("this id is an object, should though", edge.type);
   }
 
-  return safe(edge.id) + " -> " + safe(edge.to) + " [label=<<table border=\"0\" cellspacing=\"0\" cellborder=\"0\"><tr><td align=\"left\">" + Object.keys(edge.signature).join(',</td></tr><tr><td align=\"left\">') + "</td></tr></table>>]";
+  function flatten(n) {
+    return n.name;
+  }
+
+  edge.params = edge.params || [];
+
+  var params = edge.params.map(flatten);
+  var signature = Object.keys(edge.signature);
+  var length = params.length + signature.length
+
+  return safe(edge.id) + " -> " + safe(edge.to) + " [label=<<table border=\"0\" cellspacing=\"0\" cellborder=\"0\"><tr><td rowspan=\"" + length + "\" width=\"1\" height=\"" + (15 * length) + " \" bgcolor=\"black\" fixedsize=\"true\"></td><td align=\"left\">" + params.join(',</td></tr><tr><td align=\"left\">') + "</td></tr><tr><td align=\"left\"><font color=\"gray\">" + signature.join(',</font></td></tr><tr color=\"grey\"><td align=\"left\"><font color=\"gray\">') + "</font></td></tr></table>>]";
 }
 
 function node(node) {
@@ -83,4 +94,43 @@ function inspect() {
   } else {
     return digraph([_graph(this)]);
   }
+}
+
+function ctxToGraph(ctx, name) {
+
+
+  var _graph = {
+    nodes: [],
+    edges: [],
+    name: name
+  }
+
+  function toName(id) {
+    return id.split('-')[0];
+  }
+
+  for (var _flx in ctx._flx) { var flx = ctx._flx[_flx];
+
+    _graph.nodes.push({
+      name: toName(flx.name),
+      id: flx.name
+    })
+
+    if (flx.outputs && flx.outputs.length > 0) flx.outputs.map(function(o) {
+
+
+    console.log(">>>>> HERE " + o.name + " <<<<<<");
+    console.log(o.params);
+
+      _graph.edges.push({
+        id: flx.name,
+        to: o.name,
+        signature: o.signature,
+        params: o.params
+      })
+    })
+  }
+
+  return inspect.call(_graph);
+
 }

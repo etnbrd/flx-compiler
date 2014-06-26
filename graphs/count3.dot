@@ -11,7 +11,7 @@ digraph G {
     ireply [label=<reply<br/><font color="#404040" point-size="5">reply</font>>]
     iMain [label=<Main<br/><font color="#404040" point-size="5">Main</font>>]
 
-    iMain -> ireply [label=<<table border="0" cellspacing="0" cellborder="0"><tr><td align="left">_rep</td></tr></table>>]
+    iMain -> ireply [label=<<table border="0" cellspacing="0" cellborder="0"><tr><td rowspan="3" width="1" height="45 " bgcolor="black" fixedsize="true"></td><td align="left">req,</td></tr><tr><td align="left">res</td></tr><tr><td align="left"><font color="gray">_rep</font></td></tr></table>>]
   }
 
 }
