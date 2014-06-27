@@ -2,55 +2,91 @@ grammar Fluxion;
 
 program
 	: fluxion EL program EOF!
+	;
 
 fluxion
-	: link LT signature LT code
+	: declaration ES outputs LT code
+	;
 
-link
-	: name WS '→' WS outputs
-
-signature
-	: '[' (identifier* Identifier)? ']'
-
+declaration
+	: Flx WS name
+	;
 
 outputs
-	: identifier* Identifier | empty
+	: ((output ES)* outputs)+ | emptyOutput
+	;
+
+output
+	: link WS signature
+	;
+
+emmptyOutput
+	: arrow WS Empty
+	;
+
+link 
+	: arrow WS name
+	;
+
+signature
+	: Ls ((Identifier Sep)* Identifier)? Rs
+	;
 
 code
-	: codeBlock (placeholder code)?
+	: CodeBlock (link code)?
+	;
 
-placeholder 
-	: (StartPh | PostPh) WS name
 
 name
 	: identifier
+	;
 
 
-identifier
-	: Identifier ',' WS
+arrow
+	: Start
+	| Post
+	;
 
+Flx
+	: 'flx'
+	;
 
 Empty
 	: 'ø'
+	;
 
-StartPh
+Start
 	: '↠'
+	;
 
-PostPh
+Post
 	: '→'
+	;
 
+Sep
+	: ',' WS*
+	;
 
-codeBlock
-	: Javascript block code
+Ls				// Left separator
+	: '['
+	;
 
-Identifier
-	: Javascript Identifier
+Rs 				// Right separator
+	: ']'
+	;
 
-EL  // Empty Line
-	: LT WS LT
+CodeBlock		// block of Javascript code
 
-WS
-	: One or more white space
+identifier 		// Javascript Identifier
 
-LT
-	: One or more line return
+EL  			// Empty Line
+	: LT WS LT;
+
+ES				// Empty Space
+	: LT
+	| WS
+	;
+
+WS  			// One or more white spaces
+
+LT  			// One or more line returns
