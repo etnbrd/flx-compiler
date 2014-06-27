@@ -25,7 +25,7 @@ emmptyOutput
 	;
 
 link 
-	: arrow WS name
+	: arrow name
 	;
 
 signature
@@ -52,15 +52,15 @@ Flx
 	;
 
 Empty
-	: 'ø'
+	: 'ø' // fallback '#'
 	;
 
 Start
-	: '↠'
+	: '↠' // fallback '>>'
 	;
 
 Post
-	: '→'
+	: '→' // fallback '->'
 	;
 
 Sep
