@@ -25,7 +25,7 @@ basename = basename[basename.length-1];
 // - Be able to break avery program (no dependencies, just expose rupture points out of async fn)
 
 // Enable logs;
-process.env.verbose = true;
+// process.env.verbose = true;
 
 var ast = parse(fs.readFileSync(filename).toString());
 var ctx = transform(ast);
@@ -51,27 +51,27 @@ t.writeFile(basename.replace(".js", ".dot"), graph, "./graphs/");
 // }
 
 
-// function displayCtx(ctx) {
+function displayCtx(ctx) {
 
-//   console.log("\n== Scopes ==");
+  console.log("\n== Scopes ==");
 
-//   ctx._scopes.forEach(function(scope) {
-//     console.log("  " + scope.name + "[" + (scope.parent ? scope.parent.name : "ø") + "]" + " // " + scope.flx.name);
-//   })
+  ctx._scopes.forEach(function(scope) {
+    console.log("  " + scope.name + "[" + (scope.parent ? scope.parent.name : "ø") + "]" + " // " + scope.flx.name);
+  })
 
-//   console.log("== Fluxions ==");
+  console.log("== Fluxions ==");
 
-//   for (var _flx in ctx._flx) { var flx = ctx._flx[_flx];
-//     console.log("\n" + flx.name + " >> " + ((flx.outputs.length) ? flx.outputs.map(function(o) {return o.name + " [" + Object.keys(o.signature) + "]"}).join(", ") : "ø") );
+  for (var _flx in ctx._flx) { var flx = ctx._flx[_flx];
+    console.log("\n" + flx.name + " >> " + ((flx.outputs.length) ? flx.outputs.map(function(o) {return o.name + " [" + Object.keys(o.signature) + "]"}).join(", ") : "ø") );
 
-//     flx.parents.forEach(function(parent) {
-//       // console.log(parent);
-//       if (parent.output.dest === flx)
-//         console.log(Object.keys(parent.output.signature));
-//     })
+    flx.parents.forEach(function(parent) {
+      // console.log(parent);
+      if (parent.output.dest === flx)
+        console.log(Object.keys(parent.output.signature));
+    })
 
-//     console.log(print(flx.ast).code);
-//   }
-// }
+    console.log(print(flx.ast).code);
+  }
+}
 
-// displayCtx(ctx);
+displayCtx(ctx);
