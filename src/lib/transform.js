@@ -196,13 +196,13 @@ _types.CallExpression = {
   leave: function(n, c) {
     if (n._placeholder) {
       if (n._placeholder.kind === "start") {
-        n.arguments[n._placeholder.index] = bld.start(n._placeholder.name, c.currentFlx.currentOutput.signature);      
+        n.arguments[n._placeholder.index] = {type: "Identifier", name: "↠" + n._placeholder.name}; //bld.start(n._placeholder.name, c.currentFlx.currentOutput.signature);      
       }
       if (n._placeholder.kind === "post") {
         c.leaveScope();
         c.leaveFlx();
 
-        return bld.post(n._placeholder.name, c.currentFlx.currentOutput.signature);
+        return {type: "Identifier", name: "→" + n._placeholder.name}//bld.post(n._placeholder.name, c.currentFlx.currentOutput.signature);
       }
     }
   }

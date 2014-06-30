@@ -24,7 +24,7 @@ basename = basename[basename.length-1];
 
 // TODO 
 // - generate graphs from fluxions
-// - Be able to break avery program (no dependencies, just expose rupture points out of async fn)
+// - Be able to break every program (no dependencies, just expose rupture points out of async fn)
 
 // Enable logs;
 // process.env.verbose = true;
