@@ -31,13 +31,18 @@ basename = basename[basename.length-1];
 
 var ast = parse(fs.readFileSync(filename).toString());
 var ctx = transform(ast);
+
+// console.log(util.inspect(ast, false, 100));
+
 var res = link(ctx);
-var graph = graphviz.ctxToGraph(ctx, filename);
+// var graph = graphviz.ctxToGraph(ctx, filename);
 
 
 process.env.verbose = true;
 t.writeFile(basename, res, "./results/");
-t.writeFile(basename.replace(".js", ".dot"), graph, "./graphs/");
+// t.writeFile(basename.replace(".js", ".dot"), graph, "./graphs/");
 
 console.log();
 console.log(printer(ctx));
+console.log("\n\n === \n\n");
+console.log(res);

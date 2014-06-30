@@ -105,7 +105,7 @@ var getId = {
 _types.Program = {
   enter: function(n, c) {
     // context.enterFlx("Main", n);
-    c.enterScope("Program");
+    c.enterScope("Program"); // TODO change program for the name of the file, or another more specific name
   },
   leave: function(n, c) {
     c.leaveScope();
@@ -196,13 +196,13 @@ _types.CallExpression = {
   leave: function(n, c) {
     if (n._placeholder) {
       if (n._placeholder.kind === "start") {
-        n.arguments[n._placeholder.index] = {type: "Identifier", name: "↠" + n._placeholder.name}; //bld.start(n._placeholder.name, c.currentFlx.currentOutput.signature);      
+        n.arguments[n._placeholder.index] = {type: "Identifier", kind: "start", name: "↠" + n._placeholder.name, signature: c.currentFlx.currentOutput.signature}; //bld.start(n._placeholder.name, c.currentFlx.currentOutput.signature);      
       }
       if (n._placeholder.kind === "post") {
         c.leaveScope();
         c.leaveFlx();
 
-        return {type: "Identifier", name: "→" + n._placeholder.name}//bld.post(n._placeholder.name, c.currentFlx.currentOutput.signature);
+        return {type: "Identifier", kind: "post", name: "→" + n._placeholder.name, signature: c.currentFlx.currentOutput.signature}//bld.post(n._placeholder.name, c.currentFlx.currentOutput.signature);
       }
     }
   }
@@ -280,7 +280,7 @@ _types.Identifier = {
     // For exemple, if the variable send is in the signature, we don't want to modify rep.send into rep.msg.send
 
     if (c.currentFlx.modifiers[n.name]) {
-      return bld.signatureModifier(n.name);
+      n.modifier = c.currentFlx.modifiers[n.name];
     }
   },
   leave: function(n, c) {
