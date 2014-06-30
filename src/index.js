@@ -7,11 +7,12 @@ var graphviz = require("./lib/graphviz");
 
 // var compile = require("./compile");
 var parse = require("recast").parse;
-var transform = require("./lib/transform");
-var link = require("./lib/link");
+var prune = require("./pruner");
+var link = require("./linker");
+var printer = require("./printer");
+
 var print = require("recast").print;
 
-var printer = require("./lib/printer");
 
 var filename = process.argv[2];
 if (!filename) {
@@ -30,17 +31,17 @@ basename = basename[basename.length-1];
 // process.env.verbose = true;
 
 var ast = parse(fs.readFileSync(filename).toString());
-var ctx = transform(ast);
+var ctx = prune(ast);
+var res = link(ctx);
 
 // console.log(util.inspect(ast, false, 100));
 
-var res = link(ctx);
-// var graph = graphviz.ctxToGraph(ctx, filename);
+var graph = graphviz.ctxToGraph(ctx, filename);
 
 
 process.env.verbose = true;
 t.writeFile(basename, res, "./results/");
-// t.writeFile(basename.replace(".js", ".dot"), graph, "./graphs/");
+t.writeFile(basename.replace(".js", ".dot"), graph, "./graphs/");
 
 console.log();
 console.log(printer(ctx));

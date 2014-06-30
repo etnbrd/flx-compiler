@@ -1,7 +1,6 @@
 var _print = require("recast").print;
-var b = require("./builders");
-var map = require("./traverse").map;
-var red = require("./traverse").reduce;
+var map = require("../lib/traverse").map;
+var red = require("../lib/traverse").reduce;
 var bld = require("./builders");
 
 module.exports = link;
@@ -44,6 +43,9 @@ function print(ast) {
 
 function link(ctx) {
 
+  // Add the flx library
+  ctx.ast.program.body.unshift(bld.requireflx());
+
   var ast = prelink(ctx._flx.Main.ast);
 
   var code = print(ast);
@@ -53,7 +55,7 @@ function link(ctx) {
 
       // var pre = prelink(flx.ast);
 
-      var _code = print(b.register(flx.name, flx.ast));
+      var _code = print(bld.register(flx.name, flx.ast));
 
       // This is only the comment :
       code += "\n\n// " + flx.name + " >> " + ((flx.outputs.length) ? flx.outputs.map(function(o) {return o.name + " [" + Object.keys(o.signature) + "]"}).join(", ") : "ø") + "\n\n" + _code;
@@ -69,7 +71,7 @@ _types.Identifier = {
 
   enter: function(n) {
     if (n.modifier) {
-      return n.modifier;
+      return bld.signatureModifier(n.modifier);
     }
 
     if (n.kind === "start"){

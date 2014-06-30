@@ -1,7 +1,7 @@
 // var graphviz = require('./graphviz');
 // var path = require('./path');
-var errors = require('./errors');
-var log = require('./log');
+var errors = require('../lib/errors');
+var log = require('../lib/log');
 
 module.exports = {
   Context: Context,

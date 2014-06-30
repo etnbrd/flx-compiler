@@ -1,7 +1,7 @@
 var parse = require("recast").parse;
-var transform = require("./lib/transform");
-var link = require("./lib/link");
+var prune = require("./pruner");
+var link = require("./linker");
 
 module.exports = function(code) {
-	return link(transform(parse(code)));
+return link(prune(parse(code)));
 }

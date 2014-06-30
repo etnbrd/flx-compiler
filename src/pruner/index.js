@@ -1,12 +1,15 @@
 var recast = require("recast");
 var fs = require("fs");
 
-var errors = require("./errors");
 var cons = require("./constructors");
-var h = require("./helpers");
-var map = require("./traverse").map;
-var red = require("./traverse").reduce;
-var bld = require("./builders");
+
+var errors = require("../lib/errors");
+var h = require("../lib/helpers");
+var map = require("../lib/traverse").map;
+var red = require("../lib/traverse").reduce;
+
+
+// var bld = require("./builders");
 
 module.exports = start;
 
@@ -17,7 +20,6 @@ function start(ast) {
   context.enterFlx("Main", ast.program);
   map(ast.program, _iterator(context));
   context.leaveFlx();
-  context.ast.program.body.unshift(bld.requireflx());
   return context;
 }
 
@@ -265,7 +267,7 @@ _types.Identifier = {
       if (source) {
         if (!c.currentFlx.modifiers[n.name]) {
           c.currentFlx.modifiers[n.name] = {
-            target : bld.signatureModifier(n.name)
+            target : n.name
           }
         }
       }
