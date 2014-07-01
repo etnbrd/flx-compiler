@@ -122,12 +122,59 @@ flx.register("reply", function capsule(msg) {
 
 # Problem #3
 
-Same with a variable declared outside, and used inside a fluxion.
-This variable should be in the signature of this fluxion.
-
 The server of problem #3 reply a constant value to every request, using a variable declared **outside** the reply function.
-This variable shouldn't be exchanged between fluxions, as it's declared and used in the same function.
+This variable should be in the signature of the second fluxions.
 
+The source program is in `examples/count3.js`
+
+```
+var app = require('express')();
+
+var _rep = "42";
+
+app.get("/", function reply(req, res){
+  res.send(_rep);
+});
+
+// if (!module.parent) {
+//     app.listen(8080);
+//     console.log(">> listening 8080");
+// }
+
+exports.app = app;
+```
+
+The compiled result is in `results/count3.js`
+
+```
+var flx = require("flx");
+var app = require('express')();
+var _rep = "42";
+
+app.get("/", function placeholder() {
+  return flx.start(flx.m("reply", {
+    _args: arguments,
+    _sign: {
+      _rep: _rep
+    }
+  }));
+});
+
+// if (!module.parent) {
+//     app.listen(8080);
+//     console.log(">> listening 8080");
+// }
+
+exports.app = app;
+
+// reply >> ø
+
+flx.register("reply", function capsule(msg) {
+    (function reply(req, res) {
+      res.send(_rep);
+    }).apply(this, msg._args);
+});
+```
 
 # Problem #4
 
