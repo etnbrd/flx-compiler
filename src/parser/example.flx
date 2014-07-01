@@ -1,0 +1,7 @@
+flx firstfluxion ↠ secondfluxion []
+
+flx secondfluxion
+  → finalfluxion [one, two, three]
+  → finalfluxion [one, two, three]
+
+flx finalfluxion → ø
