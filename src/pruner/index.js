@@ -176,7 +176,7 @@ _types.CallExpression = {
           if (_n.type === "FunctionExpression"
           || _n.type === "FunctionDeclaration") {
             var name = _n.id.name;
-            n._linkedFn = _n
+            n._linkedFn = _n // TODO can do better
             n._placeholder = {type: "Placeholder", name: name, kind: "start", index: i};
             n.arguments[i] = {type: "Placeholder", name: name, kind: "start", index: i};
           }
