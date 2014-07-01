@@ -8,8 +8,12 @@ app.get("/", function placeholder() {
   }));
 });
 
-app.listen(8080);
-console.log(">> listening 8080");
+// if (!module.parent) {
+//     app.listen(8080);
+//     console.log(">> listening 8080");
+// }
+
+exports.app = app;
 
 // reply >> ø
 
