@@ -66,5 +66,6 @@ module.exports = {
   use : log(bold(grey(">>  ")), cyan("   use"), 0),
   vard : log(bold(grey(">>  ")), green("   var"), 0),
   sig : log(bold(grey(">>  ")), blue("   sig"), 0),
+  mod : log(bold(grey(">>  ")), magenta("   mod"), 0),
   info : log(bold(grey(">>  ")), "  ", 0)
 }

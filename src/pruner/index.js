@@ -1,5 +1,6 @@
 var recast = require("recast");
 var fs = require("fs");
+var util = require("util");
 
 var cons = require("./constructors");
 
@@ -222,25 +223,33 @@ _types.AssignmentExpression = {
         my_object.prop[my_index.my_prop] -> my_object is the modified object, my_index is an used object.
     */
 
-    // red(n.left, {
-    //   aggregate : function(prev, n) {
-    //     if (n.type === "MemberExpression"){
-    //       prev.push(n.object.name);
 
-    //       if(n.computed) {
+    var res = red(n.left, {
+      enter: function(n) {
+        return n;
+      },
+
+      aggregate : function(prev, n) {
+        if (n.type === "MemberExpression"){
+          // if(n.computed) {
             
-    //       }
-    //     }
-    //   },
-    //   init : []
-    // })
+          // }
+        } else {
+          prev.push(n);
+        }
+
+        return prev;
+      },
+      init : []
+    })
 
 
+    if (res.length > 0) {
+      c.registerMod(res[0]);
+      c.currentFlx.registerModifier(res[0], "scope"); // TODO might lead to conflict, as scope and fluxion scope aren't the same
+    }
 
-
-
-
-    // console.log(" ========================= ");
+    // console.log(" ============  " + util.inspect(res) + "  ============= ");
     // console.log(" ============ ", red(n.left, getId), " ============= ");
 
     // console.log("££ ", _c.id);
@@ -268,9 +277,7 @@ _types.Identifier = {
       // If register said it's outside of scope, then replace futur occurence (in this fluxion) with msg._my_var_
       if (source) {
         if (!c.currentFlx.modifiers[n.name]) {
-          c.currentFlx.modifiers[n.name] = {
-            target : n.name
-          }
+          c.currentFlx.registerModifier(n,"signature");
         }
       }
     }

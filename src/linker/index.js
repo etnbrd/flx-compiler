@@ -55,7 +55,7 @@ function link(ctx) {
 
       // var pre = prelink(flx.ast);
 
-      var _code = print(bld.register(flx.name, flx.ast));
+      var _code = print(bld.register(flx.name, prelink(flx.ast), flx.scope));
 
       // This is only the comment :
       code += "\n\n// " + flx.name + " >> " + ((flx.outputs.length) ? flx.outputs.map(function(o) {return o.name + " [" + Object.keys(o.signature) + "]"}).join(", ") : "ø") + "\n\n" + _code;
@@ -70,8 +70,19 @@ _types = {};
 _types.Identifier = {
 
   enter: function(n) {
+
     if (n.modifier) {
-      return bld.signatureModifier(n.modifier);
+
+      console.log("!! ", n.name, n.modifier);
+
+      if (n.modifier.target === "signature") {
+        return bld.signatureModifier(n.name);
+      }
+
+      if (n.modifier.target === "scope") {
+        console.log("SCOPE")
+        return bld.scopeModifier(n.name);
+      }
     }
 
     if (n.kind === "start"){

@@ -17,6 +17,7 @@ module.exports = {
   post: postPlaceholder,
 
   signatureModifier: signatureModifier,
+  scopeModifier: scopeModifier
 }
 
 
@@ -46,17 +47,19 @@ function requireflx() {
   ]);
 }
 
-function register(name, fn) {
-  return b.expressionStatement(
-    b.callExpression(
-      b.memberExpression(b.identifier("flx"), b.identifier("register"), false),
-      [
-        b.literal(name),
-        fn
-      ]
-    )
-  )
-}
+// function register(name, fn, scope) {
+
+//   return b.expressionStatement(
+//     b.callExpression(
+//       b.memberExpression(b.identifier("flx"), b.identifier("register"), false),
+//       [
+//         b.literal(name),
+//         fn,
+//         _scope
+//       ]
+//     )
+//   )
+// }
 
 function registerScp(name, fn, scp) {
   return b.expressionStatement(
@@ -270,7 +273,7 @@ function HelloWorld(msg) {
   )
 }
 
-function register(name, fn) {
+function register(name, fn, scope) {
 
   // flx.register(name, function capsule(msg) {
   //   // merge scope (this) and signature (msg._sign)
@@ -279,13 +282,23 @@ function register(name, fn) {
   //   })(msg._args);
   // })
 
-  function _register(name, fn) { // TODO duplicate with register
+  function _register(name, fn, scope) { // TODO duplicate with register
+    if (scope) {
+      var _scope = b.objectExpression(
+        Object.keys(scope).map(function(id) {
+          return b.property("init", b.identifier(id), b.identifier(id));
+        })
+      )
+    }
+
+
     return b.expressionStatement(
       b.callExpression(
         b.memberExpression(b.identifier("flx"), b.identifier("register"), false),
         [
           b.literal(name),
-          fn
+          fn,
+          _scope
         ]
       )
     )
@@ -311,7 +324,7 @@ function register(name, fn) {
     )
   }
 
-  return _register(name, _capsule(fn))
+  return _register(name, _capsule(fn), scope);
 }
 
 function signatureModifier(name) {
@@ -322,6 +335,14 @@ function signatureModifier(name) {
       b.identifier(name),
       false
     ),
+    false
+  )
+}
+
+function scopeModifier(name) {
+  return b.memberExpression(
+    b.identifier("this"),
+    b.identifier(name),
     false
   )
 }

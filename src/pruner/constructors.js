@@ -83,6 +83,10 @@ Context.prototype.registerOutput = function(output) {
   return this.currentFlx.registerOutput(output);
 }
 
+Context.prototype.registerMod = function(id) {
+  return this.currentScope.registerMod(id);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // FlxScope                                                                   //
 ////////////////////////////////////////////////////////////////////////////////
@@ -94,6 +98,7 @@ function FlxScope(name, ast) {
   this.outputs = [];
   this.modifiers = {};
   this.parents = [];
+  this.scope = {};
 }
 
 FlxScope.prototype.current = function() {
@@ -119,12 +124,29 @@ FlxScope.prototype.registerOutput = function(output) {
   this.currentOutput = output;
 }
 
+FlxScope.prototype.registerScope = function(id) {
+  this.scope[id.name] = id;
+}
+
+FlxScope.prototype.registerModifier = function(id, type) { // TODO this should be directly triggered by registerId or registerMod
+
+  console.log("MODIFIER ", id.name || id, type, !!this.modifiers)
+
+  if (!this.modifiers[id.name]) {
+    this.modifiers[id.name] = { // TODO might lead to conflict, as scope and fluxion scope aren't the same
+      target : type
+    }
+  } else if (type === "scope") { // scope modifier is of higher priority
+    this.modifiers[id.name].target = "scope";
+  }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // FnScope                                                                    //
 ////////////////////////////////////////////////////////////////////////////////
 
 function FnScope(name, parent, flx) {
-  this._ids = {};
+  this._ids = {}; // TODO this needs refactoring, ids and var are the same.
   this._var = {};
   this.name = name;
   this.parent = parent;
@@ -138,6 +160,13 @@ FnScope.prototype.enter = function() {
 
 FnScope.prototype.leave = function() {
   log.leave("Leave scope " + this.name);
+
+  for (var _id in this._ids) { var id = this._ids[_id];
+    if (id.used) {
+      this.flx.registerScope(id);
+    }
+  }
+
   return this;
 }
 
@@ -179,6 +208,23 @@ FnScope.prototype.registerId = function(id) {
     }
 
     return source;
+  }
+}
+
+FnScope.prototype.registerMod = function(id) {
+
+  if (id.name) {
+
+    if (!this._ids[id.name]) {
+      this.registerId(id);
+    }
+
+    if (this._var[id.name]) { // local modification, nothing to do
+      log.mod(id.name + log.grey(" // " + this.name));
+    } else { // remote modification, need to do something
+      this._ids[id.name].used = true;
+      log.mod(log.bold(id.name) + log.grey(" // " + this.name));
+    }
   }
 }
 
