@@ -14,6 +14,8 @@ var printer = require("./printer");
 var print = require("recast").print;
 
 
+process.env.verbose = true;
+
 var filename = process.argv[2];
 if (!filename) {
   console.log("Please specify a filename as an argument");
@@ -36,12 +38,10 @@ var res = link(ctx);
 
 // console.log(util.inspect(ast, false, 100));
 
-var graph = graphviz.ctxToGraph(ctx, filename);
+// var graph = graphviz.ctxToGraph(ctx, filename);
 
-
-process.env.verbose = true;
 t.writeFile(basename, res, "./results/");
-t.writeFile(basename.replace(".js", ".dot"), graph, "./graphs/");
+// t.writeFile(basename.replace(".js", ".dot"), graph, "./graphs/");
 
 console.log();
 console.log(printer(ctx));

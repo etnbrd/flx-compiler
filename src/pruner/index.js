@@ -176,10 +176,7 @@ _types.CallExpression = {
           if (_n.type === "FunctionExpression"
           || _n.type === "FunctionDeclaration") {
             var name = _n.id.name;
-
-            c.enterFlx(name, _n, "start");
-            map(_n, _iterator(c));
-            c.leaveFlx();
+            n._linkedFn = _n
             n._placeholder = {type: "Placeholder", name: name, kind: "start", index: i};
             n.arguments[i] = {type: "Placeholder", name: name, kind: "start", index: i};
           }
@@ -198,6 +195,11 @@ _types.CallExpression = {
   leave: function(n, c) {
     if (n._placeholder) {
       if (n._placeholder.kind === "start") {
+
+        c.enterFlx(n._placeholder.name, n._linkedFn, "start");
+        map(n._linkedFn, _iterator(c));
+        c.leaveFlx();
+
         n.arguments[n._placeholder.index] = {type: "Identifier", kind: "start", name: "↠" + n._placeholder.name, signature: c.currentFlx.currentOutput.signature}; //bld.start(n._placeholder.name, c.currentFlx.currentOutput.signature);      
       }
       if (n._placeholder.kind === "post") {
