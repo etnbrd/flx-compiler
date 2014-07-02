@@ -25,7 +25,6 @@ describe('Test Cases', function(){
     })
   })
 
-
   describe('Problem #4', function(){
     it('should compile problem #4', function(done){
         var srv = t.compileAndMock('count4.js');
@@ -35,6 +34,22 @@ describe('Test Cases', function(){
             done();
           })
         })
+    })
+  })
+
+  describe('IfStatement without alternative', function(){
+    it('should compile', function(done){
+        t.compileAndMock('ifthen.js')
+            .get('/')
+            .expect('42', done);
+    })
+  })
+
+  describe('IfStatement with alternative', function(){
+    it('should compile', function(done){
+        t.compileAndMock('ifthenelse.js')
+            .get('/')
+            .expect('101010', done);
     })
   })
 })

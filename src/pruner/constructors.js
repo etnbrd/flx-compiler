@@ -53,7 +53,7 @@ Context.prototype.leaveFlx = function() {
     this._flx[flx.name] = flx;
     return flx.leave();
   } else {
-    throw flxConflict(this.currentFlx.name);
+    throw errors.flxConflict(this.currentFlx.name);
   }
 }
 

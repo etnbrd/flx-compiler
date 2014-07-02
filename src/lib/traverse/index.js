@@ -35,6 +35,15 @@ function _maper() {
     }
   }
 
+  mapers.nullable = function(names) {
+    return function(n, it) {
+      for(var maper in names) {
+        if (n[names[maper]])
+            mapers[maper](names[maper])(n, it);
+      }
+    }
+  }
+
   mapers.single = function(name) {
     return function(n, it) {
       n[name] = map(n[name], it) || n[name];
@@ -108,6 +117,12 @@ function _reducer() {
     }
   }
 
+  reducers.nullable = function(name) {
+    return function(n, it) {
+        console.log('// TODO : never reached ', n);
+    }
+  }
+
   reducers.single = function(name) {
     return function(n, it) {
       return reduce(n[name], it);
@@ -129,7 +144,7 @@ function _reducer() {
   reducers.composite = function(childs) {
     return function(n, it) {
       for(var name in childs) {
-        it.init = reducers[name](childs[name])(n, it);;
+        it.init = reducers[name](childs[name])(n, it);
       }
 
       return it.init;
@@ -168,7 +183,11 @@ function _types(_walkers) {
     BlockStatement: _walkers.array("body"),
     ExpressionStatement: _walkers.single("expression"),
     LabeledStatement: _walkers.todo,
-    IfStatement: _walkers.todo,
+    IfStatement: _walkers.composite({
+      single: "test",
+      single: "consequent",
+      nullable: { single: "alternate" }
+    }),
     SwitchStatement: _walkers.todo,
     WhileStatement: _walkers.todo,
     DoWhileStatement: _walkers.todo,
