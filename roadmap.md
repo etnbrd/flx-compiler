@@ -178,8 +178,66 @@ flx.register("reply", function capsule(msg) {
 
 # Problem #4
 
-Same with a variable initialised outside, and modified inside a fluxion.
-This variable should be part of the scope of this fluxion.
+The server of problem #4 reply a value incremented at every request, using a variable declared outside the reply function.
+This variable should be in the scope of the fluxions as it is used only in this fluxion.
+
+
+This source program is in `examples/count4.js`
+
+
+```
+var app = require('express')();
+
+var _rep = 42;
+
+app.get("/", function reply(req, res){
+  res.send("" + _rep);
+  _rep += 1;
+});
+
+// if (!module.parent) {
+//     app.listen(8080);
+//     console.log(">> listening 8080");
+// }
+
+exports.app = app;
+```
+
+The compiled result is in `results/count4.js`
+
+```
+var flx = require("flx");
+var app = require('express')();
+var _rep = 42;
+
+app.get("/", function placeholder() {
+  return flx.start(flx.m("reply", {
+    _args: arguments,
+
+    _sign: {
+      _rep: _rep
+    }
+  }));
+});
+
+// if (!module.parent) {
+//     app.listen(8080);
+//     console.log(">> listening 8080");
+// }
+
+exports.app = app;
+
+// reply >> ø
+
+flx.register("reply", function capsule(msg) {
+    (function reply(req, res) {
+      res.send("" + this._rep);
+      this._rep += 1;
+    }).apply(this, msg._args);
+}, {
+    _rep: _rep
+});
+```
 
 # Problem #5
 

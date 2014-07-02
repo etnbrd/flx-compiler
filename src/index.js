@@ -3,9 +3,8 @@ var util = require("util");
 
 var t = require("./lib/tools");
 
-var graphviz = require("./lib/graphviz");
+var graphviz = require("./lib/graphviz"); // TODO replace graphviz by d3.js, or sigma.js
 
-// var compile = require("./compile");
 var parse = require("recast").parse;
 var prune = require("./pruner");
 var link = require("./linker");
@@ -13,37 +12,28 @@ var printer = require("./printer");
 
 var print = require("recast").print;
 
+var i = require("./lib/interface");
 
-process.env.verbose = true;
+// var options = i.args(process.argv);
 
-var filename = process.argv[2];
-if (!filename) {
-  console.log("Please specify a filename as an argument");
-  return 0;
-}
+// if (options.verbose) {
+//   process.env.verbose = true;
+// }
 
-var basename = filename.split('/');
-basename = basename[basename.length-1];
+// if (!options.intput) {
+//   console.log("Please specify a filename as an argument");
+//   return 0;
+// }
 
-// TODO 
-// - generate graphs from fluxions
-// - Be able to break every program (no dependencies, just expose rupture points out of async fn)
+i.pipe(function run(input) {
+  var ast = parse(input);
+  var ctx = prune(ast);
+  var res = link(ctx);
 
-// Enable logs;
-// process.env.verbose = true;
+  // console.log();
+  // console.log(printer(ctx));
+  // console.log("\n\n === \n\n");
+  // console.log(res);
 
-var ast = parse(fs.readFileSync(filename).toString());
-var ctx = prune(ast);
-var res = link(ctx);
-
-// console.log(util.inspect(ast, false, 100));
-
-// var graph = graphviz.ctxToGraph(ctx, filename);
-
-t.writeFile(basename, res, "./results/");
-// t.writeFile(basename.replace(".js", ".dot"), graph, "./graphs/");
-
-console.log();
-console.log(printer(ctx));
-console.log("\n\n === \n\n");
-console.log(res);
+  return res;
+})
