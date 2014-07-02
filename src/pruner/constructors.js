@@ -130,7 +130,7 @@ FlxScope.prototype.registerScope = function(id) {
 
 FlxScope.prototype.registerModifier = function(id, type) { // TODO this should be directly triggered by registerId or registerMod
 
-  console.log("MODIFIER ", id.name || id, type, !!this.modifiers)
+  // console.log("MODIFIER ", id.name || id, type, !!this.modifiers)
 
   if (!this.modifiers[id.name]) {
     this.modifiers[id.name] = { // TODO might lead to conflict, as scope and fluxion scope aren't the same
@@ -170,7 +170,7 @@ FnScope.prototype.leave = function() {
   return this;
 }
 
-FnScope.prototype.registerId = function(id) {
+FnScope.prototype.registerId = function(id, type) {
   if (id.name) {
 
     function findVar(scope, name) {
@@ -193,11 +193,6 @@ FnScope.prototype.registerId = function(id) {
     }
 
     var source = findVar(this, id.name);
-
-    // if (source) {
-    //   // log.reg("Signature", id.name, "in", source.name);
-    //   source.registerSign(id);
-    // }
 
     if (!this._ids[id.name]) {
       this._ids[id.name] = id;
@@ -237,6 +232,19 @@ FnScope.prototype.registerVar = function(_var) {
   this._var[_var.name] = _var;
   log.vard(log.bold(_var.name) + log.grey(" // " + this.name));
 }
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Identifier                                                                 //
+////////////////////////////////////////////////////////////////////////////////
+
+function Identifier(id, scope) {
+  this.name = id.name;
+  this.ast = id;
+  this.used = {};
+  this.declared = {};
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Output                                                                     //

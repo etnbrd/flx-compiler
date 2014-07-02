@@ -23,6 +23,6 @@ exports.app = app;
 
 flx.register("reply", function capsule(msg) {
     (function reply(req, res) {
-      res.send(_rep);
+      res.send(msg._sign._rep);
     }).apply(this, msg._args);
-});
+}, {});

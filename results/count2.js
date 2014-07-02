@@ -22,4 +22,4 @@ flx.register("reply", function capsule(msg) {
       var _rep = "42";
       res.send(_rep);
     }).apply(this, msg._args);
-});
+}, {});

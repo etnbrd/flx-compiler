@@ -10,5 +10,5 @@ module.exports = {
 function compileAndMock(filename) {
   var res = compile(fs.readFileSync("./examples/" + filename).toString());
   t.writeFile(filename, res, "./results/");
-  return request(require("../results/" + filename).app);
+  return request.agent(require("../results/" + filename).app);
 }

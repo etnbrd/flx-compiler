@@ -24,4 +24,17 @@ describe('Test Cases', function(){
             .expect('42', done);
     })
   })
+
+
+  describe('Problem #4', function(){
+    it('should compile problem #4', function(done){
+        var srv = t.compileAndMock('count4.js');
+
+        srv.get('/').expect('42').end(function() {
+          srv.get('/').expect('43').end(function() {
+            done();
+          })
+        })
+    })
+  })
 })

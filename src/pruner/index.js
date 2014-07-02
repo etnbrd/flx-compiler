@@ -243,8 +243,13 @@ _types.AssignmentExpression = {
       init : []
     })
 
+    function reserved(name) { // TODO find a better place for this function
+      return !!(name === "require"
+             || name === "exports"
+             || name === "module");
+    }
 
-    if (res.length > 0) {
+    if (res.length > 0 && !reserved(res[0].name)) {
       c.registerMod(res[0]);
       c.currentFlx.registerModifier(res[0], "scope"); // TODO might lead to conflict, as scope and fluxion scope aren't the same
     }
@@ -271,9 +276,14 @@ _types.Identifier = {
 
     // })
 
-    if (!c.currentScope._var[n.name]) {
-      var source = c.registerId(n);
+    function reserved(name) { // TODO find a better place for this function
+      return !!(name === "require"
+             || name === "exports"
+             || name === "module");
+    }
 
+    if (!reserved(n.name) && !c.currentScope._var[n.name]) {
+      var source = c.registerId(n);
       // If register said it's outside of scope, then replace futur occurence (in this fluxion) with msg._my_var_
       if (source) {
         if (!c.currentFlx.modifiers[n.name]) {
@@ -281,11 +291,6 @@ _types.Identifier = {
         }
       }
     }
-
-
-
-
-
 
     // TODO Before modification, make sure, it's not in a MemberExpression
     // For exemple, if the variable send is in the signature, we don't want to modify rep.send into rep.msg.send

@@ -72,15 +72,11 @@ _types.Identifier = {
   enter: function(n) {
 
     if (n.modifier) {
-
-      console.log("!! ", n.name, n.modifier);
-
       if (n.modifier.target === "signature") {
         return bld.signatureModifier(n.name);
       }
 
       if (n.modifier.target === "scope") {
-        console.log("SCOPE")
         return bld.scopeModifier(n.name);
       }
     }

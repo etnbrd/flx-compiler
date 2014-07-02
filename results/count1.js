@@ -21,4 +21,4 @@ flx.register("reply", function capsule(msg) {
     (function reply(req, res) {
       res.send("42");
     }).apply(this, msg._args);
-});
+}, {});
