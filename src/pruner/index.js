@@ -1,14 +1,13 @@
-var recast = require("recast");
-var fs = require("fs");
-var util = require("util");
-
-var cons = require("./constructors");
-
-var errors = require("../lib/errors");
-var h = require("../lib/helpers");
-var map = require("../lib/traverse").map;
-var red = require("../lib/traverse").reduce;
-
+var recast = require("recast")
+,   fs = require("fs")
+,   util = require("util")
+,   cons = require("./constructors")
+,   errors = require("../lib/errors")
+,   h = require("../lib/helpers")
+,   map = require("../lib/traverse").map
+,   red = require("../lib/traverse").reduce
+,   commonIterator = require('../lib/tools').commonIterator
+;
 
 // var bld = require("./builders");
 
@@ -19,36 +18,9 @@ var _types = {};
 function start(ast) {
   var context = new cons.Context(ast);
   context.enterFlx("Main", ast.program);
-  map(ast.program, _iterator(context));
+  map(ast.program, commonIterator(context));
   context.leaveFlx();
   return context;
-}
-
-// TODO make itarators modules.
-// one iterator by special case like needs of ahead member-expression identifier.
-
-function _iterator(c) {
-  function handled(n) {
-    if (!n.type)
-      throw errors.missingType(n);
-
-    return !!_types[n.type]
-  }
-
-  function _enter(n) {
-    if (handled(n))
-      return _types[n.type].enter(n, c);
-  }
-
-  function _leave(n) {
-    if (handled(n))
-      return _types[n.type].leave(n, c);
-  }
-
-  return {
-    enter: _enter,
-    leave: _leave
-  }
 }
 
 function _getId(c) {
@@ -165,7 +137,7 @@ _types.CallExpression = {
         // TODO scope problem : a required file is not a new fluxion, only a new scope
         // OR fluxion Main is a special fluxion which is not a movable fluxion.
         c.enterScope(filename, true);
-        map(ast.program, _iterator(c));
+        map(ast.program, commonIterator(c));
         c.leaveScope()
       }
 
@@ -198,7 +170,7 @@ _types.CallExpression = {
       if (n._placeholder.kind === "start") {
 
         c.enterFlx(n._placeholder.name, n._linkedFn, "start");
-        map(n._linkedFn, _iterator(c));
+        map(n._linkedFn, commonIterator(c));
         c.leaveFlx();
 
         n.arguments[n._placeholder.index] = {type: "Identifier", kind: "start", name: "↠" + n._placeholder.name, signature: c.currentFlx.currentOutput.signature}; //bld.start(n._placeholder.name, c.currentFlx.currentOutput.signature);      

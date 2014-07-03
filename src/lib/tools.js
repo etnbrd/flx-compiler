@@ -1,9 +1,13 @@
-var fs = require("fs");
-var util = require("util");
+var fs = require("fs")
+,   util = require("util")
+,   map = require('../lib/traverse').map
+;
 
 module.exports = {
-  writeFile: writeFile,
-  clone: clone
+    writeFile: writeFile
+,   clone: clone
+,   commonMapper: commonMapper
+,   commonIterator: commonIterator
 }
 
 function writeFile(name, data, path) {
@@ -21,4 +25,25 @@ function writeFile(name, data, path) {
 function clone(obj) {
   var copy = util._extend({}, obj);
   return copy;
+}
+
+function commonIterator(c) {
+    function handle(type) {
+        return function(n) {
+          if (!n.type)
+            throw errors.missingType(n);
+
+            if (!!_types[n.type] && _types[n.type][type])
+                return _types[n.type][type](n, c);
+        }
+    }
+
+    return {
+        enter: handle('enter'),
+        leave: handle('leave')
+    }
+}
+
+function commonMapper(ast, c) {
+    return map(ast, commonIterator(c))
 }
