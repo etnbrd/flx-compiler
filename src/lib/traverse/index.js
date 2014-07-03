@@ -179,28 +179,48 @@ function _types(_walkers) {
 ////////////////////////////////////////////////////////////////////////////////
 // Statements                                                                 //
 ////////////////////////////////////////////////////////////////////////////////
-    EmptyStatement: _walkers.todo,
+    EmptyStatement: _walkers.end,
     BlockStatement: _walkers.array("body"),
     ExpressionStatement: _walkers.single("expression"),
-    LabeledStatement: _walkers.todo,
+    LabeledStatement: _walkers.binary("label", "body"),
     IfStatement: _walkers.composite({
       single: "test",
       single: "consequent",
       nullable: { single: "alternate" }
     }),
-    SwitchStatement: _walkers.todo,
-    WhileStatement: _walkers.todo,
-    DoWhileStatement: _walkers.todo,
-    ForStatement: _walkers.todo,
-    ForInStatement: _walkers.todo,
-    BreakStatement: _walkers.todo,
-    ContinueStatement: _walkers.todo,
-    WithStatement: _walkers.todo,
+    SwitchStatement: _walkers.composite({
+      single: "discriminent",
+      array: "cases"
+    }),
+    WhileStatement: _walkers.binary("test", "body"),
+    DoWhileStatement: _walkers.binary("test", "body"),
+    ForStatement: _walkers.composite({
+      nullable: { single: "init"},
+      nullable: { single: "test"},
+      nullable: { single: "update"},
+      single: "body"
+    }),
+    ForInStatement: _walkers.composite({
+      single: "left",
+      single: "right",
+      single: "body"
+    }),
+    BreakStatement: _walkers.nullable({ single: "label" }),
+    ContinueStatement: _walkers.nullable({ single: "label" }),
+    WithStatement: _walkers.binary("object", "body"),
     ReturnStatement: _walkers.single("argument"),
-    TryStatement: _walkers.todo,
-    ThrowStatement: _walkers.todo,
-    DebuggerStatement: _walkers.todo,
-    LetStatement: _walkers.todo,
+    TryStatement: _walkers.composite({
+      single: "body",
+      array: "handlers",
+      nullable: { array: "guardedHandlers" }
+      nullable: { single: "finalizer" }
+    }),
+    ThrowStatement: _walkers.single("argument"),
+    DebuggerStatement: _walkers.end,
+    LetStatement: _walkers.composite({
+      array: "head",
+      single: "body"
+    }),
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -217,15 +237,21 @@ function _types(_walkers) {
 ////////////////////////////////////////////////////////////////////////////////
 // Expressions                                                                //
 ////////////////////////////////////////////////////////////////////////////////
-    SequenceExpression: _walkers.todo,
-    ConditionalExpression: _walkers.todo,
-    UnaryExpression: _walkers.todo,
+    SequenceExpression: _walkers.array("expressions"),
+    ConditionalExpression: _walkers.composite({
+      single: "test",
+      single: "consequent",
+      single, "alternate"
+    }),
+    UnaryExpression: _walkers.binary("op", "arg"),
     BinaryExpression: _walkers.binary("left", "right"),
     AssignmentExpression: _walkers.binary("left", "right"),
     LogicalExpression: _walkers.binary("left", "right"),
-    UpdateExpression: _walkers.todo,
-    NewExpression: _walkers.todo,
-    Argument: _walkers.todo,
+    UpdateExpression: _walkers.binary("op", "arg"),
+    NewExpression: _walkers.composite({
+      single: "callee",
+      array: "args"
+    }),
     CallExpression: _walkers.composite({
       single: "callee",
       array: "arguments"
@@ -236,11 +262,11 @@ function _types(_walkers) {
       array: "params",
       single: "body"
     }),
-    ArrayExpression: _walkers.todo,
-    ObjectExpression: _walkers.array("properties"),
-    ThisExpression: _walkers.todo,
-    GraphExpression: _walkers.todo,
-    GraphIndexExpression: _walkers.todo,
+    ArrayExpression: _walkers.nullable({ array: "elements" }),
+    ObjectExpression: _walkers.todo, // TODO an objectExpression in an array of custom object without type, so we can't simply use array. we need a better composition : array can take a string, or a composite element
+    ThisExpression: _walkers.end,
+    GraphExpression: _walkers.single("expression"),
+    GraphIndexExpression: _walkers.end,
     ComprehensionExpression: _walkers.todo,
     GeneratorExpression: _walkers.todo,
     YieldExpression: _walkers.todo,
@@ -250,17 +276,24 @@ function _types(_walkers) {
 ////////////////////////////////////////////////////////////////////////////////
 // Patterns                                                                   //
 ////////////////////////////////////////////////////////////////////////////////
-    ArrayPattern: _walkers.todo,
-    ObjectPattern: _walkers.todo,
+    ArrayPattern: _walkers.todo, // TODO an ArrayPattern is an array of nullable pattern
+    ObjectPattern: _walkers.todo, // TODO same as ObjectExpression
     PropertyPattern: _walkers.todo,
 
 
 ////////////////////////////////////////////////////////////////////////////////
 // Clauses                                                                    //
 ////////////////////////////////////////////////////////////////////////////////
-    SwitchCase: _walkers.todo,
-    CatchClause: _walkers.todo,
-    ComprehensionBlock: _walkers.todo,
+    SwitchCase: _walkers.composite({
+      nullable: { single("test") },
+      array: "consequent"
+    }),
+    CatchClause: _walkers.composite({
+      single: "param",
+      nullable: { single: "guard"},
+      single: "body"
+    }),
+    ComprehensionBlock: _walkers.binary("left", "right"),
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -270,6 +303,6 @@ function _types(_walkers) {
     Literal: _walkers.end,
     Property: _walkers.todo,
 
-    Placeholder: _walkers.end
+    Placeholder: _walkers.end // TODO this should be removable
   }
 }

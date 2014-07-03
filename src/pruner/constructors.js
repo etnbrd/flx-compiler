@@ -1,12 +1,9 @@
-// var graphviz = require('./graphviz');
-// var path = require('./path');
 var errors = require('../lib/errors');
 var log = require('../lib/log');
 
 module.exports = {
   Context: Context,
 }
-
 
 // TODO merge Context and FlxScope prototypes, they share most of their properties and methods
 
@@ -23,9 +20,14 @@ function Context(ast) {
   this.currentFlx = undefined;
   this.ast = ast;
   this.starts = [];
+  this.name = ast.name
 }
 
 Context.prototype.enterFlx = function(name, ast, type) {
+
+  // Capitalize
+  var name = name.charAt(0).toUpperCase() + name.slice(1);
+
   var _oldFlx = this.currentFlx;
   var _newFlx = new FlxScope(name, ast);
 
@@ -36,8 +38,7 @@ Context.prototype.enterFlx = function(name, ast, type) {
     var _out = new Output(name, type, ast.params, _oldFlx, this.currentFlx);
 
     _newFlx.registerParent(_oldFlx, _out);
-    // if (_oldFlx) // TODO scope problem, resolved partially. There should always be an encapsulating Fluxion.
-      _oldFlx.registerOutput(_out);
+    _oldFlx.registerOutput(_out);
   } else {
     if (name !== "Main")
     console.log("entering a fluxion without an output");
@@ -232,19 +233,6 @@ FnScope.prototype.registerVar = function(_var) {
   this._var[_var.name] = _var;
   log.vard(log.bold(_var.name) + log.grey(" // " + this.name));
 }
-
-
-////////////////////////////////////////////////////////////////////////////////
-// Identifier                                                                 //
-////////////////////////////////////////////////////////////////////////////////
-
-function Identifier(id, scope) {
-  this.name = id.name;
-  this.ast = id;
-  this.used = {};
-  this.declared = {};
-}
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Output                                                                     //
