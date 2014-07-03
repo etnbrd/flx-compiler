@@ -4,11 +4,16 @@ var fs = require('fs')
 ,   compile = require('../src/compile');
 
 module.exports = {
-    compileAndMock: compileAndMock
-} 
+    compile: compile
+,   load: load
+,   compileAndMock: compileAndMock
+}
+
+function load(filename) {
+    return fs.readFileSync('./examples/' + filename).toString();
+}
 
 function compileAndMock(filename) {
-  var res = compile(fs.readFileSync("./examples/" + filename).toString());
-  t.writeFile(filename, res, "./results/");
-  return request.agent(require("../results/" + filename).app);
+    t.writeFile(filename, compile(load(filename)), './results/');
+    return request.agent(require('../results/' + filename).app);
 }

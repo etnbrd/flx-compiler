@@ -1,4 +1,6 @@
-var t = require("./tools");
+var t = require('./tools')
+,   assert = require('assert')
+;
 
 describe('Test Cases', function(){
   describe('Problem #1', function(){
@@ -34,6 +36,14 @@ describe('Test Cases', function(){
             done();
           })
         })
+    })
+  })
+
+  describe('compile', function(){
+    it('should compile, change the code', function(done){
+        var s = t.load('compile.js');
+        assert.notEqual(s, t.compile(s));
+        done();
     })
   })
 })

@@ -27,14 +27,15 @@ function clone(obj) {
   return copy;
 }
 
-function commonIterator(c) {
+function commonIterator(c, types) {
+    types = types || _types;
     function handle(type) {
         return function(n) {
           if (!n.type)
             throw errors.missingType(n);
 
-            if (!!_types[n.type] && _types[n.type][type])
-                return _types[n.type][type](n, c);
+            if (!!types[n.type] && types[n.type][type])
+                return types[n.type][type](n, c);
         }
     }
 
@@ -44,6 +45,6 @@ function commonIterator(c) {
     }
 }
 
-function commonMapper(ast, c) {
-    return map(ast, commonIterator(c))
+function commonMapper(ast, c, types) {
+    return map(ast, commonIterator(c, types))
 }
