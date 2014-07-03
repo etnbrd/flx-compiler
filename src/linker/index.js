@@ -1,40 +1,24 @@
 var _print = require("recast").print;
 var map = require("../lib/traverse").map;
-var red = require("../lib/traverse").reduce;
 var bld = require("./builders");
 
 module.exports = link;
 
 function prelink(ast) {
+    function handle(type) {
+        return function(n) {
+          if (!n.type)
+            throw errors.missingType(n);
 
-  function _iterator(c) {
-    function handled(n, type) {
-      if (!n.type)
-        throw errors.missingType(n);
-
-      return !!_types[n.type] && _types[n.type][type]
+            if (!!_types[n.type] && _types[n.type][type])
+                return _types[n.type][type](n);
+        }
     }
 
-    function _enter(n) {
-      if (handled(n, "enter"))
-        return _types[n.type].enter(n);
-    }
-
-    function _leave(n) {
-      if (handled(n, "leave"))
-        return _types[n.type].leave(n);
-    }
-
-    return {
-      enter: _enter,
-      leave: _leave
-    }
-  }
-
-
-  ast = map(ast, _iterator());
-
-  return ast;
+    return map(ast, {
+        enter: handle('enter'),
+        leave: handle('leave')
+    })
 }
 
 function print(ast) {
