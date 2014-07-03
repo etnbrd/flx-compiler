@@ -25,8 +25,8 @@ function Context(ast) {
 
 Context.prototype.enterFlx = function(name, ast, type) {
 
-  // Capitalize
-  var name = name.charAt(0).toUpperCase() + name.slice(1);
+  // TODO Capitalize, I don't know where this modification is best placed, maybe in the main iterator
+  // var name = name.charAt(0).toUpperCase() + name.slice(1);
 
   var _oldFlx = this.currentFlx;
   var _newFlx = new FlxScope(name, ast);

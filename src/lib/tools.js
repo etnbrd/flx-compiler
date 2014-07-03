@@ -1,9 +1,11 @@
-var fs = require("fs");
-var util = require("util");
+var fs = require("fs")
+,   util = require("util")
+,   map = require('../lib/traverse').map
+;
 
 module.exports = {
-  writeFile: writeFile,
-  clone: clone
+    writeFile: writeFile
+,   clone: clone
 }
 
 function writeFile(name, data, path) {

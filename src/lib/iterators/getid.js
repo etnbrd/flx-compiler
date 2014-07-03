@@ -1,27 +1,42 @@
-module.exports = _getId;
+module.exports = {
 
-function _getId(c) {
-
-  function _enter(n) {
-    if(n.type === "Identifier") {
+  Identifier: {
+    enter: function(n, c) {
       c.id += (c.id === "" ? "" : ".") + n.name;
     }
   }
+};
 
-  function _leave(n) {
+// function _getId(c) {
 
-  }
+//   function _enter(n) {
+//     if(n.type === "Identifier") {
+//       c.id += (c.id === "" ? "" : ".") + n.name;
+//     }
+//   }
 
-  function aggregate(prev, n) {
+//   function _leave(n) {
 
-  }
+//   }
 
-  return {
-    enter: _enter,
-    leave: _leave
-  }
+//   function aggregate(prev, n) {
 
-}
+//   }
+
+//   return {
+//     enter: _enter,
+//     leave: _leave
+//   }
+
+// }
+
+// var _types = {};
+
+// _types.Identifier = {
+//   enter: function(n, c) {
+//     return c.id += (c.id === "" ? "" : ".") + n.name;
+//   }
+// }
 
 /*  OLD  */
 // var getId = {

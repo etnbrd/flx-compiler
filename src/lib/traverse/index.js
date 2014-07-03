@@ -11,7 +11,6 @@ module.exports = {
 function _maper() {
 
   function map(n, it) {
-
     if (it.enter)
       var res = it.enter(n);
   
@@ -212,7 +211,7 @@ function _types(_walkers) {
     TryStatement: _walkers.composite({
       single: "body",
       array: "handlers",
-      nullable: { array: "guardedHandlers" }
+      nullable: { array: "guardedHandlers" },
       nullable: { single: "finalizer" }
     }),
     ThrowStatement: _walkers.single("argument"),
@@ -241,7 +240,7 @@ function _types(_walkers) {
     ConditionalExpression: _walkers.composite({
       single: "test",
       single: "consequent",
-      single, "alternate"
+      single: "alternate"
     }),
     UnaryExpression: _walkers.binary("op", "arg"),
     BinaryExpression: _walkers.binary("left", "right"),
@@ -285,7 +284,7 @@ function _types(_walkers) {
 // Clauses                                                                    //
 ////////////////////////////////////////////////////////////////////////////////
     SwitchCase: _walkers.composite({
-      nullable: { single("test") },
+      nullable: { single: "test" },
       array: "consequent"
     }),
     CatchClause: _walkers.composite({

@@ -1,6 +1,25 @@
-var t = require("./tools");
+var t = require('./tools')
+,   assert = require('assert')
+;
 
 describe('Test Cases', function(){
+
+  describe('compile', function(){
+    it('should compile', function(done){
+        var s = t.load('compile.js');
+        t.compile(s);
+        done();
+    })
+  })
+
+  describe('compilation result seems good', function(){
+    it('result code shouldn\'t be the same', function(done){
+        var s = t.load('compile.js');
+        assert.notEqual(s, t.compile(s));
+        done();
+    })
+  })
+
   describe('Problem #1', function(){
     it('should compile problem #1', function(done){
         t.compileAndMock('count1.js')
@@ -27,29 +46,13 @@ describe('Test Cases', function(){
 
   describe('Problem #4', function(){
     it('should compile problem #4', function(done){
-        var srv = t.compileAndMock('count4.js');
+      var srv = t.compileAndMock('count4.js');
 
-        srv.get('/').expect('42').end(function() {
-          srv.get('/').expect('43').end(function() {
-            done();
-          })
+      srv.get('/').expect('42').end(function() {
+        srv.get('/').expect('43').end(function() {
+          done();
         })
-    })
-  })
-
-  describe('IfStatement without alternative', function(){
-    it('should compile', function(done){
-        t.compileAndMock('ifthen.js')
-            .get('/')
-            .expect('42', done);
-    })
-  })
-
-  describe('IfStatement with alternative', function(){
-    it('should compile', function(done){
-        t.compileAndMock('ifthenelse.js')
-            .get('/')
-            .expect('101010', done);
+      })
     })
   })
 })
