@@ -6,7 +6,7 @@ var recast = require("recast")
 ,   h = require("../lib/helpers")
 ,   map = require("../lib/traverse").map
 ,   red = require("../lib/traverse").reduce
-,   commonIterator = require('../lib/tools').commonIterator
+,   commonMapper = require('../lib/tools').commonMapper
 ;
 
 // var bld = require("./builders");
@@ -18,7 +18,7 @@ var _types = {};
 function start(ast) {
   var context = new cons.Context(ast);
   context.enterFlx("Main", ast.program);
-  map(ast.program, commonIterator(context));
+  commonMapper(ast.program, context);
   context.leaveFlx();
   return context;
 }
@@ -137,7 +137,7 @@ _types.CallExpression = {
         // TODO scope problem : a required file is not a new fluxion, only a new scope
         // OR fluxion Main is a special fluxion which is not a movable fluxion.
         c.enterScope(filename, true);
-        map(ast.program, commonIterator(c));
+        commonMapper(ast.program, c);
         c.leaveScope()
       }
 
@@ -170,7 +170,7 @@ _types.CallExpression = {
       if (n._placeholder.kind === "start") {
 
         c.enterFlx(n._placeholder.name, n._linkedFn, "start");
-        map(n._linkedFn, commonIterator(c));
+        commonMapper(n._linkedFn, c);
         c.leaveFlx();
 
         n.arguments[n._placeholder.index] = {type: "Identifier", kind: "start", name: "↠" + n._placeholder.name, signature: c.currentFlx.currentOutput.signature}; //bld.start(n._placeholder.name, c.currentFlx.currentOutput.signature);      
