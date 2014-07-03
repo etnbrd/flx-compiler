@@ -36,20 +36,4 @@ describe('Test Cases', function(){
         })
     })
   })
-
-  describe('IfStatement without alternative', function(){
-    it('should compile', function(done){
-        t.compileAndMock('ifthen.js')
-            .get('/')
-            .expect('42', done);
-    })
-  })
-
-  describe('IfStatement with alternative', function(){
-    it('should compile', function(done){
-        t.compileAndMock('ifthenelse.js')
-            .get('/')
-            .expect('101010', done);
-    })
-  })
 })

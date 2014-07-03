@@ -16,12 +16,3 @@ if (!module.parent) {
 }
 
 exports.app = app;
-
-// reply >> ø
-
-flx.register("reply", function capsule(msg) {
-    (function reply(req, res) {
-      var _rep = "42";
-      res.send(_rep);
-    }).apply(this, msg._args);
-}, {});
