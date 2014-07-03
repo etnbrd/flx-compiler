@@ -1,5 +1,5 @@
 // <<<<<<< HEAD
-var iterator = require("../lib/iterators")
+var iterator = require("../lib/traverse").iterator(require('./iterators/main'))
 ,   cons = require("./constructors")
 ,   map = require("../lib/traverse").map
 ,   red = require("../lib/traverse").reduce
@@ -28,7 +28,7 @@ function start(ast) {
 
   // console.log(">>> ITERATOR \n", iterator.toString());
 
-  map(ast.program, iterator.main(context));
+  map(ast.program, iterator(context));
   // commonMapper(ast.program, context);
   context.leaveFlx();
   return context;
