@@ -34,7 +34,3 @@ function iteratorFactory(types) {
     }
   }
 }
-
-// function commonMapper(ast, c, types) {
-//   return map(ast, commonIterator(c, types))
-// }

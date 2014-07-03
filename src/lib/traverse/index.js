@@ -11,7 +11,6 @@ function iteratorFactory(types) {
       return function handler(n) {
         if (!n.type)
           throw errors.missingType(n);
-
         if (!!types[n.type] && types[n.type][type])
             return types[n.type][type](n, c);
       }
