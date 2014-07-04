@@ -1,28 +1,33 @@
-var fs = require('fs')
-,   parse = require('recast').parse
-,   map = require('./index').map
+var t = require('../../../test/tools.js')
 ;
 
-function compile(filename) {
-  return parse(fs.readFileSync('./examples/' + filename).toString()).program;
-}
+describe('Test Cases', function(){
+    describe('IfStatement', function(){
+        describe('outside of app.get', function(){
+            it('if-then no else should compile', function(done){
+                t.compileAndMock('ifthen-out.js')
+                .get('/')
+                .expect('42', done);
+            })
 
-var ast = compile('ifthen.js');
+            it('if-then-else should compile', function(done){
+                t.compileAndMock('ifthenelse-out.js')
+                .get('/')
+                .expect('101010', done);
+            })
+        })
+        describe('inside of app.get', function(){
+            it('if-then no else should compile', function(done){
+                t.compileAndMock('ifthen-in.js')
+                .get('/')
+                .expect('42', done);
+            })
 
-function handle(type) {
-    return function(n) {
-      if (!n.type)
-        throw errors.missingType(n);
-
-        if (!!_types[n.type] && _types[n.type][type])
-            return _types[n.type][type](n);
-    }
-}
-
-var mres = map(ast, {
-    enter: handle('enter'),
-    leave: handle('leave')
+            it('if-then-else should compile', function(done){
+                t.compileAndMock('ifthenelse-in.js')
+                .get('/')
+                .expect('101010', done);
+            })
+        })
+    })
 })
-
-console.log(ast);
-console.log(mres);

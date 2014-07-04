@@ -14,6 +14,6 @@ function load(filename) {
 }
 
 function compileAndMock(filename) {
-    t.writeFile(filename, compile(load(filename)), './results/');
-    return request.agent(require('../results/' + filename).app);
+    t.writeFile(filename, compile(load(filename)), __dirname + '/../results/');
+    return request.agent(require(__dirname + '/../results/' + filename).app);
 }
