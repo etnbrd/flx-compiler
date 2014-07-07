@@ -1,15 +1,15 @@
 /*
-  This file is a sandbox.
-  Do whatever you want to do, comment the rest.
-*/
+   This file is a sandbox.
+   Do whatever you want to do, comment the rest.
+   */
 
 var recast = require("recast");
 var fs = require("fs");
 var util = require("util");
 
 module.exports = {
-  truc : "truc",
-}
+    truc : "truc"
+};
 
 var test = require("./test");
 
@@ -25,21 +25,21 @@ console.log(test);
 // console.log(util.inspect(ast, false, 1000));
 
 // var end = red(ast.program, {
-// 	enter: function(n) {
-// 		return n.type + ":[";
-// 	},
-// 	leave: function(n, prev) {
-// 		return "]";
-// 	},
-// 	aggregate: function(prev, n) {
-// 		console.log("= % ", n)
+//  enter: function(n) {
+//      return n.type + ":[";
+//  },
+//  leave: function(n, prev) {
+//      return "]";
+//  },
+//  aggregate: function(prev, n) {
+//      console.log("= % ", n)
 
-// 		if (n !== false)
-// 			return prev + ',' + n;
-// 		else
-// 			return prev;
-// 	},
-// 	init: ""
+//      if (n !== false)
+//          return prev + ',' + n;
+//      else
+//          return prev;
+//  },
+//  init: ""
 // })
 
 // console.log(" --- ");

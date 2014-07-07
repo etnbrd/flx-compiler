@@ -1,13 +1,6 @@
-var fs = require('fs')
-,   t = require('../src/lib/tools')
-,   compile = require('../src/compile');
-
-module.exports = {
-    compile: compile
-,   read: read
-,   compileAndMock: compileAndMock
-,   compileAndLoad: compileAndLoad
-}
+var fs = require('fs'),
+    t = require('../src/lib/tools'),
+    compile = require('../src/compile');
 
 function read(filename) {
     return fs.readFileSync('./examples/' + filename).toString();
@@ -21,3 +14,10 @@ function compileAndLoad(filename) {
 function compileAndMock(filename) {
     return require('supertest')(compileAndLoad(filename));
 }
+
+module.exports = {
+    compile: compile,
+    read: read,
+    compileAndMock: compileAndMock,
+    compileAndLoad: compileAndLoad
+};
