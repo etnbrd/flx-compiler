@@ -3,7 +3,7 @@ var cond = true;
 
 if (cond)
     app.get("/", function reply(req, res){
-      var _rep = "42";
+      var _rep = 'A';
       res.send(_rep);
     });
 
