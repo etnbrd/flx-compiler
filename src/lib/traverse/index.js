@@ -287,7 +287,7 @@ function _types(_walkers) {
     GraphIndexExpression: _walkers.end,
     ComprehensionExpression: _walkers.todo,
     GeneratorExpression: _walkers.todo,
-    YieldExpression: _walkers.todo,
+    YieldExpression: _walkers.todo, // TODO not supported yet by nodejs : _walkers.nullable({ single: "argument" }),
     LetExpression: _walkers.todo,
 
 
