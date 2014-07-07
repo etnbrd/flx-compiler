@@ -4,10 +4,9 @@ var cond = false;
 app.get("/", function reply1(req, res){
     var _rep = null;
     if (cond)
-        _rep = "24";
+        _rep = 'F';
     else
-        // FIX : Fail with the same name / src/pruner/constructors.js:52
-        _rep = "101010";
+        _rep = 'G';
 
     res.send(_rep);
 });
