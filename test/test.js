@@ -1,3 +1,9 @@
+require('blanket')({
+    pattern: function (filename) {
+            return !/node_modules/.test(filename);
+        }
+});
+
 var t = require('./tools'),
     assert = require('assert');
 

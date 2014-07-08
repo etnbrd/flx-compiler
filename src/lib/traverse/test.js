@@ -15,7 +15,7 @@ describe('Test Cases', function(){
                     .expect('A')
                     .end(done)
                     ;
-            })
+            });
 
             it('if-then-else should compile', function(done){
                 compileAndMock('ifthenelse-out.js')
@@ -23,8 +23,8 @@ describe('Test Cases', function(){
                     .expect('D')
                     .end(done)
                     ;
-            })
-        })
+            });
+        });
         describe('inside of app.get', function(){
             it('if-then no else should compile', function(done){
                 compileAndMock('ifthen-in.js')
@@ -32,7 +32,7 @@ describe('Test Cases', function(){
                     .expect('E')
                     .end(done)
                     ;
-            })
+            });
 
             it('if-then-else should compile', function(done){
                 compileAndMock('ifthenelse-in.js')
@@ -41,9 +41,9 @@ describe('Test Cases', function(){
                     .expect('G')
                     .end(done)
                     ;
-            })
-        })
-    })
+            });
+        });
+    });
 
     // describe('YieldExpression', function(){
     //     it('if-then no else should compile', function(done){
@@ -52,4 +52,4 @@ describe('Test Cases', function(){
     //         .expect('third', done);
     //     })
     // })
-})
+});
