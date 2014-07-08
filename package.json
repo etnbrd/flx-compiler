@@ -8,9 +8,11 @@
   },
   "devDependencies": {
     "pegjs": "*",
-  	"mocha": "*",
+    "mocha": "*",
     "express": "*",
-    "supertest": "*"
+    "supertest": "*",
+    "jshint": "*",
+    "blanket": "*"
   },
   "engine": "node >= 0.10.0",
   "main": "src/index.js",

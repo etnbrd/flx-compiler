@@ -18,4 +18,5 @@ if (!module.parent) {
     console.log(">> listening 8080");
 }
 
+exports.name = "ifthenelseout";
 exports.app = app;

@@ -4,6 +4,186 @@ var log = require('../lib/log');
 // TODO merge Context and FlxScope prototypes, they share most of their properties and methods
 
 ////////////////////////////////////////////////////////////////////////////////
+// FlxScope                                                                   //
+////////////////////////////////////////////////////////////////////////////////
+
+function FlxScope(name, ast) {
+    this.name = name;
+    this.ast = ast;
+    this.input = [];
+    this.outputs = [];
+    this.modifiers = {};
+    this.parents = [];
+    this.scope = {};
+}
+
+FlxScope.prototype.current = function () {
+    return this._stack[0];
+};
+
+FlxScope.prototype.enter = function () {
+    log.enter('Enter flx ' + this.name);
+    return this;
+};
+
+FlxScope.prototype.leave = function () {
+    log.leave('Leave flx ' + this.name);
+};
+
+FlxScope.prototype.registerParent = function (parent, output) {
+    this.parents.push({parent: parent, output: output});
+};
+
+FlxScope.prototype.registerOutput = function (output) {
+    log.info(this.name + ' // ' + output.source.name +  ' -> ' + output.dest.name);
+    this.outputs.push(output);
+    this.currentOutput = output;
+};
+
+FlxScope.prototype.registerScope = function (id) {
+    this.scope[id.name] = id;
+};
+
+FlxScope.prototype.registerModifier = function (id, type) { // TODO this should be directly triggered by registerId or registerMod
+
+    // console.log('MODIFIER ', id.name || id, type, !!this.modifiers)
+
+    if (!this.modifiers[id.name]) {
+        this.modifiers[id.name] = { // TODO might lead to conflict, as scope and fluxion scope aren't the same
+            target : type
+        };
+    } else if (type === 'scope') { // scope modifier is of higher priority
+        this.modifiers[id.name].target = 'scope';
+    }
+};
+
+////////////////////////////////////////////////////////////////////////////////
+// FnScope                                                                    //
+////////////////////////////////////////////////////////////////////////////////
+
+function FnScope(name, parent, flx) {
+    this._ids = {}; // TODO this needs refactoring, ids and var are the same.
+    this._var = {};
+    this.name = name;
+    this.parent = parent;
+    this.flx = flx;
+}
+
+FnScope.prototype.enter = function () {
+    log.enter('Enter scope ' + this.name);
+    return this;
+};
+
+FnScope.prototype.leave = function () {
+    log.leave('Leave scope ' + this.name);
+    var index,
+        length = this._ids.length;
+
+    for (index = 0; index < length; index += 1) {
+        if (this._ids[index].used) {
+            this.flx.registerScope(this._ids[index]);
+        }
+    }
+
+    return this;
+};
+
+FnScope.prototype.registerId = function (id) {
+    if (id.name) {
+        var findVar;
+        findVar = function (scope, name) {
+            var index,
+                _par,
+                length = scope._var.length;
+
+            for (index = 0; index < length; index += 1) {
+                if (scope._var.length[index] === name) {
+                    return scope.flx;
+                }
+            }
+
+            if (scope.parent) {
+                _par = findVar(scope.parent, name);
+                if (_par) {
+                    scope.parent.flx.currentOutput.registerSign(id);
+                    return _par;
+                }
+
+            }
+
+            return undefined;
+        };
+
+        if (!this._ids[id.name]) {
+            this._ids[id.name] = id;
+            log.use(log.bold(id.name) + log.grey(' // ' + this.name));
+        } else {
+            log.use(id.name + log.grey(' // ' + this.name));
+            // throw errors.identifierConflict([id, this._ids[id.name]]);
+        }
+
+        return findVar(this, id.name);
+    }
+};
+
+FnScope.prototype.registerMod = function (id) {
+
+    if (id.name) {
+
+        if (!this._ids[id.name]) {
+            this.registerId(id);
+        }
+
+        if (this._var[id.name]) { // local modification, nothing to do
+            log.mod(id.name + log.grey(' // ' + this.name));
+        } else { // remote modification, need to do something
+            this._ids[id.name].used = true;
+            log.mod(log.bold(id.name) + log.grey(' // ' + this.name));
+        }
+    }
+};
+
+FnScope.prototype.registerVar = function (_var) {
+
+    if (_var.id && _var.id.name) {
+        _var = _var.id;
+    }
+
+    this._var[_var.name] = _var;
+    log.vard(log.bold(_var.name) + log.grey(' // ' + this.name));
+};
+
+////////////////////////////////////////////////////////////////////////////////
+// Output                                                                     //
+////////////////////////////////////////////////////////////////////////////////
+
+function Output(name, type, params, sourceFlx, destFlx) {
+    function formatParam(param) {
+        return {
+            ast: param,
+            name: param.name
+        };
+    }
+
+    this.name = name;
+    this.type = type;
+    this.params = params.map(formatParam);
+    this.source = sourceFlx;
+    this.dest = destFlx;
+    this.signature = {};
+}
+
+Output.prototype.registerSign = function (id) {
+    log.sig(id.name + log.grey(' // ' + this.source.name + ' -> ' + this.dest.name));
+    this.signature[id.name] = {
+        name: id.name,
+        id: id,
+        source: this.source,
+        dest: this.dest
+    };
+};
+
+////////////////////////////////////////////////////////////////////////////////
 // Context                                                                    //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -25,19 +205,20 @@ Context.prototype.enterFlx = function (name, ast, type) {
     // var name = name.charAt(0).toUpperCase() + name.slice(1);
 
     var _oldFlx = this.currentFlx,
-        _newFlx = new FlxScope(name, ast);
+        _newFlx = new FlxScope(name, ast),
+        _out;
 
     this.currentFlx = _newFlx;
     this._flxStack.push(_newFlx);
 
     if (type) {
-        var _out = new Output(name, type, ast.params, _oldFlx, this.currentFlx);
+        _out = new Output(name, type, ast.params, _oldFlx, this.currentFlx);
 
         _newFlx.registerParent(_oldFlx, _out);
         _oldFlx.registerOutput(_out);
     } else {
-        if (name !== "Main") {
-            console.log("entering a fluxion without an output");
+        if (name !== 'Main') {
+            console.log('entering a fluxion without an output');
         }
     }
 
@@ -81,188 +262,10 @@ Context.prototype.registerOutput = function (output) {
     return this.currentFlx.registerOutput(output);
 };
 
-Context.prototype.registerMod = function (id) {
+Context.prototype.registerMod = function (id) {
     return this.currentScope.registerMod(id);
 };
 
-////////////////////////////////////////////////////////////////////////////////
-// FlxScope                                                                   //
-////////////////////////////////////////////////////////////////////////////////
-
-function FlxScope(name, ast) {
-    this.name = name;
-    this.ast = ast;
-    this.input = [];
-    this.outputs = [];
-    this.modifiers = {};
-    this.parents = [];
-    this.scope = {};
-}
-
-FlxScope.prototype.current = function () {
-    return this._stack[0];
-};
-
-FlxScope.prototype.enter = function () {
-    log.enter("Enter flx " + this.name);
-    return this;
-};
-
-FlxScope.prototype.leave = function () {
-    log.leave("Leave flx " + this.name);
-};
-
-FlxScope.prototype.registerParent = function (parent, output) {
-    this.parents.push({parent: parent, output: output});
-};
-
-FlxScope.prototype.registerOutput = function (output) {
-    log.info(this.name + " // " + output.source.name +  " -> " + output.dest.name);
-    this.outputs.push(output);
-    this.currentOutput = output;
-};
-
-FlxScope.prototype.registerScope = function (id) {
-    this.scope[id.name] = id;
-};
-
-FlxScope.prototype.registerModifier = function (id, type) { // TODO this should be directly triggered by registerId or registerMod
-
-    // console.log("MODIFIER ", id.name || id, type, !!this.modifiers)
-
-    if (!this.modifiers[id.name]) {
-        this.modifiers[id.name] = { // TODO might lead to conflict, as scope and fluxion scope aren't the same
-            target : type
-        };
-    } else if (type === "scope") { // scope modifier is of higher priority
-        this.modifiers[id.name].target = "scope";
-    }
-};
-
-////////////////////////////////////////////////////////////////////////////////
-// FnScope                                                                    //
-////////////////////////////////////////////////////////////////////////////////
-
-function FnScope(name, parent, flx) {
-    this._ids = {}; // TODO this needs refactoring, ids and var are the same.
-    this._var = {};
-    this.name = name;
-    this.parent = parent;
-    this.flx = flx;
-}
-
-FnScope.prototype.enter = function () {
-    log.enter("Enter scope " + this.name);
-    return this;
-};
-
-FnScope.prototype.leave = function () {
-    log.leave("Leave scope " + this.name);
-    var index,
-        length = this._ids.length;
-
-    for (index = 0; index < length; index++) {
-        if (this._ids[index].used) {
-            this.flx.registerScope(this._ids[index]);
-        }
-    }
-
-    return this;
-};
-
-FnScope.prototype.registerId = function (id, type) {
-    if (id.name) {
-
-        function findVar(scope, name) {
-            for (var _var in scope._var) {
-                if (_var === name) {
-                    return scope.flx;
-                }
-            }
-
-            if (scope.parent) {
-                var _par = findVar(scope.parent, name);
-                if (_par) {
-                    scope.parent.flx.currentOutput.registerSign(id);
-                    return _par;
-                }
-
-            }
-
-            return undefined;
-        }
-
-        var source = findVar(this, id.name);
-
-        if (!this._ids[id.name]) {
-            this._ids[id.name] = id;
-            log.use(log.bold(id.name) + log.grey(" // " + this.name));
-        } else {
-            log.use(id.name + log.grey(" // " + this.name));
-            // throw errors.identifierConflict([id, this._ids[id.name]]);
-        }
-
-        return source;
-    }
-};
-
-FnScope.prototype.registerMod = function (id) {
-
-    if (id.name) {
-
-        if (!this._ids[id.name]) {
-            this.registerId(id);
-        }
-
-        if (this._var[id.name]) { // local modification, nothing to do
-            log.mod(id.name + log.grey(" // " + this.name));
-        } else { // remote modification, need to do something
-            this._ids[id.name].used = true;
-            log.mod(log.bold(id.name) + log.grey(" // " + this.name));
-        }
-    }
-};
-
-FnScope.prototype.registerVar = function (_var) {
-
-    if (_var.id && _var.id.name) {
-        _var = _var.id;
-    }
-
-    this._var[_var.name] = _var;
-    log.vard(log.bold(_var.name) + log.grey(" // " + this.name));
-};
-
-////////////////////////////////////////////////////////////////////////////////
-// Output                                                                     //
-////////////////////////////////////////////////////////////////////////////////
-
-function Output(name, type, params, sourceFlx, destFlx) {
-    function formatParam(param) {
-        return {
-            ast: param,
-            name: param.name
-        }
-    }
-
-    this.name = name;
-    this.type = type;
-    this.params = params.map(formatParam);
-    this.source = sourceFlx;
-    this.dest = destFlx;
-    this.signature = {};
-};
-
-Output.prototype.registerSign = function (id) {
-    log.sig(id.name + log.grey(" // " + this.source.name + " -> " + this.dest.name ));
-    this.signature[id.name] = {
-        name: id.name,
-        id: id,
-        source: this.source,
-        dest: this.dest
-    };
-};
-
 module.exports = {
-    Context: Context,
+    Context: Context
 };

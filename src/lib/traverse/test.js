@@ -1,49 +1,49 @@
 var t = require('../../../test/tools.js')
+,   supertest = require('supertest');
 ;
 
 
 function compileAndMock(filename) {
-    return require('supertest')(t.compileAndLoad(filename));
+    return supertest(t.compileAndLoad(filename));
 }
 
-describe('Test Cases', function(){
-    describe('IfStatement', function(){
-        describe('outside of app.get', function(){
+// describe('Test Cases', function(){
+    describe('IfStatement :', function(){
+        describe('outside of app.get :', function(){
             it('if-then no else should compile', function(done){
-                compileAndMock('ifthen-out.js')
-                    .get('/')
+                var srv = compileAndMock('ifthenout.js')
+                srv.get('/')
                     .expect('B')
                     .end(done)
                     ;
-            })
+            });
 
             it('if-then-else should compile', function(done){
-                compileAndMock('ifthenelse-out.js')
-                    .get('/')
+                var srv = compileAndMock('ifthenelseout.js')
+                srv.get('/')
                     .expect('D')
                     .end(done)
                     ;
-            })
-        })
-        describe('inside of app.get', function(){
+            });
+        });
+        describe('inside of app.get :', function(){
             it('if-then no else should compile', function(done){
-                compileAndMock('ifthen-in.js')
-                    .get('/')
+                var srv = compileAndMock('ifthenin.js')
+                srv.get('/')
                     .expect('E')
                     .end(done)
                     ;
-            })
+            });
 
             it('if-then-else should compile', function(done){
-                compileAndMock('ifthenelse-in.js')
-                // compileAndMock('ifthenelse-out.js')
-                    .get('/')
+                var srv = compileAndMock('ifthenelsein.js')
+                srv.get('/')
                     .expect('G')
                     .end(done)
                     ;
-            })
-        })
-    })
+            });
+        });
+    });
 
     // describe('YieldExpression', function(){
     //     it('if-then no else should compile', function(done){
@@ -52,4 +52,4 @@ describe('Test Cases', function(){
     //         .expect('third', done);
     //     })
     // })
-})
+// })

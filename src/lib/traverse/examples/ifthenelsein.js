@@ -8,9 +8,6 @@ app.get("/", function reply1(req, res){
     else
         _rep = 'G';
 
-
-    console.log(_rep);
-
     res.send(_rep);
 });
 
@@ -19,4 +16,5 @@ if (!module.parent) {
     console.log(">> listening 8080");
 }
 
+exports.name = "ifthenelsein";
 exports.app = app;

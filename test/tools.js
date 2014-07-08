@@ -7,13 +7,14 @@ function read(filename) {
 }
 
 function compileAndLoad(filename) {
-    t.writeFile(filename, compile(read(filename)), __dirname + '/../results/');
-    return require(__dirname + '/../results/' + filename).app;
-}
 
-function compileAndLoad(filename) {
-    t.writeFile(filename, compile(read(filename)), __dirname + '/../results/');
-    return require(__dirname + '/../results/' + filename).app;
+    var src = compile(read(filename))
+
+    t.writeFile(filename, src, __dirname + '/../results/');
+    // console.log(filename, src)
+    var req = require(__dirname + '/../results/' + filename);
+    req.app.settings.name = filename;
+    return req.app;
 }
 
 function compileAndMock(filename) {

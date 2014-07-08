@@ -1,3 +1,9 @@
+require('blanket')({
+    pattern: function (filename) {
+            return !/node_modules/.test(filename);
+        }
+});
+
 var t = require('./tools'),
     assert = require('assert');
 
@@ -50,8 +56,8 @@ describe('Test Cases', function () {
         it('should compile problem #5', function (done) {
             var srv = t.compileAndMock('count5.js');
 
-            srv.get('/A').expect('42').end(function () {
-                srv.get('/B').expect('43').end(function () {
+            srv.get('/').expect('42').end(function () {
+                srv.get('/').expect('43').end(function () {
                     done();
                 });
             });
