@@ -7,14 +7,9 @@ function read(filename) {
 }
 
 function compileAndLoad(filename) {
-
-    var src = compile(read(filename))
-
+    var src = compile(read(filename));
     t.writeFile(filename, src, __dirname + '/../results/');
-    // console.log(filename, src)
-    var req = require(__dirname + '/../results/' + filename);
-    req.app.settings.name = filename;
-    return req.app;
+    return require(__dirname + '/../results/' + filename).app;
 }
 
 function compileAndMock(filename) {
