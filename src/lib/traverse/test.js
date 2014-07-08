@@ -12,7 +12,7 @@ describe('Test Cases', function(){
             it('if-then no else should compile', function(done){
                 compileAndMock('ifthen-out.js')
                     .get('/')
-                    .expect('A')
+                    .expect('B')
                     .end(done)
                     ;
             })
