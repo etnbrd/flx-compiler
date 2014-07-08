@@ -88,7 +88,7 @@ FnScope.prototype.leave = function () {
     return this;
 };
 
-FnScope.prototype.registerId = function (id, type) {
+FnScope.prototype.registerId = function (id) {
     if (id.name) {
         var findVar;
         findVar = function (scope, name) {

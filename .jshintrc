@@ -19,6 +19,7 @@
     "esnext": true,
     "overrides": {
         "test*/*": { "unused": false, "mocha": true },
+        "src/test.js": { "unused": false, "mocha": true },
         "src/lib/traverse/test.js": { "unused": false, "mocha": true }
     }
 }
