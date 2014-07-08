@@ -8,6 +8,9 @@ app.get("/", function reply1(req, res){
     else
         _rep = 'G';
 
+
+    console.log(_rep);
+
     res.send(_rep);
 });
 

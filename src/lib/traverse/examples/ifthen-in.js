@@ -4,6 +4,11 @@ var cond = true;
 app.get("/", function reply(req, res){
     if (cond) {
       var _rep = 'E';
+
+
+      console.log(_rep);
+
+
       res.send(_rep);
     }
 });
