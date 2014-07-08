@@ -1,55 +1,37 @@
-var t = require('../../../test/tools.js')
-;
+var t = require('../../../test/tools.js'),
+    vm = require('vm');
 
-
-function compileAndMock(filename) {
-    return require('supertest')(t.compileAndLoad(filename));
+function basicTest(filename, expected, done) {
+    var code = 't.compileAndMock(f).get(\'/\').expect(e).end(d);';
+    var context = {
+        t: t,
+        f: filename,
+        e: expected,
+        d: done
+    };
+    vm.runInNewContext(code, context);
 }
+
 
 describe('Test Cases', function(){
     describe('IfStatement', function(){
         describe('outside of app.get', function(){
             it('if-then no else should compile', function(done){
-                compileAndMock('ifthen-out.js')
-                    .get('/')
-                    .expect('A')
-                    .end(done)
-                    ;
+                basicTest('ifthen-out.js', 'A', done);
             });
 
             it('if-then-else should compile', function(done){
-                compileAndMock('ifthenelse-out.js')
-                    .get('/')
-                    .expect('D')
-                    .end(done)
-                    ;
+                basicTest('ifthenelse-out.js', 'D', done);
             });
         });
         describe('inside of app.get', function(){
             it('if-then no else should compile', function(done){
-                compileAndMock('ifthen-in.js')
-                    .get('/')
-                    .expect('E')
-                    .end(done)
-                    ;
+                basicTest('ifthen-in.js', 'E', done);
             });
 
             it('if-then-else should compile', function(done){
-                compileAndMock('ifthenelse-in.js')
-                // compileAndMock('ifthenelse-out.js')
-                    .get('/')
-                    .expect('G')
-                    .end(done)
-                    ;
+                basicTest('ifthenelse-in.js', 'G', done);
             });
         });
     });
-
-    // describe('YieldExpression', function(){
-    //     it('if-then no else should compile', function(done){
-    //         t.compileAndMock('yield.js')
-    //         .get('/')
-    //         .expect('third', done);
-    //     })
-    // })
 });
