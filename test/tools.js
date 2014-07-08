@@ -1,19 +1,28 @@
-var fs = require('fs')
-,   request = require('supertest')
-,   t = require('../src/lib/tools')
-,   compile = require('../src/compile');
+var fs = require('fs'),
+    t = require('../src/lib/tools'),
+    compile = require('../src/compile');
 
-module.exports = {
-    compile: compile
-,   load: load
-,   compileAndMock: compileAndMock
-}
-
-function load(filename) {
+function read(filename) {
     return fs.readFileSync('./examples/' + filename).toString();
 }
 
-function compileAndMock(filename) {
-    t.writeFile(filename, compile(load(filename)), './results/');
-    return request.agent(require('../results/' + filename).app);
+function compileAndLoad(filename) {
+    t.writeFile(filename, compile(read(filename)), __dirname + '/../results/');
+    return require(__dirname + '/../results/' + filename).app;
 }
+
+function compileAndLoad(filename) {
+    t.writeFile(filename, compile(read(filename)), __dirname + '/../results/');
+    return require(__dirname + '/../results/' + filename).app;
+}
+
+function compileAndMock(filename) {
+    return require('supertest')(compileAndLoad(filename));
+}
+
+module.exports = {
+    compile: compile,
+    read: read,
+    compileAndMock: compileAndMock,
+    compileAndLoad: compileAndLoad
+};

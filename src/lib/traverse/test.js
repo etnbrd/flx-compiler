@@ -1,28 +1,55 @@
-var fs = require('fs')
-,   parse = require('recast').parse
-,   map = require('./index').map
+var t = require('../../../test/tools.js')
 ;
 
-function compile(filename) {
-  return parse(fs.readFileSync('./examples/' + filename).toString()).program;
+
+function compileAndMock(filename) {
+    return require('supertest')(t.compileAndLoad(filename));
 }
 
-var ast = compile('ifthen.js');
+describe('Test Cases', function(){
+    describe('IfStatement', function(){
+        describe('outside of app.get', function(){
+            it('if-then no else should compile', function(done){
+                compileAndMock('ifthen-out.js')
+                    .get('/')
+                    .expect('A')
+                    .end(done)
+                    ;
+            })
 
-function handle(type) {
-    return function(n) {
-      if (!n.type)
-        throw errors.missingType(n);
+            it('if-then-else should compile', function(done){
+                compileAndMock('ifthenelse-out.js')
+                    .get('/')
+                    .expect('D')
+                    .end(done)
+                    ;
+            })
+        })
+        describe('inside of app.get', function(){
+            it('if-then no else should compile', function(done){
+                compileAndMock('ifthen-in.js')
+                    .get('/')
+                    .expect('E')
+                    .end(done)
+                    ;
+            })
 
-        if (!!_types[n.type] && _types[n.type][type])
-            return _types[n.type][type](n);
-    }
-}
+            it('if-then-else should compile', function(done){
+                compileAndMock('ifthenelse-in.js')
+                // compileAndMock('ifthenelse-out.js')
+                    .get('/')
+                    .expect('G')
+                    .end(done)
+                    ;
+            })
+        })
+    })
 
-var mres = map(ast, {
-    enter: handle('enter'),
-    leave: handle('leave')
+    // describe('YieldExpression', function(){
+    //     it('if-then no else should compile', function(done){
+    //         t.compileAndMock('yield.js')
+    //         .get('/')
+    //         .expect('third', done);
+    //     })
+    // })
 })
-
-console.log(ast);
-console.log(mres);
