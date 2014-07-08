@@ -162,6 +162,8 @@ _types.AssignmentExpression = {
 _types.Identifier = {
     enter: function (n, c) {
 
+        // console.log(n.name);
+
         function reserved(name) { // TODO find a better place for this function
             return !!(name === 'require' || name === 'exports' || name === 'module');
         }
