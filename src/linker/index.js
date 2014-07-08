@@ -1,34 +1,52 @@
-var _print = require('recast').print
-,   bld = require('./builders')
-// ,   commonMapper = require('../lib/tools').commonMapper
-// ,   iterators = require('../lib/iterators')
-,   map = require('../lib/traverse').map
-,   iterator = require("../lib/traverse").iterator(require('./iterators/main'))
-;
-
-module.exports = link;
+var _print = require('recast').print,
+    bld = require('./builders'),
+    map = require('../lib/traverse').map,
+    iterator = require('../lib/traverse').iterator(require('./iterators/main'));
 
 function print(ast) {
-  return _print(ast).code;
+    return _print(ast).code;
+}
+
+function printSig(flx) {
+    return flx.outputs.map(function (o) {
+            return o.name + ' [' + Object.keys(o.signature) + ']';
+        }).join(', ');
 }
 
 function link(ctx) {
+    var index,
+        ast,
+        code,
+        flx,
+        length = ctx._flx.length,
+        _code;
 
-  // Add the flx library
-  ctx.ast.program.body.unshift(bld.requireflx());
-  var ast = map(ctx._flx.Main.ast, iterator());
+    // Add the flx library
+    ctx.ast.program.body.unshift(bld.requireflx());
+    ast = map(ctx._flx.Main.ast, iterator());
 
-  var code = print(ast);
+    code = print(ast);
 
-  for (var _flx in ctx._flx) { var flx = ctx._flx[_flx];
-    if (flx.name !== "Main") {
+    for (index = 0; index < length; index++) {
+        flx = ctx._flx[index];
+        if (flx.name !== 'Main') {
 
-      var _code = print(bld.register(flx.name, map(flx.ast, iterator()), flx.scope));
+            _code = print(bld.register(flx.name, map(flx.ast, iterator()), flx.scope));
 
-      // This is only the comment :
-      code += "\n\n// " + flx.name + " >> " + ((flx.outputs.length) ? flx.outputs.map(function(o) {return o.name + " [" + Object.keys(o.signature) + "]"}).join(", ") : "ø") + "\n\n" + _code;
+            // This is only the comment :
+            code += "\n\n// " + flx.name + ' >> ';
+            if (flx.outputs.length) {
+                code += printSig(flx);
+            }
+            else {
+                code += 'ø';
+            }
+
+            code += "\n\n" + _code;
+        }
     }
-  }
 
-  return code;
+    return code;
 }
+
+module.exports = link;
