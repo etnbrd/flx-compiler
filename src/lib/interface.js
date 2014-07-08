@@ -1,10 +1,5 @@
 var fs = require('fs');
 
-module.exports = {
-  args : parseArgs,
-  pipe : pipe
-}
-
 function parseArgs(args) {
 
 
@@ -22,17 +17,18 @@ function parseArgs(args) {
       this.input = arg;
     }
 
-    const options = {
-      "-o" : output,
-      "--output" : output,
-      "-v" : verbose,
-      "--verbose" : verbose
-    }
+    const avaliableOptions = {
+      '-o' : output,
+      '--output' : output,
+      '-v' : verbose,
+      '--verbose' : verbose
+    };
 
     function iterator(opt, arg) {
-      var flag_handler = options[arg];
+      var flagHandler = avaliableOptions[arg],
+          prev;
 
-      if (!prev && !flag_handler && !opt.input) {
+      if (!prev && !flagHandler && !opt.input) {
         prev = first;
       }
 
@@ -40,12 +36,10 @@ function parseArgs(args) {
         prev.call(opt, arg);
       }
 
-      prev = flag_handler;
+      prev = flagHandler;
 
       return opt;
     }
-
-    var prev = undefined;
 
     return iterator;
   }
@@ -62,11 +56,11 @@ function pipe(fn) {
   var options = parseArgs(process.argv);
 
   if (!options.input) {
-    console.log("Please specify a name"); // TODO error management
+    console.log('Please specify a name'); // TODO error management
   }
 
   // if (!options.output) {
-    // options.output = "result.js";
+    // options.output = 'result.js';
   // }
 
   if (options.verbose) {
@@ -85,6 +79,11 @@ function pipe(fn) {
       console.log("\n====================================\n");
       console.log(output);
     }
-  })
+  });
 
 }
+
+module.exports = {
+  args : parseArgs,
+  pipe : pipe
+};
