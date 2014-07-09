@@ -164,6 +164,7 @@ _types.AssignmentExpression = {
         //     });
 
         // TODO need redesign
+        // We need map and reduce, design a module from estraverse
 
         var _context = [];
 
