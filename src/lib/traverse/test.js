@@ -7,6 +7,12 @@ function compileAndMock(filename) {
     return supertest(t.compileAndLoad(filename));
 }
 
+// TODO all tests are useless :
+// We want to make sure the compilation is happenning correctly.
+// The compilation modify scope availability for distributed system.
+// But in these tests, the global scope is accessible everywhere, so even if the compilation breaks, as it's the case now, the tests pass.
+
+
 // describe('Test Cases', function(){
     describe('IfStatement :', function(){
         describe('outside of app.get :', function(){
