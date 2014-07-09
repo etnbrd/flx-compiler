@@ -3,7 +3,7 @@ var bld = require('../../linker/builders');
 var _types = {};
 
 _types.Identifier = {
-  enter: function(n) {
+  enter: function(n, p) {
 
     if (n.modifier) {
       if (n.modifier.target === 'signature') {

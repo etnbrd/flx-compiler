@@ -1,4 +1,4 @@
-var parse = require('recast').parse;
+var parse = require('esprima').parse;
 var prune = require('./pruner');
 var link = require('./linker');
 
