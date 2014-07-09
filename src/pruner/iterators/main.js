@@ -1,9 +1,4 @@
-var map = require('../../lib/traverse').map,
-    red = require('../../lib/traverse').reduce,
-    iterators = { // TODO this is ugly, we should make a factory to build the module based on the folder iterators of each compile step, and the iteratorFactory in lib/traverse
-        main: require('../../lib/traverse').iterator(require('./main')),
-        getid: require('../../lib/traverse').iterator(require('./getid'))
-    };
+// For requires, see the end of file.
 
 var _types = {};
 
@@ -189,4 +184,14 @@ _types.Identifier = {
     }
 };
 
+// This file construction seems odd with the require and module.exports at bottom.
+// But it is perfectly justified : as this file is required recursively, we need to export it before anything else.
+// Thanks to hoisting, this work.
 module.exports = _types;
+
+var map = require('../../lib/traverse').map,
+    red = require('../../lib/traverse').reduce,
+    iterators = { // TODO this is ugly, we should make a factory to build the module based on the folder iterators of each compile step, and the iteratorFactory in lib/traverse
+        main: require('../../lib/traverse').iterator(require('./main')),
+        getid: require('../../lib/traverse').iterator(require('./getid'))
+    };

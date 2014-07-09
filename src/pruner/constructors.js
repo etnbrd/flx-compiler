@@ -17,6 +17,10 @@ function FlxScope(name, ast) {
     this.scope = {};
 }
 
+FlxScope.prototype.current = function () {
+    return this._stack[0];
+};
+
 FlxScope.prototype.enter = function () {
     log.enter('Enter flx ' + this.name);
     return this;
@@ -34,6 +38,23 @@ FlxScope.prototype.registerOutput = function (output) {
     log.info(this.name + ' // ' + output.source.name +  ' -> ' + output.dest.name);
     this.outputs.push(output);
     this.currentOutput = output;
+};
+
+FlxScope.prototype.registerScope = function (id) {
+    this.scope[id.name] = id;
+};
+
+FlxScope.prototype.registerModifier = function (id, type) { // TODO this should be directly triggered by registerId or registerMod
+
+    // console.log('MODIFIER ', id.name || id, type, !!this.modifiers)
+
+    if (!this.modifiers[id.name]) {
+        this.modifiers[id.name] = { // TODO might lead to conflict, as scope and fluxion scope aren't the same
+            target : type
+        };
+    } else if (type === 'scope') { // scope modifier is of higher priority
+        this.modifiers[id.name].target = 'scope';
+    }
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -102,6 +123,23 @@ FnScope.prototype.registerId = function (id) {
         }
 
         return findVar(this, id.name);
+    }
+};
+
+FnScope.prototype.registerMod = function (id) {
+
+    if (id.name) {
+
+        if (!this._ids[id.name]) {
+            this.registerId(id);
+        }
+
+        if (this._var[id.name]) { // local modification, nothing to do
+            log.mod(id.name + log.grey(' // ' + this.name));
+        } else { // remote modification, need to do something
+            this._ids[id.name].used = true;
+            log.mod(log.bold(id.name) + log.grey(' // ' + this.name));
+        }
     }
 };
 
@@ -218,6 +256,14 @@ Context.prototype.registerId = function (id) {
 
 Context.prototype.registerVar = function (_var) {
     return this.currentScope.registerVar(_var);
+};
+
+Context.prototype.registerOutput = function (output) {
+    return this.currentFlx.registerOutput(output);
+};
+
+Context.prototype.registerMod = function (id) {
+    return this.currentScope.registerMod(id);
 };
 
 module.exports = {

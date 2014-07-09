@@ -1,6 +1,5 @@
 var b = require('recast').types.builders;
 
-
 function requireflx() {
     return b.variableDeclaration('var', [
             b.variableDeclarator(b.identifier('flx'), b.callExpression(
@@ -9,6 +8,7 @@ function requireflx() {
                     ))
             ]);
 }
+
 
 function startPlaceholder(next, signature) {
     return b.functionExpression(b.identifier('placeholder'), [
@@ -95,8 +95,17 @@ function register(name, fn, scope) {
     return _register(name, _capsule(fn), scope);
 }
 
+function scopeModifier(name) {
+    return b.memberExpression(
+            b.identifier('this'),
+            b.identifier(name),
+            false
+            );
+}
+
 module.exports = {
     requireflx: requireflx,
     register: register,
-    start: startPlaceholder
+    start: startPlaceholder,
+    scopeModifier: scopeModifier
 };
