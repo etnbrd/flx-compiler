@@ -29,7 +29,6 @@ function link(ctx) {
     for (var _flx in ctx._flx) {
         var flx = ctx._flx[_flx];
         if (flx.name !== 'Main') {
-
             var _code = print(bld.register(flx.name, map(flx.ast, iterator()), flx.scope));
 
             // This is only the comment :
