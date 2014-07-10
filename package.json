@@ -13,7 +13,10 @@
     "express": "*",
     "supertest": "*",
     "jshint": "*",
-    "blanket": "*"
+    "blanket": "*",
+    "coffee-script": "*",
+    "esprima": "*",
+    "escope": "*"
   },
   "engine": "node >= 0.10.0",
   "main": "src/index.js",

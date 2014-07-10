@@ -94,13 +94,14 @@ FnScope.prototype.leave = function () {
 
 FnScope.prototype.registerId = function (id) {
     if (id.name) {
-        function findVar(scope, name) {
+        var findVar;
+        findVar = function (scope, name) {
             var index,
                 _par,
                 length = scope._var.length;
 
-            for (index in scope._var) {
-                if (scope._var[index].name === name) {
+            for (index = 0; index < length; index += 1) {
+                if (scope._var.length[index] === name) {
                     return scope.flx;
                 }
             }
