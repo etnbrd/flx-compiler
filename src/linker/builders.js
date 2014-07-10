@@ -1,23 +1,23 @@
-// var b = require('recast').types.builders;
+module.exports = {
+  // program: program,
+  // requires: requires,
+  // registerScp: registerScp,
+  // route: route,
+  // flxSimple: flxSimple,
+  // HelloWorld: HelloWorld,
+  // postFlx : postFlx
+
+  requireflx: requireflx,
+  placeholder: placeholder,
+  register: register,
+  start: startPlaceholder,
+  post: postPlaceholder,
+
+  signatureModifier: signatureModifier,
+  scopeModifier: scopeModifier
+};
+
 var b = require('ast-types').builders;
-
-
-// function program(n) {
-//     return b.program(n);
-// }
-
-// function requires(path) {
-//     return b.variableDeclaration('var', [
-//             b.variableDeclarator(b.identifier('flx'), b.callExpression(
-//                     b.identifier('require'), // Anonymize the function expression.
-//                     [b.literal('./lib/flx')]
-//                     )),
-//             b.variableDeclarator(b.identifier('web'), b.callExpression(
-//                     b.identifier('require'), // Anonymize the function expression.
-//                     [b.literal('./lib/web')]
-//                     ))
-//             ]);
-// }
 
 function requireflx() {
   return b.variableDeclaration('var', [
@@ -327,23 +327,3 @@ function scopeModifier(name) {
     false
   );
 }
-
-module.exports = {
-  // program: program,
-  // requires: requires,
-  // registerScp: registerScp,
-  // route: route,
-  // flxSimple: flxSimple,
-  // HelloWorld: HelloWorld,
-  // postFlx : postFlx
-
-
-  requireflx: requireflx,
-  placeholder: placeholder,
-  register: register,
-  start: startPlaceholder,
-  post: postPlaceholder,
-
-  signatureModifier: signatureModifier,
-  scopeModifier: scopeModifier
-};

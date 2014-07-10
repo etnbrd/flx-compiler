@@ -222,6 +222,8 @@ _types.AssignmentExpression = {
 _types.Identifier = {
     enter: function (n, p, c) {
 
+        // console.log(n.name);
+
         function reserved(name) { // TODO find a better place for this function
             return !!(name === 'require' || name === 'exports' || name === 'module');
         }
@@ -229,7 +231,6 @@ _types.Identifier = {
         if (!reserved(n.name) && !c.currentScope._var[n.name]) {
             var source = c.registerId(n);
             // If register said it's outside of scope, then replace futur occurence (in this fluxion) with msg._my_var_
-
             if (source) {
                 if (!c.currentFlx.modifiers[n.name]) {
                     c.currentFlx.registerModifier(n, 'signature');

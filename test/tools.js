@@ -1,27 +1,20 @@
+require('coffee-script/register');
 var fs = require('fs'),
     t = require('../src/lib/tools'),
-    _compile = require('../src/compile');
-
-
-// TODO refactor needed !!
-
+    compile = require('../src/compile'),
+    lint = require('./lint.coffee'),
+    assert = require('assert');
 
 function read(filename) {
     return fs.readFileSync('./examples/' + filename).toString();
 }
 
-function expect(filename) {
-    return fs.readFileSync('./test/results/' + filename).toString();
-}
-
-function compile(src, filename) {
-    var res = _compile(src);
-    t.writeFile(filename, res, __dirname + '/../results/');
-    return res;
-}
-
 function compileAndLoad(filename) {
-    compile(read(filename), filename);
+    var src = compile(read(filename));
+    var l = lint(src);
+    if (l.length)
+        assert.fail(false, true, 'Des variables globales sont référencez dans des fluxions :\n' + JSON.stringify(l, null, '\t'));
+    t.writeFile(filename, src, __dirname + '/../results/');
     return require(__dirname + '/../results/' + filename).app;
 }
 
@@ -32,7 +25,6 @@ function compileAndMock(filename) {
 module.exports = {
     compile: compile,
     read: read,
-    expect: expect,
     compileAndMock: compileAndMock,
     compileAndLoad: compileAndLoad
 };
