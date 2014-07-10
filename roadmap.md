@@ -253,3 +253,8 @@ Same with objects.
 # Problem #7
 
 Same with arrays.
+
+
+# Problem #8
+
+Same with require

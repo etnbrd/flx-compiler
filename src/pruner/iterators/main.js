@@ -4,7 +4,9 @@ var estraverse = require("estraverse")
 ,   iterators = { // TODO this is ugly, we should make a factory to build the module based on the folder iterators of each compile step, and the iteratorFactory in lib/traverse
         main: require('./main'),
         getid: require('./getid')
-    };
+    }
+,   h = require("../../lib/helpers")
+;    
 
 function iterator(c) { // TODO refactor to extract this function from the defeinition of _types, and then dynamically generate iterator modules.
     function handlerFactory(type) {
@@ -91,14 +93,14 @@ _types.CallExpression = {
 
         */
 
+        var salt = h.salt();
 
         if (_c.id === 'app.get') { // STARTERS
             n.arguments.forEach(function (_n, i) {
                 if (_n.type === 'FunctionExpression' || _n.type === 'FunctionDeclaration') {
-                    var placeholder = {type: 'Placeholder', name: _n.id.name, kind: 'start', index: i};
-                    // n._linkedFn = _n; // TODO can do better
-                    // n._placeholder = placeholder;
-                    // n.arguments[i] = placeholder;
+                    n.salt = salt;
+                    var name = c.prepareFlx(salt, _n, 'start', i);
+                    n.arguments[i] = {type: 'Identifier', kind: 'start', name: '↠' + name};
                 }
             });
 
@@ -113,21 +115,25 @@ _types.CallExpression = {
 
     },
     leave: function (n, p, c) {
-        if (n._placeholder) {
-            if (n._placeholder.kind === 'start') {
+        if (n.salt) {
+            c.getFutures(n.salt).forEach(function(flx) {
+                if (flx.kind === 'start') {
 
-                c.enterFlx(n._placeholder.name, n._linkedFn, 'start');
-                estraverse.traverse(n._linkedFn, iterators.main(c));
-                c.leaveFlx();
+                    c.enterFlx(flx.name, flx.fn, 'start');
+                    estraverse.traverse(flx.fn, iterators.main(c));
+                    c.leaveFlx();
 
-                n.arguments[n._placeholder.index] = {type: 'Identifier', kind: 'start', name: '↠' + n._placeholder.name, signature: c.currentFlx.currentOutput.signature}; //bld.start(n._placeholder.name, c.currentFlx.currentOutput.signature);      
-            }
-            if (n._placeholder.kind === 'post') {
-                c.leaveScope();
-                c.leaveFlx();
+                    // TODO this is bad design, we shouldn't modify the AST so much, remove signature, put it somwhere else
+                    n.arguments[flx.index].signature = c.currentFlx.currentOutput.signature;
+                }
+                // TODO uncomment later, and replace n._placeholder with flx
+                // if (n._placeholder.kind === 'post') {
+                //     c.leaveScope();
+                //     c.leaveFlx();
 
-                return {type: 'Identifier', kind: 'post', name: '→' + n._placeholder.name, signature: c.currentFlx.currentOutput.signature};//bld.post(n._placeholder.name, c.currentFlx.currentOutput.signature);
-            }
+                //     return {type: 'Identifier', kind: 'post', name: '→' + n._placeholder.name, signature: c.currentFlx.currentOutput.signature};//bld.post(n._placeholder.name, c.currentFlx.currentOutput.signature);
+                // }
+            })
         }
     }
 };
@@ -235,6 +241,7 @@ _types.Identifier = {
         // For exemple, if the variable send is in the signature, we don't want to modify rep.send into rep.msg.send
 
         if (c.currentFlx.modifiers[n.name]) {
+            // TODO we shouldn't put modifier in the AST
             n.modifier = c.currentFlx.modifiers[n.name];
         }
     },

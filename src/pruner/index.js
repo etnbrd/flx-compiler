@@ -14,7 +14,7 @@ function start(ast) {
     // console.log(util.inspect(scopes, false, 10));
 
     var context = new cons.Context(ast);
-    context.enterFlx("Main", ast.program);
+    context.enterFlx("Main", ast);
     // map(ast.program, iterator(context));
 
     estraverse.traverse(ast, iterator(context));

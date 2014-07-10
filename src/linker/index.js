@@ -1,47 +1,83 @@
-var _print = require("recast").print
+var escodegen = require("escodegen")
 ,    bld = require("./builders")
 //,    map = require("../lib/traverse").map
-,    iterator = require("../lib/traverse").iterator(require("./iterators/main"))
-,    estraverse = require("estraverse");
+,    iterator = require("./iterators/main")
+,    estraverse = require("estraverse")
+,    util = require("util")
 ;
 
 
+const options = {
+  format: {
+    indent: {
+      style: '  ',
+      base: 0,
+      adjustMultilineComment: false
+    },
+    newline: '\n',
+    space: ' ',
+    json: false,
+    renumber: false,
+    hexadecimal: false,
+    quotes: 'single',
+    escapeless: true,
+    compact: false,
+    parentheses: true,
+    semicolons: true,
+    safeConcatenation: false
+  },
+  moz: {
+    starlessGenerator: false,
+    parenthesizedComprehensionBlock: false,
+    comprehensionExpressionStartsWithAssignment: false
+  },
+  parse: null,
+  comment: false,
+  sourceMap: undefined,
+  sourceMapRoot: null,
+  sourceMapWithCode: false,
+  // sourceContent: originalSource, // TODO
+  directive: false,
+  verbatim: undefined
+}
+
 function print(ast) {
-    return _print(ast).code;
+  return escodegen.generate(ast, options);
 }
 
 function printFlx(flx) {
-    if (flx.outputs.length) {
-        return flx.outputs.map(function (o) {
-            return o.name + " [" + Object.keys(o.signature) + "]";
-        }).join(", ");
-    }
-    else {
-        return "ø";
-    }
+  if (flx.outputs.length) {
+    return flx.outputs.map(function (o) {
+      return o.name + " [" + Object.keys(o.signature) + "]";
+    }).join(", ");
+  }
+  else {
+    return "ø";
+  }
 }
 
 function link(ctx) {
 
-    console.log(ctx);
+  // Add the flx library
+  ctx.ast.body.unshift(bld.requireflx());
 
-    // Add the flx library
-    ctx.ast.body.unshift(bld.requireflx());
-    var ast = estraverse.traverse(ctx._flx.Main.ast, iterator());
+  var ast = estraverse.replace(ctx._flx.Main.ast, iterator());
 
-    var code = print(ast);
+  var code = print(ast);
 
-    for (var _flx in ctx._flx) {
-        var flx = ctx._flx[_flx];
-        if (flx.name !== "Main") {
-            var _code = print(bld.register(flx.name, estraverse.traverse(flx.ast, iterator()), flx.scope));
+  for (var _flx in ctx._flx) {
+    var flx = ctx._flx[_flx];
+    if (flx.name !== "Main") {
 
-            // This is only the comment :
-            code += "\n\n// " + flx.name + " >> " + printFlx(flx) + "\n\n" + _code;
-        }
+      var _ast = estraverse.replace(flx.ast, iterator());
+      var _code = print(bld.register(flx.name, _ast, flx.scope));
+
+      // This is only the comment :
+      code += "\n\n// " + flx.name + " >> " + printFlx(flx) + "\n\n" + _code;
     }
+  }
 
-    return code;
+  return code;
 }
 
 module.exports = link;

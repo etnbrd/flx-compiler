@@ -6,7 +6,9 @@
   "dependencies": {
     "esprima": "*",
     "estraverse": "*",
-    "escope": "*"
+    "escope": "*",
+    "escodegen": "*",
+    "ast-types": "*"
   },
   "devDependencies": {
     "flx": "*",
