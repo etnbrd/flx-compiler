@@ -3,6 +3,9 @@ var log = require('../lib/log');
 
 // TODO merge Context and FlxScope prototypes, they share most of their properties and methods
 
+// TODO there is two kind of scope here : function scope, and fluxion scope, we need to change the name of fluxion scope to something else.
+// Like context, state, or persistence ...
+
 ////////////////////////////////////////////////////////////////////////////////
 // FlxScope                                                                   //
 ////////////////////////////////////////////////////////////////////////////////
@@ -53,6 +56,7 @@ FlxScope.prototype.registerModifier = function (id, type) { // TODO this should 
             target : type
         };
     } else if (type === 'scope') { // scope modifier is of higher priority
+        this.registerScope(id); // TODO I am not sure if this is the right place for this line (but it seems to work :)
         this.modifiers[id.name].target = 'scope';
     }
 };
@@ -108,7 +112,6 @@ FnScope.prototype.registerId = function (id) {
                     scope.parent.flx.currentOutput.registerSign(id);
                     return _par;
                 }
-
             }
 
             return undefined;

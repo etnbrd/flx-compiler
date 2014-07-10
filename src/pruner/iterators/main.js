@@ -186,7 +186,7 @@ _types.Identifier = {
 
 // This file construction seems odd with the require and module.exports at bottom.
 // But it is perfectly justified : as this file is required recursively, we need to export it before anything else.
-// Thanks to hoisting, this work.
+// Thanks to hoisting, this work :)
 module.exports = _types;
 
 var map = require('../../lib/traverse').map,
