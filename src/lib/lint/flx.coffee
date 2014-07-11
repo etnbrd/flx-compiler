@@ -1,20 +1,8 @@
-console.time 'Total'
 fs = require 'fs'
 esprima = require 'esprima'
 escope = require 'escope'
 
-get_globals_scope = (scope) ->
-    name = (a) ->
-        if a.identifier
-            a.identifier.name
-        else
-            a.name
-
-    names = (a) -> a.map name
-    minus_array = (a, b) -> a.filter (e) -> b.indexOf(e) == -1
-    minus_array names(scope.references), names(scope.variables)
-
-get_globals = (code) ->
+get_flxs = (code, f) ->
     ast = esprima.parse(code, { loc: true, range: true })
     scopes = escope.analyze(ast).scopes
     scopes[0].block.body
@@ -32,10 +20,10 @@ get_globals = (code) ->
             {
                 name: m.block.id.name,
                 loc: m.block.id.loc,
-                errors: get_globals_scope m
+                errors: f m
             }
         .reduce ((a, b) -> a.concat b), []
         .reduce ((a, b) -> a.concat b), []
         .filter (n) -> n.errors.length
 
-module.exports = get_globals
+module.exports = get_flxs

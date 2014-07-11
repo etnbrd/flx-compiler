@@ -1,8 +1,7 @@
-require('coffee-script/register');
 var fs = require('fs'),
     t = require('../src/lib/tools'),
     compile = require('../src/compile'),
-    lint = require('./lint.coffee'),
+    lint = require('../src/lib/lint').lint,
     assert = require('assert');
 
 function read(filename) {
