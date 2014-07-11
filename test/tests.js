@@ -35,30 +35,30 @@ module.exports = {
        "   as it is used only in this fluxion."
       ].join("\n")
     },
-    {
-      name : 'count5',
-      desc : [
-        "  The server of problem #1 reply a constant value to every request.",
-       "   There isn't any variable used."
-      ].join("\n")
-    },
-    {
-      name : 'count6',
-      desc : [
-        "  Same with objects"
-      ].join("\n")
-    },
-    {
-      name : 'count7',
-      desc : [
-        "  Same with arrays"
-      ].join("\n")
-    },
-    {
-      name : 'count8',
-      desc : [
-        "  Same with requires"
-      ].join("\n")
-    }
+    // {
+    //   name : 'count5',
+    //   desc : [
+    //     "  The server of problem #1 reply a constant value to every request.",
+    //    "   There isn't any variable used."
+    //   ].join("\n")
+    // },
+    // {
+    //   name : 'count6',
+    //   desc : [
+    //     "  Same with objects"
+    //   ].join("\n")
+    // },
+    // {
+    //   name : 'count7',
+    //   desc : [
+    //     "  Same with arrays"
+    //   ].join("\n")
+    // },
+    // {
+    //   name : 'count8',
+    //   desc : [
+    //     "  Same with requires"
+    //   ].join("\n")
+    // }
   ]
 }

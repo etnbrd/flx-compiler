@@ -4,9 +4,16 @@ var fs = require('fs'),
     lint = require('../src/lib/lint').lint,
     assert = require('assert');
 
+// TODO refactor needed !!
+
 function read(filename) {
     return fs.readFileSync('./examples/' + filename).toString();
 }
+
+function expect(filename) {
+    return fs.readFileSync('./test/results/' + filename).toString();
+}
+
 
 function compileAndLoad(filename) {
     var src = compile(read(filename));

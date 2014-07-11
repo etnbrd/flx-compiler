@@ -10,10 +10,13 @@ var iterator = require("./iterators/main")
 
 function start(ast) {
 
-    // var scopes = escope.analyze(ast);
-    // console.log(util.inspect(scopes, false, 10));
+    var scopes = escope.analyze(ast);
+    var str = util.inspect(scopes, false, 1000);
+    // var str = JSON.stringify(scopes);
 
-    var context = new cons.Context(ast);
+    require("fs").writeFileSync("scopes.json", str);
+
+    var context = new cons.Context(ast, scopes);
     context.enterFlx("Main", ast);
     // map(ast.program, iterator(context));
 
