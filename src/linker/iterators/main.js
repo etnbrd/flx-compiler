@@ -26,12 +26,13 @@ _types.Identifier = {
     if (n.modifier) {
       if (n.modifier.target === 'signature') {
         var mod = bld.signatureModifier(n.name);
+        console.log("SIGNATURE MOD ", mod);
         return mod;
       }
 
       if (n.modifier.target === 'scope') {
         var mod = bld.scopeModifier(n.name);
-        // console.log("SCOPE MOD ", mod);
+        console.log("SCOPE MOD ", mod);
         return mod;
       }
     }
