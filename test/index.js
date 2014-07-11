@@ -11,7 +11,7 @@ describe('Compilation', function () {
     describe('Problem #0 : \n', function () {
         it('source and result should be different', function (done) {
             var s = t.read('compile.js');
-            assert.notEqual(s, t.compile(s));
+            assert.notEqual(s, t.compile(s, "compile.js"));
             done();
         });
     });

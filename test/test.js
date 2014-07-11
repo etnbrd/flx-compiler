@@ -11,7 +11,7 @@ describe('Test Cases', function () {
     describe('compilation result seems good', function () {
         it('result code shouldn\'t be the same', function (done) {
             var s = t.read('compile.js');
-            assert.notEqual(s, t.compile(s));
+            assert.notEqual(s, t.compile(s, "compile.js"));
             done();
         });
     });
