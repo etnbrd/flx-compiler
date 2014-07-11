@@ -3,7 +3,7 @@ globals = require '../globals'
 esprima = require 'esprima'
 escope = require 'escope'
 
-load = (code, n) ->
+load = (code, n, dump = false) ->
     ast = esprima.parse(code, { loc: true, range: true })
     globals escope.analyze(ast).scopes[n]
 
@@ -497,4 +497,12 @@ describe 'globals', ->
                                                             var l = 2;
                                                             return b(y)+l+a;
                                                         }', 1)
+
+    describe 'regression', ->
+        it 'fluxion own variable used should return an empty array', ->
+            assert.deepEqual [], load(" flx.register('reply', function capsule(msg) {
+                                          (function reply(req, res) {
+                                            res.send(msg._sign._rep);
+                                          }.apply(this, msg._args));
+                                        }, {});", 1)
 
