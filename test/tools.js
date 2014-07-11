@@ -16,7 +16,6 @@ function expect(filename) {
 
 function compile(src, filename) {
     var res = _compile(src);
-    console.log(__dirname + "/../results/");
     t.writeFile(filename, res, __dirname + '/../results/');
     return res;
 }

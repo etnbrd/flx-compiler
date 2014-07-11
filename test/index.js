@@ -20,7 +20,6 @@ describe('Compilation', function () {
         describe("Problem #" + (index + 1) + " : \n", function() {
             it(test.desc, function () {
                 var filename = test.name + ".js";
-                console.log(">>>> HERE");
                 assert.equal(t.compile(t.read(filename), filename), t.expect(filename));
             })
         })

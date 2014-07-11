@@ -141,7 +141,7 @@ var _rep = '42';
 app.get('/', function placeholder() {
   return flx.start(flx.m('reply', {
     _args: arguments,
-    _sign: {}
+    _sign: { _rep: _rep }
   }));
 });
 if (!module.parent) {
@@ -154,7 +154,7 @@ exports.app = app;
 
 flx.register('reply', function capsule(msg) {
   (function reply(req, res) {
-    res.send(_rep);
+    res.send(msg._sign._rep);
   }.apply(this, msg._args));
 }, {});
 ```
@@ -198,7 +198,7 @@ var _rep = 42;
 app.get('/', function placeholder() {
   return flx.start(flx.m('reply', {
     _args: arguments,
-    _sign: {}
+    _sign: { _rep: _rep }
   }));
 });
 if (!module.parent) {
@@ -211,9 +211,9 @@ exports.app = app;
 
 flx.register('reply', function capsule(msg) {
   (function reply(req, res) {
-    res.send('' + _rep);
+    res.send('' + this._rep);
     this._rep += 1;
   }.apply(this, msg._args));
-}, {});
+}, { _rep: _rep });
 ```
 

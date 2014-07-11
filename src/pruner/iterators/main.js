@@ -242,7 +242,7 @@ _types.Identifier = {
         // For exemple, if the variable send is in the signature, we don't want to modify rep.send into rep.msg.send
 
         if (c.currentFlx.modifiers[n.name]) {
-            // TODO we shouldn't put modifier in the AST
+            // TODO we shouldn't put modifier in the AST, instead this step beglongs to linker
             n.modifier = c.currentFlx.modifiers[n.name];
         }
     },
