@@ -15,7 +15,6 @@ get_flxs = (code, f) ->
         .map (n) -> n.range
         .map (p) -> scopes.filter (s) -> s.block.range == p
         .map (n) -> n.map (m) -> m.childScopes[0]
-        .map (n) -> n.map (m) -> m.childScopes[0]
         .map (n) ->
             m = n[1]
             {
