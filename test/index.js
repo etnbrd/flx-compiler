@@ -16,12 +16,24 @@ describe('Compilation', function () {
         });
     });
 
-    require("./tests").counts.forEach(function(test, index) {
-        describe("Problem #" + (index + 1) + " : \n", function() {
-            it(test.desc, function () {
-                var filename = test.name + ".js";
-                assert.equal(t.compile(t.read(filename), filename), t.expect(filename));
-            })
-        })
-    })
+    require('./tests').counts.forEach(function(test, index) {
+        describe('Problem #' + (index + 1) + " : \n", function() {
+            it(test.desc, function (done) {
+                var p = t.compileAndMock(test.name + '.js');
+                var runExpectations = function (index) {
+                    return function () {
+                        if (index >= test.expectations.length)
+                            done();
+                        else
+                            p
+                                .get('/')
+                                .expect(test.expectations[index])
+                                .end(runExpectations(index + 1));
+                    };
+                };
+
+                runExpectations(0)();
+            });
+        });
+    });
 });
