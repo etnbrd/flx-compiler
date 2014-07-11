@@ -14,7 +14,7 @@ function start(ast) {
     var str = util.inspect(scopes, false, 1000);
     // var str = JSON.stringify(scopes);
 
-    require("fs").writeFileSync("scopes.json", str);
+    // require("fs").writeFileSync("scopes.json", str);
 
     var context = new cons.Context(ast, scopes);
     context.enterFlx("Main", ast);

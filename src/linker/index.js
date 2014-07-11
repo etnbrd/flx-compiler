@@ -61,7 +61,7 @@ function link(ctx) {
   // Add the flx library
   ctx.ast.body.unshift(bld.requireflx());
 
-  var ast = estraverse.replace(ctx._flx.Main.ast, iterator());
+  var ast = estraverse.replace(ctx._flx.Main.ast, iterator(ctx._flx.Main));
 
   var code = print(ast);
 
@@ -69,7 +69,7 @@ function link(ctx) {
     var flx = ctx._flx[_flx];
     if (flx.name !== "Main") {
 
-      var _ast = estraverse.replace(flx.ast, iterator());
+      var _ast = estraverse.replace(flx.ast, iterator(flx));
       var _code = print(bld.register(flx.name, _ast, flx.scope));
 
       // This is only the comment :

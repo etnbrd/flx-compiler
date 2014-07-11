@@ -21,7 +21,9 @@ function iterator(c) { // TODO refactor to extract this function from the defein
 var _types = {};
 
 _types.Identifier = {
-  enter: function(n, p) {
+  enter: function(n, p, c) {
+
+    // console.log(c.modifiers);
 
     if (n.modifier) {
       if (n.modifier.target === 'signature') {
@@ -31,7 +33,6 @@ _types.Identifier = {
 
       if (n.modifier.target === 'scope') {
         var mod = bld.scopeModifier(n.name);
-        // console.log("SCOPE MOD ", mod);
         return mod;
       }
     }
@@ -42,11 +43,6 @@ _types.Identifier = {
 
     if (n.kind === 'post'){
       return bld.post(n.name.substring(1), n.signature);
-    }
-  },
-  leave: function(n, p) {
-    if (n.modified) {
-      console.log("MODIFIED", n);
     }
   }
 };
