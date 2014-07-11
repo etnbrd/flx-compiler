@@ -125,7 +125,13 @@ FnScope.prototype.registerId = function (id) {
             // throw errors.identifierConflict([id, this._ids[id.name]]);
         }
 
-        return findVar(this, id.name);
+        var source = findVar(this, id.name)
+
+        // console.log(">> ", source);
+
+        // c.scope.analyse();
+
+        return source;
     }
 };
 
@@ -190,7 +196,7 @@ Output.prototype.registerSign = function (id) {
 // Context                                                                    //
 ////////////////////////////////////////////////////////////////////////////////
 
-function Context(ast) {
+function Context(ast, scopes) {
     this._scopes = [];
     this._flx = {};
     this._stack = [];
@@ -201,6 +207,7 @@ function Context(ast) {
     this.starts = [];
     this.name = ast.name;
     this.futurFlx = {};
+    this.scopes = scopes;
 }
 
 // prepareFlx and getFutures need to be redesigned, it's just a quick fix.
