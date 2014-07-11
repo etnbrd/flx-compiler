@@ -96,6 +96,7 @@ describe 'flx', ->
                     o = v
                     v += 'A'
                     o
+
                 assert.equal 2, flx('   flx.register("replyA", function capsule(msg) {
                                             (function replyA(req, res) {
                                               res.send("" + _rep);
@@ -120,3 +121,28 @@ describe 'flx', ->
                                               this._rep += 1;
                                             }).apply(this, msg._args);
                                         }, {});', acc).length
+
+    describe 'regression', ->
+        it 'we should match the fluxion function, not below should return an O-length array', ->
+            assert.equal 0, flx("var flx = require('flx');
+var app = require('express')();
+var _rep = '42';
+app.get('/', function placeholder() {
+  return flx.start(flx.m('reply', {
+    _args: arguments,
+    _sign: { _rep: _rep }
+  }));
+});
+if (!module.parent) {
+  app.listen(8080);
+  console.log('>> listening 8080');
+}
+exports.app = app;
+
+// reply >> ø
+
+flx.register('reply', function capsule(msg) {
+  (function reply(req, res) {
+    res.send(msg._sign._rep);
+  }.apply(this, msg._args));
+}, {});", globals).length
