@@ -200,6 +200,31 @@ function Context(ast) {
     this.ast = ast;
     this.starts = [];
     this.name = ast.name;
+    this.futurFlx = {};
+}
+
+// prepareFlx and getFutures need to be redesigned, it's just a quick fix.
+
+Context.prototype.prepareFlx = function(node, fn, kind, index) {
+
+    if (!this.futurFlx[node]) this.futurFlx[node] = [];
+
+    var name = fn.id.name; // TODO make this more robust, with salt.
+
+    this.futurFlx[node].push({
+        name: name,
+        fn: fn,
+        kind: kind,
+        index: index
+    })
+
+    return name;
+}
+
+Context.prototype.getFutures = function(node) {
+    var futures = this.futurFlx[node];
+    this.futurFlx[node] = undefined;
+    return futures;
 }
 
 Context.prototype.enterFlx = function (name, ast, type) {

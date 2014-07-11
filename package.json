@@ -4,7 +4,11 @@
   "version": "0.0.1",
   "author": "Etienne Brodu <etn@etnbrd.com>",
   "dependencies": {
-    "recast": "*"
+    "esprima": "*",
+    "estraverse": "*",
+    "escope": "*",
+    "escodegen": "*",
+    "ast-types": "*"
   },
   "devDependencies": {
     "flx": "*",
