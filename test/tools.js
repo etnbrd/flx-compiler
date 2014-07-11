@@ -1,8 +1,7 @@
-require('coffee-script/register');
 var fs = require('fs'),
     t = require('../src/lib/tools'),
     compile = require('../src/compile'),
-    lint = require('./lint.coffee'),
+    lint = require('../src/lib/lint').lint,
     assert = require('assert');
 
 function read(filename) {
@@ -11,10 +10,10 @@ function read(filename) {
 
 function compileAndLoad(filename) {
     var src = compile(read(filename));
+    t.writeFile(filename, src, __dirname + '/../results/');
     var l = lint(src);
     if (l.length)
         assert.fail(false, true, 'Des variables globales sont référencez dans des fluxions :\n' + JSON.stringify(l, null, '\t'));
-    t.writeFile(filename, src, __dirname + '/../results/');
     return require(__dirname + '/../results/' + filename).app;
 }
 
