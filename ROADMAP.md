@@ -23,32 +23,7 @@ exports.app = app;
 
 ```
 
-The compiled result is in `results/count1.js` : 
-
-```
-var flx = require('flx');
-var app = require('express')();
-app.get('/', function placeholder() {
-  return flx.start(flx.m('reply', {
-    _args: arguments,
-    _sign: {}
-  }));
-});
-if (!module.parent) {
-  app.listen(8080);
-  console.log('>> listening 8080');
-}
-exports.app = app;
-
-// reply >> ø
-
-flx.register('reply', function capsule(msg) {
-  (function reply(req, res) {
-    res.send('42');
-  }.apply(this, msg._args));
-}, {});
-```
-
+The result has not yet be implemented
 # Problem #2
 
 
@@ -77,33 +52,7 @@ exports.app = app;
 
 ```
 
-The compiled result is in `results/count2.js` : 
-
-```
-var flx = require('flx');
-var app = require('express')();
-app.get('/', function placeholder() {
-  return flx.start(flx.m('reply', {
-    _args: arguments,
-    _sign: {}
-  }));
-});
-if (!module.parent) {
-  app.listen(8080);
-  console.log('>> listening 8080');
-}
-exports.app = app;
-
-// reply >> ø
-
-flx.register('reply', function capsule(msg) {
-  (function reply(req, res) {
-    var _rep = '42';
-    res.send(_rep);
-  }.apply(this, msg._args));
-}, {});
-```
-
+The result has not yet be implemented
 # Problem #3
 
 
@@ -132,33 +81,7 @@ exports.app = app;
 
 ```
 
-The compiled result is in `results/count3.js` : 
-
-```
-var flx = require('flx');
-var app = require('express')();
-var _rep = '42';
-app.get('/', function placeholder() {
-  return flx.start(flx.m('reply', {
-    _args: arguments,
-    _sign: { _rep: _rep }
-  }));
-});
-if (!module.parent) {
-  app.listen(8080);
-  console.log('>> listening 8080');
-}
-exports.app = app;
-
-// reply >> ø
-
-flx.register('reply', function capsule(msg) {
-  (function reply(req, res) {
-    res.send(msg._sign._rep);
-  }.apply(this, msg._args));
-}, {});
-```
-
+The result has not yet be implemented
 # Problem #4
 
 
@@ -189,31 +112,4 @@ exports.app = app;
 
 ```
 
-The compiled result is in `results/count4.js` : 
-
-```
-var flx = require('flx');
-var app = require('express')();
-var _rep = 42;
-app.get('/', function placeholder() {
-  return flx.start(flx.m('reply', {
-    _args: arguments,
-    _sign: { _rep: _rep }
-  }));
-});
-if (!module.parent) {
-  app.listen(8080);
-  console.log('>> listening 8080');
-}
-exports.app = app;
-
-// reply >> ø
-
-flx.register('reply', function capsule(msg) {
-  (function reply(req, res) {
-    res.send('' + this._rep);
-    this._rep += 1;
-  }.apply(this, msg._args));
-}, { _rep: _rep });
-```
-
+The result has not yet be implemented

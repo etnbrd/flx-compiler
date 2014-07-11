@@ -1,6 +1,6 @@
 var fs = require('fs'),
     t = require('../src/lib/tools'),
-    compile = require('../src/compile'),
+    _compile = require('../src/compile'),
     lint = require('../src/lib/lint').lint,
     assert = require('assert');
 
@@ -14,9 +14,15 @@ function expect(filename) {
     return fs.readFileSync('./test/results/' + filename).toString();
 }
 
+function compile(src, filename) {
+    var res = _compile(src);
+    console.log(__dirname + "/../results/");
+    t.writeFile(filename, res, __dirname + '/../results/');
+    return res;
+}
 
 function compileAndLoad(filename) {
-    var src = compile(read(filename));
+    var src = _compile(read(filename));
     t.writeFile(filename, src, __dirname + '/../results/');
     var l = lint(src);
     if (l.length)
@@ -31,6 +37,7 @@ function compileAndMock(filename) {
 module.exports = {
     compile: compile,
     read: read,
+    expect: expect,
     compileAndMock: compileAndMock,
     compileAndLoad: compileAndLoad
 };
