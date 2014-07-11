@@ -130,9 +130,6 @@ FnScope.prototype.registerId = function (id) {
     }
 
     var source = findVar(this, id.name)
-
-    // c.scope.analyse();
-
     return source;
   }
 };

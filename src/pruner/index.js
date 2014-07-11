@@ -12,6 +12,8 @@ function start(ast) {
 
     var scopes = escope.analyze(ast);
     var str = util.inspect(scopes, false, 1000);
+    console.log(scopes);
+
     // var str = JSON.stringify(scopes);
 
     // require("fs").writeFileSync("scopes.json", str);
