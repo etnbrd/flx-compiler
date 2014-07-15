@@ -28,7 +28,13 @@ var _types = {};
 
 _types.Program = {
     enter: function (n, p, c) {
-        c.enterScope('Program'); // TODO change program for the name of the file, or another more specific name
+
+        // TODO this doesn't belong here, it should be in the enterScope function
+        var _scp = c.scopes.scopes.filter(function(scope) {
+            return (scope.block === n)
+        })
+
+        c.enterScope('Program', _scp[0]); // TODO change program for the name of the file, or another more specific name
     },
     leave: function (n, p, c) {
         c.leaveScope();
@@ -39,7 +45,15 @@ _types.Program = {
 //   functionExpression(name, args, body, isGenerator, isExpression[, loc])
 _types.FunctionDeclaration = {
     enter: function (n, p, c) {
-        c.enterScope(n.id.name);
+
+
+        // TODO this doesn't belong here, it should be in the enterScope function
+        var _scp = c.scopes.scopes.filter(function(scope) {
+            return (scope.block === n)
+        })
+
+        // TODO for one function, there is two scope, one containing the function name (index 0), and one containing the body function (index 1), this need to be acknowledged.
+        c.enterScope(n.id.name, _scp[1]);
         n.params.forEach(function (param) {
             c.registerVar(param);
         });
@@ -196,7 +210,7 @@ _types.AssignmentExpression = {
         estraverse.traverse(n.left, _iterator([]))
 
         function reserved(name) { // TODO find a better place for this function
-            return !!(name === 'require' || name === 'exports' || name === 'module');
+            return !!(name === 'require' || name === 'exports' || name === 'module' || name === 'console');
         }
 
         var res = _context; // TODO need redesign
@@ -225,17 +239,76 @@ _types.Identifier = {
         // console.log(n.name);
 
         function reserved(name) { // TODO find a better place for this function
-            return !!(name === 'require' || name === 'exports' || name === 'module');
+            return !!(name === 'require' || name === 'exports' || name === 'module' || name === 'console');
+        }
+
+
+        function locateDeclaration(ref) {
+            var node, scope, i, v;
+
+            if (ref.resolved) {
+                return ref.resolved.defs[ref.resolved.defs.length - 1].name;
+            }
+
+            scope = ref.from;
+            do {
+                for (i = 0; i < scope.variables.length; ++i) {
+                    v = scope.variables[i];
+                    if (v.name === ref.identifier.name && v.defs.length) {
+                        return scope;
+                        // return v.defs[v.defs.length - 1].name;
+                    }
+                }
+                scope = scope.upper;
+            } while (scope);
+
+            return null;
         }
 
         if (!reserved(n.name) && !c.currentScope._var[n.name]) {
 
+            // console.log(c.currentScope.scope.variables);
+
+            // var _vars = c.currentScope.scope.variables.filter(function(_id) {
+            //     return _id.identifier === n;
+            // })
+
+            // console.log(_vars);
+
 
             var source = c.registerId(n);
-            // If register said it's outside of scope, then replace futur occurence (in this fluxion) with msg._my_var_
-            if (source) {
-                if (!c.currentFlx.modifiers[n.name]) {
-                    c.currentFlx.registerModifier(n, 'signature');
+
+            // if (source)
+            //     if (source === c.currentScope.scope) {
+            //         console.log("SAME SCOPE");
+            //     } else {
+            //         console.log("!!!!!! ", source, "\n ------------------------------ \n", c.currentScope.scope);
+            //     }
+
+            var ref = c.currentScope.scope.references.filter(function(ref) {
+                return ref.identifier === n;  
+            });
+
+            if (ref.length > 0) {       
+                if (ref.length > 1) {
+                    throw errors.multipleOccurences(ref);
+                }
+
+                var defScope = locateDeclaration(ref[0]);
+
+
+                // defScope is the scope where the variable is declared, if this scope isn't within the scope of the current fluxion,
+                // then replace futur occurence (in this fluxion) with msg._my_var_
+                var scope = c.currentScope;
+
+                while ( scope && scope.flx === c.currentFlx && scope !== defScope) {
+                    scope = scope.parent;
+                }
+
+                if (defScope !== scope) {
+                    if (!c.currentFlx.modifiers[n.name]) {
+                        c.currentFlx.registerModifier(n, 'signature');
+                    }
                 }
             }
         }
@@ -244,7 +317,7 @@ _types.Identifier = {
         // For exemple, if the variable send is in the signature, we don't want to modify rep.send into rep.msg.send
 
         if (c.currentFlx.modifiers[n.name]) {
-            // TODO we shouldn't put modifier in the AST, instead this step beglongs to linker
+            // TODO we shouldn't put modifier in the AST, instead this step belongs to linker
             n.modifier = c.currentFlx.modifiers[n.name];
         }
     },

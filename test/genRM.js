@@ -36,7 +36,7 @@ var result = tests.counts.reduce(function(prev, test, i) {
   test.desc = test.desc.replace(/(^|\n)[ ]+/g, '$1');
 
   var result = [
-    "# Problem #" + (1 + i),
+    "### Problem #" + (1 + i),
     "\n",
     test.desc,
     "\n",

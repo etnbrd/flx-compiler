@@ -1,4 +1,4 @@
-# Problem #1
+### Problem #1
 
 
 The server reply a constant value to every request.
@@ -49,7 +49,7 @@ flx.register('reply', function capsule(msg) {
 }, {});
 ```
 
-# Problem #2
+### Problem #2
 
 
 The server reply a constant value to every request,
@@ -104,7 +104,7 @@ flx.register('reply', function capsule(msg) {
 }, {});
 ```
 
-# Problem #3
+### Problem #3
 
 
 The server of problem #3 reply a constant value to every request,
@@ -129,7 +129,6 @@ if (!module.parent) {
 }
 
 exports.app = app;
-
 ```
 
 The compiled result is in `results/count3.js` : 
@@ -159,7 +158,7 @@ flx.register('reply', function capsule(msg) {
 }, {});
 ```
 
-# Problem #4
+### Problem #4
 
 
 The server of problem #4 reply a value incremented at every request,
@@ -216,4 +215,103 @@ flx.register('reply', function capsule(msg) {
   }.apply(this, msg._args));
 }, { _rep: _rep });
 ```
+
+### Problem #5
+
+
+The server of problem #5 uses two different handler for two different request routes.
+Both handlers modify the same variable, so the fluxions needs to synchronize this value after each modification.
+
+
+The source program is in `examples/count5.js` : 
+
+```
+var app = require('express')();
+
+var _rep = 42;
+
+app.get("/A", function replyA(req, res){
+  res.send("" + _rep);
+  _rep += 1;
+});
+
+app.get("/B", function replyB(req, res){
+  res.send("" + _rep);
+  _rep += 2;
+});
+
+if (!module.parent) {
+    app.listen(8080);
+    console.log(">> listening 8080");
+}
+
+exports.app = app;
+```
+
+The compiled result is in `results/count5.js` : 
+
+```
+var flx = require('flx');
+var app = require('express')();
+var _rep = 42;
+app.get('/A', function placeholder() {
+  return flx.start(flx.m('replyA', {
+    _args: arguments,
+    _sign: { _rep: _rep }
+  }));
+});
+app.get('/B', function placeholder() {
+  return flx.start(flx.m('replyB', {
+    _args: arguments,
+    _sign: { _rep: _rep }
+  }));
+});
+if (!module.parent) {
+  app.listen(8080);
+  console.log('>> listening 8080');
+}
+exports.app = app;
+
+// replyA >> ø
+
+flx.register('replyA', function capsule(msg) {
+  (function replyA(req, res) {
+    res.send('' + this._rep);
+    this._rep += 1;
+  }.apply(this, msg._args));
+}, { _rep: _rep });
+
+// replyB >> ø
+
+flx.register('replyB', function capsule(msg) {
+  (function replyB(req, res) {
+    res.send('' + this._rep);
+    this._rep += 2;
+  }.apply(this, msg._args));
+}, { _rep: _rep });
+```
+
+### Problem #6
+
+
+Same with objects
+
+
+the test has not yet be implemented
+
+### Problem #7
+
+
+Same with arrays
+
+
+the test has not yet be implemented
+
+### Problem #8
+
+
+Same with requires
+
+
+the test has not yet be implemented
 
