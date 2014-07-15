@@ -1,11 +1,11 @@
 var colorFactory = function(prefix, suffix) {
-    var colorFn = function(string) {
-        if (typeof(string) === 'function') {
-            return function(string_) {
-                return colorFn(string(string_));
+    var colorFn = function(toPrint) {
+        if (typeof(toPrint) === 'function') {
+            return function(fulfillerParameter) {
+                return colorFn(toPrint(fulfillerParameter));
             };
         }
-        return prefix + string + suffix;
+        return prefix + toPrint + suffix;
     };
     return colorFn;
 };
@@ -31,23 +31,24 @@ function prefix(color) {
     return bold(color('>> '));
 }
 
-var _indent = 0;
+var _indentLevel = 0;
 
-function log(prefix, suffix, inc) {
+function log(prefix, suffix, incrementIndentLevel) {
     return function() {
         if (!process.env.verbose)
             return;
 
-        if (inc < 0)
-            _indent += inc;
+        if (incrementIndentLevel < 0)
+            _indentLevel += incrementIndentLevel;
 
-        for (var _p = '', i = _indent; i > 0; i--)
-            _p += '┊ ';
+        var indentation = '';
+        for (var i = _indentLevel; i > 0; i--)
+            indentation += '┊ ';
 
-        if (inc > 0)
-            _indent += inc;
+        if (incrementIndentLevel > 0)
+            _indentLevel += incrementIndentLevel;
 
-        var args = [prefix + grey(_p) + suffix]
+        var args = [prefix + grey(indentation) + suffix]
                    .concat(Array.prototype.slice.call(arguments, 0));
 
         console.log.apply(undefined, args);

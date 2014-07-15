@@ -1,22 +1,3 @@
-module.exports = {
-  // program: program,
-  // requires: requires,
-  // registerScp: registerScp,
-  // route: route,
-  // flxSimple: flxSimple,
-  // HelloWorld: HelloWorld,
-  // postFlx : postFlx
-
-  requireflx: requireflx,
-  placeholder: placeholder,
-  register: register,
-  start: startPlaceholder,
-  post: postPlaceholder,
-
-  signatureModifier: signatureModifier,
-  scopeModifier: scopeModifier
-};
-
 var b = require('ast-types').builders;
 
 function requireflx() {
@@ -27,100 +8,6 @@ function requireflx() {
           ))
       ]);
 }
-
-// function register(name, fn, scope) {
-
-//   return b.expressionStatement(
-//     b.callExpression(
-//       b.memberExpression(b.identifier('flx'), b.identifier('register'), false),
-//       [
-//         b.literal(name),
-//         fn,
-//         _scope
-//       ]
-//     )
-//   )
-// }
-
-// function registerScp(name, fn, scp) {
-//     return b.expressionStatement(
-//             b.callExpression(
-//                 b.memberExpression(b.identifier('flx'), b.identifier('register'), false),
-//                 [
-//                 b.literal(name),
-//                 fn,
-//                 b.objectPattern(scp)
-//                 ]
-//                 )
-//             )
-// }
-
-// function route(path, next, name) {
-//     return b.expressionStatement(
-//             b.callExpression(
-//                 b.memberExpression(b.identifier('web'), b.identifier('route'), false),
-//                 [
-//                 b.literal(path),
-//                 b.literal(next),
-//                 b.literal(name)
-//                 ]
-//                 )
-//             )
-// }
-
-// function placeholder(next) {
-//   return b.functionExpression(b.identifier('placeholder'), [
-//     ],
-//     b.blockStatement([
-//       b.returnStatement(
-//         b.callExpression(
-//           b.memberExpression(
-//             b.identifier('flx'),
-//             b.identifier('start'),
-//             false
-//           ),
-//           [
-//             b.callExpression(
-//               b.memberExpression(
-//                 b.identifier('flx'),
-//                 b.identifier('m'),
-//                 false
-//               ),
-//               [
-//                 b.literal(next),
-//                 b.identifier('arguments')
-//               ]
-//             )
-//           ]
-//         )
-//       )
-//     ])
-//   )
-// }
-
-function placeholder(next) {
-  return b.callExpression(
-      b.memberExpression(
-        b.identifier('flx'),
-        b.identifier('post'),
-        false
-        ),
-      [
-      b.callExpression(
-        b.memberExpression(
-          b.identifier('flx'),
-          b.identifier('m'),
-          false
-          ),
-        [
-        b.literal(next),
-        b.identifier('arguments')
-        ]
-        )
-      ]
-      );
-}
-
 
 function startPlaceholder(next, signature) {
   return b.functionExpression(b.identifier('placeholder'), [
@@ -158,101 +45,6 @@ function startPlaceholder(next, signature) {
             ])
             );
 }
-
-
-function postPlaceholder(next, signature) {
-
-  return b.callExpression(
-      b.memberExpression(
-        b.identifier('flx'),
-        b.identifier('post'),
-        false
-        ),
-      [
-      b.callExpression(
-        b.memberExpression(
-          b.identifier('flx'),
-          b.identifier('m'),
-          false
-          ),
-        [
-        b.literal(next),
-        b.objectExpression([
-          b.property('init', b.identifier('_args'), b.identifier('arguments')),
-          b.property('init', b.identifier('_sign'), b.objectExpression(
-              Object.keys(signature).map(function(need) {
-                return b.property('init', b.identifier(need), b.identifier(need));
-              })
-              ))
-          ])
-        ]
-        )
-      ]
-      );
-}
-
-// function postFlx(name, body) {
-
-//     if (body.type !== 'BlockStatement') {
-//         body = b.blockStatement([
-//                 b.expressionStatement(
-//                     body
-//                     )
-//                 ])
-//     }
-
-//     return b.functionExpression(b.identifier(name), [
-//             b.identifier('msg')
-//             ],
-//             body
-//             )
-
-// }
-
-
-// function flxSimple(msg) {
-//     return b.functionExpression(b.identifier('fn'), [
-//             b.identifier('msg')
-//             ],
-//             b.blockStatement([
-//                 b.returnStatement(
-//                     b.callExpression(
-//                         b.memberExpression(
-//                             b.identifier('flx'),
-//                             b.identifier('m'),
-//                             false
-//                             ),
-//                         [
-//                         b.literal('output'),
-//                         msg
-//                         ]
-//                         )
-//                     )
-//                 ])
-//             )
-// }
-
-// function HelloWorld(msg) {
-//     return b.functionExpression(b.identifier('HelloWorld'), [
-//             b.identifier('msg')
-//             ],
-//             b.blockStatement([
-//                 b.returnStatement(
-//                     b.callExpression(
-//                         b.memberExpression(
-//                             b.identifier('flx'),
-//                             b.identifier('m'),
-//                             false
-//                             ),
-//                         [
-//                         b.literal('output'),
-//                         msg
-//                         ]
-//                         )
-//                     )
-//                 ])
-//             )
-// }
 
 function register(name, fn, scope) {
 
@@ -327,3 +119,12 @@ function scopeModifier(name) {
     false
   );
 }
+
+module.exports = {
+  requireflx: requireflx,
+  register: register,
+  start: startPlaceholder,
+
+  signatureModifier: signatureModifier,
+  scopeModifier: scopeModifier
+};

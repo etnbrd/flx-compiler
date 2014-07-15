@@ -1,23 +1,15 @@
-var _salt = 1000;
-
-// function _pre(c) {
-//   var _output = '';
-//   for (var i = 0; i < c.length; i++) {
-//     _output += '  ';
-//   };
-//   return _output + '>> ';
-// }
+var _saltTrace = 1000;
 
 function salt() {
-    return _salt++;
+    return _saltTrace++;
 }
 
-function hash(n, _salt) {
+function hash(node, _salt) {
     return '' +
-        n.loc.start.line +
-        n.loc.start.column +
-        n.loc.end.line +
-        n.loc.end.column +
+        node.loc.start.line +
+        node.loc.start.column +
+        node.loc.end.line +
+        node.loc.end.column +
         '-' +
         (_salt || salt());
 }
