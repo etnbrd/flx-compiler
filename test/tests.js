@@ -39,14 +39,14 @@ module.exports = {
       ].join("\n"),
       expectations: ['42']
     },
-    // {
-    //   name : 'count5',
-    //   desc : [
-    //     "  The server of problem #1 reply a constant value to every request.",
-    //    "   There isn't any variable used."
-    //   ].join("\n"),
-    //   expectations: ['42', '43']
-    // },
+    {
+      name : 'count5',
+      desc : [
+        "  The server of problem #5 uses two different handler for two different request routes.",
+       "   Both handlers modify the same variable, so the fluxions needs to synchronize this value after each modification."
+      ].join("\n"),
+      expectations: ['42', '43']
+    },
     // {
     //   name : 'count6',
     //   desc : [

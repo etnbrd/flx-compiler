@@ -6,7 +6,6 @@ var iterator = require('./iterators/main'),
 
 module.exports = function(ast) {
     var scopes = escope.analyze(ast);
-
     var context = new constructors.Context(ast, scopes);
     context.enterFlx('Main', ast);
 

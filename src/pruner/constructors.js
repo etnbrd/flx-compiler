@@ -98,28 +98,28 @@ FnScope.prototype.registerId = function (id) {
   // TODO if id.name start with a special caracter, like →, ignore.
 
   if (id.name) {
-    var findVar;
-    findVar = function (scope, name) {
-      var index,
-        _par,
-        length = scope._var.length;
+    // var findVar;
+    // findVar = function (scope, name) {
+    //   var index,
+    //     _par,
+    //     length = scope._var.length;
 
-      for (index in scope._var) {
-        if (scope._var[index].name === name) {
-          return scope.flx;
-        }
-      }
+    //   for (index in scope._var) {
+    //     if (scope._var[index].name === name) {
+    //       return scope.flx;
+    //     }
+    //   }
 
-      if (scope.parent) {
-        _par = findVar(scope.parent, name);
-        if (_par) {
-          scope.parent.flx.currentOutput.registerSign(id);
-          return _par;
-        }
-      }
+    //   if (scope.parent) {
+    //     _par = findVar(scope.parent, name);
+    //     if (_par) {
+    //       scope.parent.flx.currentOutput.registerSign(id);
+    //       return _par;
+    //     }
+    //   }
 
-      return undefined;
-    };
+    //   return undefined;
+    // };
 
     if (!this._ids[id.name]) {
       this._ids[id.name] = id;
@@ -129,11 +129,30 @@ FnScope.prototype.registerId = function (id) {
       // throw errors.identifierConflict([id, this._ids[id.name]]);
     }
 
-    var source = findVar(this, id.name)
+    // console.log(">>>> ", this.scope.through.map(function(_id) {
+    //   return _id.identifier;
+    // }));
+    // console.log("<<<< ", id);
 
-    // c.scope.analyse();
+    var ids = this.scope.through.filter(function(_id) {
+      return _id.identifier === id;
+    });
 
-    return source;
+    // console.log(ids[0]);
+
+    if (ids.length > 1)
+      throw errors.multipleOccurences(ids);
+
+    // var source = findVar(this, id.name)
+    // return source;
+
+    // console.log(ids[0])
+
+
+    if (ids[0])
+      return ids[0].from;
+    else
+      return undefined;
   }
 };
 
@@ -273,8 +292,13 @@ Context.prototype.leaveFlx = function () {
   throw errors.flxConflict(this.currentFlx.name);
 };
 
-Context.prototype.enterScope = function (name, rootScope) {
+Context.prototype.enterScope = function (name, scp) {
+
+  var rootScope = false; // TODO change that, see require part in iterator.CallExpression
+
   var scope = new FnScope(name, (rootScope ? undefined : this.currentScope), this.currentFlx);
+
+  scope.scope = scp; // TODO this is a quick modif, the object FnScope should be replaced by this scp object provided by escope.
   this._stack.push(scope);
   this.currentScope = scope;
   return scope.enter(name);
