@@ -38,11 +38,11 @@ _types.Identifier = {
     }
 
     if (n.kind === 'start'){
-      return bld.start(n.name.substring(1), n.signature);
+      return bld.start(n.name, n.signature);
     }
 
     if (n.kind === 'post'){
-      return bld.post(n.name.substring(1), n.signature);
+      return bld.post(n.name, n.signature);
     }
   }
 };

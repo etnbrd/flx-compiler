@@ -8,23 +8,10 @@ var iterator = require("./iterators/main")
 ;
 
 
-function start(ast) {
-
-    var scopes = escope.analyze(ast);
-    var str = util.inspect(scopes, false, 1000);
-    // console.log(scopes.scopes[0]);
-
-    // var str = JSON.stringify(scopes);
-
-    require("fs").writeFileSync("scopes.json", str);
-
-    var context = new cons.Context(ast, scopes);
-    context.enterFlx("Main", ast);
-    // map(ast.program, iterator(context));
-
+function start(ast, filename) {
+    var context = new cons.Context(ast, filename);
     estraverse.traverse(ast, iterator(context));
-
-    context.leaveFlx();
+    context.end();
     return context;
 }
 

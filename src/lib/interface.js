@@ -70,7 +70,10 @@ function pipe(fn) {
   fs.readFile(options.input, function(err, file) {
     if (err) throw err;
 
-    var output = fn(file);
+    var filename = options.input.split('/');
+    filename = filename[filename.length - 1];
+
+    var output = fn(file, filename);
     if (options.output) {
       fs.writeFile(options.output, output, function(err) {
         if (err) throw err;

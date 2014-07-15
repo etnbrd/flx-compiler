@@ -1,9 +1,9 @@
 var escodegen = require("escodegen")
-,    bld = require("./builders")
+,   bld = require("./builders")
 //,    map = require("../lib/traverse").map
-,    iterator = require("./iterators/main")
-,    estraverse = require("estraverse")
-,    util = require("util")
+,   iterator = require("./iterators/main")
+,   estraverse = require("estraverse")
+,   util = require("util")
 ;
 
 
@@ -45,7 +45,7 @@ function print(ast) {
   return escodegen.generate(ast, options);
 }
 
-function printFlx(flx) {
+function printFlx(flx) { // TODO this belongs in the flx printer
   if (flx.outputs.length) {
     return flx.outputs.map(function (o) {
       return o.name + " [" + Object.keys(o.signature) + "]";
@@ -58,19 +58,23 @@ function printFlx(flx) {
 
 function link(ctx) {
 
-  // Add the flx library
-  ctx.ast.body.unshift(bld.requireflx());
+  // console.log(ctx);
+  var code = "";
 
-  var ast = estraverse.replace(ctx._flx.Main.ast, iterator(ctx._flx.Main));
+  for (var _flx in ctx.flx) {
+    var flx = ctx.flx[_flx]
+    ,   _ast = estraverse.replace(flx.ast, iterator(flx))
+    ;
 
-  var code = print(ast);
+    if (flx.root) {
+      // Add the flx library
+      _ast.body.unshift(bld.requireflx());
 
-  for (var _flx in ctx._flx) {
-    var flx = ctx._flx[_flx];
-    if (flx.name !== "Main") {
+      code = print(_ast) + code;
+    } else {
 
-      var _ast = estraverse.replace(flx.ast, iterator(flx));
-      var _code = print(bld.register(flx.name, _ast, flx.scope));
+      var _ast = bld.register(flx.name, _ast, flx.scope);
+      var _code = print(_ast);
 
       // This is only the comment :
       code += "\n\n// " + flx.name + " >> " + printFlx(flx) + "\n\n" + _code;
