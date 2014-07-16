@@ -1,33 +1,12 @@
-module.exports = iterator;
-
-var estraverse = require("estraverse")
-,   iterators = { // TODO this is ugly, we should make a factory to build the module based on the folder iterators of each compile step, and the iteratorFactory in lib/traverse
-        main: require('./main'),
-        getid: require('./getid')
-    }
-,   h = require("../../lib/helpers")
-;    
-
-function iterator(c) { // TODO refactor to extract this function from the defeinition of _types, and then dynamically generate iterator modules.
-    function handlerFactory(type) {
-        return function handler(n, p) {
-            if (!n.type)
-                throw errors.missingType(n);
-            if (!!_types[n.type] && _types[n.type][type])
-                return _types[n.type][type](n, p, c);
-        };
-    }
-
-    return {
-        enter: handlerFactory('enter'),
-        leave: handlerFactory('leave')
-    };
-};
+var iteratorFactory = require('../../lib/iterators'),
+    estraverse = require('estraverse'),
+    getIdIterator = require('./getid'),
+    h = require('../../lib/helpers');
 
 var _types = {};
 
 _types.Program = {
-    enter: function (n, p, c) {
+    enter: function (c, n, p) {
 
         // TODO this doesn't belong here, it should be in the enterScope function
         var _scp = c.scopes.scopes.filter(function(scope) {
@@ -36,7 +15,7 @@ _types.Program = {
 
         c.enterScope('Program', _scp[0]); // TODO change program for the name of the file, or another more specific name
     },
-    leave: function (n, p, c) {
+    leave: function (c, n, p) {
         c.leaveScope();
     }
 };
@@ -44,7 +23,7 @@ _types.Program = {
 //   functionDeclaration(name, args, body, isGenerator, isExpression[, loc])
 //   functionExpression(name, args, body, isGenerator, isExpression[, loc])
 _types.FunctionDeclaration = {
-    enter: function (n, p, c) {
+    enter: function (c, n, p) {
 
 
         // TODO this doesn't belong here, it should be in the enterScope function
@@ -58,7 +37,7 @@ _types.FunctionDeclaration = {
             c.registerVar(param);
         });
     },
-    leave: function (n, p, c) {
+    leave: function (c, n, p) {
         c.leaveScope();
     }
 };
@@ -67,20 +46,20 @@ _types.FunctionExpression = _types.FunctionDeclaration;
 
 //   variableDeclarator(patt, init[, loc])
 _types.VariableDeclarator = {
-    enter: function (n, p, c) {
+    enter: function (c, n, p) {
         c.registerVar(n);
     },
-    leave: function (n, p, c) {
+    leave: function (c, n, p) {
     }
 };
 
 //   callExpression(callee, args[, loc])
 _types.CallExpression = {
-    enter: function (n, p, c) {
+    enter: function (c, n, p) {
         // TODO this is bad design
         var _c = {id: ''};
 
-        estraverse.traverse(n.callee, iterators.getid(_c));
+        estraverse.traverse(n.callee, getIdIterator(_c));
 
         // TODO : no usecase
         // if (_c.id === 'require' && n.arguments.length > 0 && n.arguments[0].value[0] === '.') {
@@ -95,7 +74,7 @@ _types.CallExpression = {
         //     // TODO scope problem : a required file is not a new fluxion, only a new scope
         //     // OR fluxion Main is a special fluxion which is not a movable fluxion.
         //     c.enterScope(filename, true);
-        //     map(ast.program, iterators.main(c));
+        //     map(ast.program, mainIterator(c));
         //     c.leaveScope();
         // }
 
@@ -128,13 +107,13 @@ _types.CallExpression = {
         // }
 
     },
-    leave: function (n, p, c) {
+    leave: function (c, n, p) {
         if (n.salt) {
             c.getFutures(n.salt).forEach(function(flx) {
                 if (flx.kind === 'start') {
 
                     c.enterFlx(flx.name, flx.fn, 'start');
-                    estraverse.traverse(flx.fn, iterators.main(c));
+                    estraverse.traverse(flx.fn, mainIterator(c));
                     c.leaveFlx();
 
                     // TODO this is bad design, we shouldn't modify the AST so much, remove signature, put it somwhere else
@@ -147,13 +126,13 @@ _types.CallExpression = {
 
                 //     return {type: 'Identifier', kind: 'post', name: '→' + n._placeholder.name, signature: c.currentFlx.currentOutput.signature};//bld.post(n._placeholder.name, c.currentFlx.currentOutput.signature);
                 // }
-            })
+            });
         }
     }
 };
 
 _types.AssignmentExpression = {
-    enter: function (n, p, c) {
+    enter: function (c, n, p) {
 
         // TODO
         /*
@@ -188,26 +167,20 @@ _types.AssignmentExpression = {
 
         var _context = [];
 
-        function _iterator(prev) {
-            return {
+        var _iterator = {
                 enter: function (n) {
-                    if (n.type === 'MemberExpression') {
-                        // TODO
-                        // if(n.computed) {
+                  if (n.type === 'MemberExpression') {
+                      // TODO
+                      // if(n.computed) {
 
-                        // }
-                    } else {
-                        _context.push(n);
-                    }
+                      // }
+                  }
+                  else
+                      _context.push(n);
+              }
+          };
 
-
-
-                    // return prev;
-                }
-            }
-        }
-
-        estraverse.traverse(n.left, _iterator([]))
+        estraverse.traverse(n.left, _iterator);
 
         function reserved(name) { // TODO find a better place for this function
             return !!(name === 'require' || name === 'exports' || name === 'module' || name === 'console');
@@ -220,21 +193,16 @@ _types.AssignmentExpression = {
             c.currentFlx.registerModifier(res[0], 'scope'); // TODO might lead to conflict, as scope and fluxion scope aren't the same
         }
 
-        // console.log(' ============  ' + util.inspect(res) + '  ============= ');
-        // console.log(' ============ ', red(n.left, getId), ' ============= ');
-
-        // console.log('££ ', _c.id);
 
     },
-    leave: function (n, p, c) {
-        // console.log('leave =');
+    leave: function (c, n, p) {
     }
 };
 
 
 //   identifier(name[, loc])
 _types.Identifier = {
-    enter: function (n, p, c) {
+    enter: function (c, n, p) {
 
         // console.log(n.name);
 
@@ -321,6 +289,9 @@ _types.Identifier = {
             n.modifier = c.currentFlx.modifiers[n.name];
         }
     },
-    leave: function (n, p, c) {
+    leave: function (c, n, p) {
     }
 };
+
+var mainIterator = iteratorFactory(_types);
+module.exports = mainIterator;

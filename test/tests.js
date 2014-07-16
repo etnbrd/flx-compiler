@@ -47,26 +47,26 @@ module.exports = {
       ].join("\n"),
       expectations: ['42', '43']
     },
-    {
-      name : 'count6',
-      desc : [
-        "  Same with objects"
-      ].join("\n"),
-      expectations: ['42']
-    },
-    {
-      name : 'count7',
-      desc : [
-        "  Same with arrays"
-      ].join("\n"),
-      expectations: ['42']
-    },
-    {
-      name : 'count8',
-      desc : [
-        "  Same with requires"
-      ].join("\n"),
-      expectations: ['42']
-    }
+    // {
+    //   name : 'count6',
+    //   desc : [
+    //     "  Same with objects"
+    //   ].join("\n"),
+    //   expectations: ['42']
+    // },
+    // {
+    //   name : 'count7',
+    //   desc : [
+    //     "  Same with arrays"
+    //   ].join("\n"),
+    //   expectations: ['42']
+    // },
+    // {
+    //   name : 'count8',
+    //   desc : [
+    //     "  Same with requires"
+    //   ].join("\n"),
+    //   expectations: ['42']
+    // }
   ]
 };

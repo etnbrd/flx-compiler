@@ -140,7 +140,7 @@ var _rep = '42';
 app.get('/', function placeholder() {
   return flx.start(flx.m('reply', {
     _args: arguments,
-    _sign: { _rep: _rep }
+    _sign: {}
   }));
 });
 if (!module.parent) {
@@ -197,7 +197,7 @@ var _rep = 42;
 app.get('/', function placeholder() {
   return flx.start(flx.m('reply', {
     _args: arguments,
-    _sign: { _rep: _rep }
+    _sign: {}
   }));
 });
 if (!module.parent) {
@@ -257,13 +257,13 @@ var _rep = 42;
 app.get('/A', function placeholder() {
   return flx.start(flx.m('replyA', {
     _args: arguments,
-    _sign: { _rep: _rep }
+    _sign: {}
   }));
 });
 app.get('/B', function placeholder() {
   return flx.start(flx.m('replyB', {
     _args: arguments,
-    _sign: { _rep: _rep }
+    _sign: {}
   }));
 });
 if (!module.parent) {
@@ -290,28 +290,4 @@ flx.register('replyB', function capsule(msg) {
   }.apply(this, msg._args));
 }, { _rep: _rep });
 ```
-
-### Problem #6
-
-
-Same with objects
-
-
-the test has not yet be implemented
-
-### Problem #7
-
-
-Same with arrays
-
-
-the test has not yet be implemented
-
-### Problem #8
-
-
-Same with requires
-
-
-the test has not yet be implemented
 

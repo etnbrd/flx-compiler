@@ -4,12 +4,12 @@ var post = '';
 // TODO factory cool stuff to handle pre + post
 
 module.exports = {
-    missingType: function(n) {
-        return pre + 'node ' +  n + ' has no type';
+    missingType: function(node) {
+        return pre + 'node ' +  node + ' has no type';
     },
 
-    missingHandler: function(n) {
-        return pre + ' handler not implemented for ' + n.type;
+    missingHandler: function(node) {
+        return pre + ' handler not implemented for ' + node.type;
     },
 
     identifierConflict: function(ids) {

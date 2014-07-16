@@ -10,10 +10,6 @@ function read(filename) {
     return fs.readFileSync('./examples/' + filename).toString();
 }
 
-function expect(filename) {
-    return fs.readFileSync('./test/results/' + filename).toString();
-}
-
 function compile(src, filename) {
     var res = _compile(src);
     t.writeFile(filename, res, __dirname + '/../results/');
@@ -36,7 +32,6 @@ function compileAndMock(filename) {
 module.exports = {
     compile: compile,
     read: read,
-    expect: expect,
     compileAndMock: compileAndMock,
     compileAndLoad: compileAndLoad
 };

@@ -1,11 +1,13 @@
-module.exports = function iteratorFactory(types) {  
+var errors = require('./errors');
+
+module.exports = function iteratorFactory(typesWalker) {
     return function iterator(c) {
-        function handlerFactory(type) {
-            return function handler(n) {
-                if (!n.type)
-                    throw errors.missingType(n);
-                if (!!types[n.type] && types[n.type][type])
-                    return types[n.type][type](n, c);
+        function handlerFactory(visitorEvent) {
+            return function handler(currentNode, previousNode) {
+                if (!currentNode.type)
+                    throw errors.missingType(currentNode);
+                if (!!typesWalker[currentNode.type] && typesWalker[currentNode.type][visitorEvent])
+                    return typesWalker[currentNode.type][visitorEvent](c, currentNode, previousNode);
             };
         }
 
@@ -14,4 +16,4 @@ module.exports = function iteratorFactory(types) {
             leave: handlerFactory('leave')
         };
     };
-}
+};
