@@ -78,7 +78,7 @@ _types.CallExpression = {
 _types.AssignmentExpression = {
     enter: function (n, p, c) {
 
-        var id = n.left.type === "MemberExpression" ? n.left.object : n.left;
+        var id = (n.left.type === "MemberExpression" ? n.left.object : n.left);
 
         if (!reserved(id.name)) {
             c.registerModification(id);

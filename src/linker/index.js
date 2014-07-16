@@ -62,9 +62,41 @@ function link(ctx) {
   var code = "";
 
   for (var _flx in ctx.flx) {
+
     var flx = ctx.flx[_flx]
     ,   _ast = estraverse.replace(flx.ast, iterator(flx))
     ;
+
+    console.log(">>>>>>>>>>  ", flx.name);
+
+    for (var _mod in flx.modifiers) { var modifier = flx.modifiers[_mod];
+
+      // console.log(util.inspect(modifier.declaration.references, false, 2));
+
+      modifier.references.forEach(function(reference) {
+        console.log(reference.identifier);
+        // .from.flx.name
+
+      })      
+
+      // For each reference, put a modifier tag
+      // the iterator will use the tag to replace it.
+
+
+
+      // if (n.modifier.target === 'signature') {
+      //   var mod = bld.signatureModifier(n.name);
+      //   return mod;
+      // }
+
+      // if (n.modifier.target === 'scope') {
+      //   var mod = bld.scopeModifier(n.name);
+      //   return mod;
+      // }
+    }
+
+
+
 
     if (flx.root) {
       // Add the flx library

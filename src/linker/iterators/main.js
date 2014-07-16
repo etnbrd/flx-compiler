@@ -23,19 +23,19 @@ var _types = {};
 _types.Identifier = {
   enter: function(n, p, c) {
 
-    // console.log(c.modifiers);
+    // console.log(c);
 
-    if (n.modifier) {
-      if (n.modifier.target === 'signature') {
-        var mod = bld.signatureModifier(n.name);
-        return mod;
-      }
+    // if (n.modifier) {
+    //   if (n.modifier.target === 'signature') {
+    //     var mod = bld.signatureModifier(n.name);
+    //     return mod;
+    //   }
 
-      if (n.modifier.target === 'scope') {
-        var mod = bld.scopeModifier(n.name);
-        return mod;
-      }
-    }
+    //   if (n.modifier.target === 'scope') {
+    //     var mod = bld.scopeModifier(n.name);
+    //     return mod;
+    //   }
+    // }
 
     if (n.kind === 'start'){
       return bld.start(n.name, n.signature);
