@@ -1,4 +1,38 @@
-var print = require('escodegen').print;
+var escodegen = require('escodegen');
+
+const options = {
+  format: {
+    indent: {
+      style: '  ',
+      base: 0,
+      adjustMultilineComment: false
+    },
+    newline: '\n',
+    space: ' ',
+    json: false,
+    renumber: false,
+    hexadecimal: false,
+    quotes: 'single',
+    escapeless: true,
+    compact: false,
+    parentheses: true,
+    semicolons: true,
+    safeConcatenation: false
+  },
+  moz: {
+    starlessGenerator: false,
+    parenthesizedComprehensionBlock: false,
+    comprehensionExpressionStartsWithAssignment: false
+  },
+  parse: null,
+  comment: false,
+  sourceMap: undefined,
+  sourceMapRoot: null,
+  sourceMapWithCode: false,
+  // sourceContent: originalSource, // TODO
+  directive: false,
+  verbatim: undefined
+};
 
 const start = '↠'; // fallback '>>'
 const post = '→'; // fallback '->'
@@ -17,7 +51,7 @@ const arrow = {
 };
 
 function code(ast) {
-  return indent + print(ast).code.replace(/\n/g, "\n" + indent);
+  return indent + escodegen.generate(ast, options).replace(/\n/g, "\n" + indent);
 }
 
 function declaration(d) {
@@ -54,9 +88,9 @@ function flx(f) {
   // })
 }
 
-function printer(ast) {
-  return Object.keys(ast._flx).map(function(flxName) {
-    return flx(ast._flx[flxName]);
+function printer(ctx) {
+  return Object.keys(ctx.flx).map(function(flxName) {
+    return flx(ctx.flx[flxName]);
   }).join('\n\n');
 }
 
