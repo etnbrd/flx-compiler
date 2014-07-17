@@ -47,6 +47,11 @@ _types.FunctionExpression = _types.FunctionDeclaration;
 //   variableDeclarator(patt, init[, loc])
 _types.VariableDeclarator = {
     enter: function (c, n, p) {
+        if (n.init.type === 'CallExpression'
+        &&  n.init.callee.callee.name === 'require'
+        &&  n.init.callee.arguments[0].value === 'express')
+          c.registerFluxionTrigger(n.id.name);
+
         c.registerVar(n);
     },
     leave: function (c, n, p) {
@@ -57,12 +62,11 @@ _types.VariableDeclarator = {
 _types.CallExpression = {
     enter: function (c, n, p) {
         // TODO this is bad design
-        var _c = {id: ''};
-
-        estraverse.traverse(n.callee, getIdIterator(_c));
+        var collectedIdentifiers = {ids: []};
+        estraverse.traverse(n.callee, getIdIterator(collectedIdentifiers));
 
         // TODO : no usecase
-        // if (_c.id === 'require' && n.arguments.length > 0 && n.arguments[0].value[0] === '.') {
+        // if (collectedIdentifiers.id === 'require' && n.arguments.length > 0 && n.arguments[0].value[0] === '.') {
         //     var filename = n.arguments[0].value;
 
         //     if (filename.lastIndexOf('.js') !== filename.length - 3) {
@@ -88,7 +92,7 @@ _types.CallExpression = {
 
         var salt = h.salt();
 
-        if (_c.id === 'app.get') { // STARTERS
+        if (c.isFluxionTrigger(collectedIdentifiers.ids)) { // STARTERS
             n.arguments.forEach(function (_n, i) {
                 if (_n.type === 'FunctionExpression' || _n.type === 'FunctionDeclaration') {
                     n.salt = salt;
@@ -99,8 +103,8 @@ _types.CallExpression = {
 
         }
 
-        // if (_c.id === 'res.send') { // POSTERS
-        //   var name = _c.id + '-' + h.salt();
+        // if (collectedIdentifiers.id === 'res.send') { // POSTERS
+        //   var name = collectedIdentifiers.id + '-' + h.salt();
         //   c.enterFlx(name, bld.postFlx(name, n), n.params 'post');
         //   c.enterScope(name);
         //   n._placeholder = {type: 'Placeholder', name: name, kind: 'post'};
@@ -203,9 +207,6 @@ _types.AssignmentExpression = {
 //   identifier(name[, loc])
 _types.Identifier = {
     enter: function (c, n, p) {
-
-        // console.log(n.name);
-
         function reserved(name) { // TODO find a better place for this function
             return !!(name === 'require' || name === 'exports' || name === 'module' || name === 'console');
         }

@@ -229,6 +229,7 @@ function Context(ast, scopes) {
   this.name = ast.name;
   this.futurFlx = {};
   this.scopes = scopes;
+  this.fluxionTriggers = [];
 }
 
 // prepareFlx and getFutures need to be redesigned, it's just a quick fix.
@@ -244,16 +245,16 @@ Context.prototype.prepareFlx = function(node, fn, kind, index) {
     fn: fn,
     kind: kind,
     index: index
-  })
+  });
 
   return name;
-}
+};
 
 Context.prototype.getFutures = function(node) {
   var futures = this.futurFlx[node];
   this.futurFlx[node] = undefined;
   return futures;
-}
+};
 
 Context.prototype.enterFlx = function (name, ast, type) {
 
@@ -325,6 +326,14 @@ Context.prototype.registerOutput = function (output) {
 
 Context.prototype.registerMod = function (id) {
   return this.currentScope.registerMod(id);
+};
+
+Context.prototype.registerFluxionTrigger = function(variableName) {
+  return this.fluxionTriggers.push(variableName);
+};
+
+Context.prototype.isFluxionTrigger = function(ids) {
+  return ids.length === 2 && this.fluxionTriggers.indexOf(ids[0]) > -1 && ids[1] === 'get';
 };
 
 module.exports = {
