@@ -56,47 +56,68 @@ function printFlx(flx) { // TODO this belongs in the flx printer
   }
 }
 
-function link(ctx) {
+function bySource (source) {
+  return function (reference) {
+    return (reference.from.flx !== source)
+  }
+}
 
-  // console.log(ctx);
-  var code = "";
-
-  for (var _flx in ctx.flx) {
-
-    var flx = ctx.flx[_flx]
-    ,   _ast = estraverse.replace(flx.ast, iterator(flx))
-    ;
-
-    console.log(">>>>>>>>>>  ", flx.name);
-
-    for (var _mod in flx.dependencies) { var modifier = flx.dependencies[_mod];
-
-      if ()
-
-      modifier.references.forEach(function(reference) {
-        console.log(reference.identifier.name, reference.identifier.loc.start);
-        // .from.flx.name
-
-      })      
-
-      // For each reference, put a modifier tag
-      // the iterator will use the tag to replace it.
-
-
-
-      // if (n.modifier.target === 'signature') {
-      //   var mod = bld.signatureModifier(n.name);
-      //   return mod;
-      // }
-
-      // if (n.modifier.target === 'scope') {
-      //   var mod = bld.scopeModifier(n.name);
-      //   return mod;
-      // }
+function modifier(type) {
+  return function (reference) {
+    reference.identifier.modifier = {
+      target: type
     }
 
+    // console.log(">>> ", reference.identifier.name, reference.identifier.loc.start);
+  }
+}
 
+function link(ctx) {
+  var code = ""
+  ,   flx
+  ,   _flx
+  ,   _ast
+  ,   card
+  ,   mcard
+  ,   _mod
+  ,   dep
+  ;
 
+  for (_flx in ctx.flx) {
+    flx = ctx.flx[_flx];
+
+    console.log("in " + flx.name);
+    for (_mod in flx.dependencies) { dep = flx.dependencies[_mod];
+
+      card = Object.keys(dep.variable.flxs).length;
+      mcard = Object.keys(dep.variable.modifierFlxs).length;
+
+      // CORE DEPENDENCIES RESOLVER // TODO might be better suited in the constructor.
+
+      // TODO debug function
+
+      console.log("  " + dep.variable.name + " is used in " + card + " flx, and modified in " + mcard + " flx");
+      console.log("    + used in : " + Object.keys(dep.variable.flxs).join(', '));
+      console.log("    + modified in : " + Object.keys(dep.variable.modifierFlxs).join(', '));
+
+      // 2 fluxions, none modify the variable : Problem #3
+      if ((card === 2 && mcard === 0)
+      // 2 fluxions, the non root fluxion modify the variable : Problem #4
+      ||  (card === 2 && mcard === 1 && !dep.variable.modifierFlxs[dep.source.name])) {
+        console.log("      -> therfore, it's in the scope");
+        dep.references.filter(bySource(dep.source))
+                      .forEach(modifier("scope"));
+
+        flx.scope[dep.variable.name] = dep;
+      } else {
+        console.log("      -> therfore, it's in the signature");
+        dep.references.filter(bySource(dep.source))
+                      .forEach(modifier("signature"));
+        flx.signature[dep.variable.name] = dep;
+      }
+    }
+
+    _ast = estraverse.replace(flx.ast, iterator(flx));
 
     if (flx.root) {
       // Add the flx library
@@ -105,11 +126,10 @@ function link(ctx) {
       code = print(_ast) + code;
     } else {
 
-      var _ast = bld.register(flx.name, _ast, flx.scope);
-      var _code = print(_ast);
+      _ast = bld.register(flx.name, _ast, flx.scope);
 
       // This is only the comment :
-      code += "\n\n// " + flx.name + " >> " + printFlx(flx) + "\n\n" + _code;
+      code += "\n\n// " + flx.name + " >> " + printFlx(flx) + "\n\n" + print(_ast);
     }
   }
 

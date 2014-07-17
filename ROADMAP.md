@@ -29,7 +29,7 @@ The compiled result is in `results/count1.js` :
 var flx = require('flx');
 var app = require('express')();
 app.get('/', function placeholder() {
-  return flx.start(flx.m('reply', {
+  return flx.start(flx.m('↠reply', {
     _args: arguments,
     _sign: {}
   }));
@@ -83,7 +83,7 @@ The compiled result is in `results/count2.js` :
 var flx = require('flx');
 var app = require('express')();
 app.get('/', function placeholder() {
-  return flx.start(flx.m('reply', {
+  return flx.start(flx.m('↠reply', {
     _args: arguments,
     _sign: {}
   }));
@@ -138,7 +138,7 @@ var flx = require('flx');
 var app = require('express')();
 var _rep = '42';
 app.get('/', function placeholder() {
-  return flx.start(flx.m('reply', {
+  return flx.start(flx.m('↠reply', {
     _args: arguments,
     _sign: {}
   }));
@@ -153,9 +153,9 @@ exports.app = app;
 
 flx.register('↠reply', function capsule(msg) {
   (function reply(req, res) {
-    res.send(_rep);
+    res.send(this._rep);
   }.apply(this, msg._args));
-}, {});
+}, { _rep: _rep });
 ```
 
 ### Problem #4
@@ -195,7 +195,7 @@ var flx = require('flx');
 var app = require('express')();
 var _rep = 42;
 app.get('/', function placeholder() {
-  return flx.start(flx.m('reply', {
+  return flx.start(flx.m('↠reply', {
     _args: arguments,
     _sign: {}
   }));
@@ -210,10 +210,10 @@ exports.app = app;
 
 flx.register('↠reply', function capsule(msg) {
   (function reply(req, res) {
-    res.send('' + _rep);
-    _rep += 1;
+    res.send('' + this._rep);
+    this._rep += 1;
   }.apply(this, msg._args));
-}, {});
+}, { _rep: _rep });
 ```
 
 ### Problem #5
@@ -255,13 +255,13 @@ var flx = require('flx');
 var app = require('express')();
 var _rep = 42;
 app.get('/A', function placeholder() {
-  return flx.start(flx.m('replyA', {
+  return flx.start(flx.m('↠replyA', {
     _args: arguments,
     _sign: {}
   }));
 });
 app.get('/B', function placeholder() {
-  return flx.start(flx.m('replyB', {
+  return flx.start(flx.m('↠replyB', {
     _args: arguments,
     _sign: {}
   }));
@@ -276,8 +276,8 @@ exports.app = app;
 
 flx.register('↠replyA', function capsule(msg) {
   (function replyA(req, res) {
-    res.send('' + _rep);
-    _rep += 1;
+    res.send('' + msg._sign._rep);
+    msg._sign._rep += 1;
   }.apply(this, msg._args));
 }, {});
 
@@ -285,8 +285,8 @@ flx.register('↠replyA', function capsule(msg) {
 
 flx.register('↠replyB', function capsule(msg) {
   (function replyB(req, res) {
-    res.send('' + _rep);
-    _rep += 2;
+    res.send('' + msg._sign._rep);
+    msg._sign._rep += 2;
   }.apply(this, msg._args));
 }, {});
 ```
@@ -311,6 +311,25 @@ the test has not yet be implemented
 
 
 Same with requires
+
+
+the test has not yet be implemented
+
+### Problem #9
+
+
+Write a graph printer to display fluxions box and arrows stuffs
+
+
+the test has not yet be implemented
+
+### Problem #10
+
+
+Write a communication TODO file to make the roadmap from test and this TODO file
+Then, put in this TODO file :
+- write documentation about ES* and generally about the compiler
+- write master subjects about compiler problem spin off (like fluxion placement, debit ...)
 
 
 the test has not yet be implemented

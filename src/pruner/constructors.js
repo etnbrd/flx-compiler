@@ -93,8 +93,8 @@ Context.prototype.enterFlx = function (name, ast, type) {
   if (type) {
     _out = new Output(name, type, ast.params, _oldFlx, this.currentFlx);
 
-    _newFlx.registerParent(_oldFlx, _out);
-    _oldFlx.registerOutput(_out);
+    _newFlx._registerParent(_oldFlx, _out);
+    _oldFlx._registerOutput(_out);
   } else {
     if (name !== 'Main') {
       console.log('entering a fluxion without an output');
@@ -187,13 +187,14 @@ Context.prototype.end = function() {
       return !!(name === 'require' || name === 'exports' || name === 'module' || name === 'console');
   }
 
-
+  // Populate dependencies
   this.scopes.forEach(function(scope) {
     scope.variables.forEach(function(variable) {
       if (!reserved(variable.name)) {
 
         populate(variable);
         variable.flxs = {};
+        variable.modifierFlxs = {};
 
         variable.references.forEach(function(ref) {
           var name = ref.from.flx.name;
@@ -201,19 +202,20 @@ Context.prototype.end = function() {
           var source = variable.scope.flx;
 
           variable.flxs[name] = flx;
+          if (ref.modified) {
+            variable.modifierFlxs[name] = flx;
+          }
 
-          if (flx !== source) {
-            if (!flx.dependencies[variable.name]) {
-              flx.dependencies[variable.name] = {
-                source: variable.scope.flx,
-                variable: variable,
-                references: [ref],
-                modified: ref.modified
-              }
-            } else {
-              flx.dependencies[variable.name].references.push(ref);
-              flx.dependencies[variable.name].modified = ref.modified || flx.dependencies[variable.name].modified;
+          if (!flx.dependencies[variable.name]) {
+            flx.dependencies[variable.name] = {
+              source: variable.scope.flx,
+              variable: variable,
+              references: [ref],
+              modified: ref.modified
             }
+          } else {
+            flx.dependencies[variable.name].references.push(ref);
+            flx.dependencies[variable.name].modified = ref.modified || flx.dependencies[variable.name].modified;
           }
         }, {});
       }
@@ -235,14 +237,8 @@ function FlxScope(name, ast, root) {
   this.parents = [];
   this.root = root;
   this.dependencies = {};
-}
-
-FlxScope.prototype._registerScopes = function(scopes) {
-  scopes.forEach(function(n) {
-    this.scopes.push(n);
-  }.bind(this));
-
-  return this;
+  this.scope = {};
+  this.signature = {};
 }
 
 FlxScope.prototype.enter = function () {
@@ -255,17 +251,23 @@ FlxScope.prototype.leave = function () {
   return this;
 };
 
-FlxScope.prototype.registerParent = function (parent, output) {
-  this.parents.push({parent: parent, output: output});
+FlxScope.prototype._registerScopes = function(scopes) {
+  scopes.forEach(function(n) {
+    this.scopes.push(n);
+  }.bind(this));
 
+  return this;
+}
+
+FlxScope.prototype._registerParent = function (parent, output) {
+  this.parents.push({parent: parent, output: output});
   return this;
 };
 
-FlxScope.prototype.registerOutput = function (output) {
+FlxScope.prototype._registerOutput = function (output) {
   log.info(this.name + ' // ' + output.source.name +  ' -> ' + output.dest.name);
   this.outputs.push(output);
   this.currentOutput = output;
-
   return this;
 };
 
