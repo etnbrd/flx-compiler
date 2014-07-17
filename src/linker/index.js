@@ -69,12 +69,12 @@ function link(ctx) {
 
     console.log(">>>>>>>>>>  ", flx.name);
 
-    for (var _mod in flx.modifiers) { var modifier = flx.modifiers[_mod];
+    for (var _mod in flx.dependencies) { var modifier = flx.dependencies[_mod];
 
-      // console.log(util.inspect(modifier.declaration.references, false, 2));
+      if ()
 
       modifier.references.forEach(function(reference) {
-        console.log(reference.identifier);
+        console.log(reference.identifier.name, reference.identifier.loc.start);
         // .from.flx.name
 
       })      

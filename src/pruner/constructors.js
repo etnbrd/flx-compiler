@@ -153,20 +153,17 @@ Context.prototype.end = function() {
       })
     }
 
-    // if (!variable.__populated) {
-      if (variable.references.length === 0) {
-        // Push local matching references
-        variable.scope.references.forEach(function(reference) {
-          if (reference.identifier.name === variable.name) {
-            variable.references.push(reference);
-          }
-        })
-      }
+    if (variable.references.length === 0) {
+      // Push local matching references
+      variable.scope.references.forEach(function(reference) {
+        if (reference.identifier.name === variable.name) {
+          variable.references.push(reference);
+        }
+      })
+    }
 
-      // Start scope lookup recursion
-      _populate(variable.scope.childScopes, variable);
-      // variable.__populated = true;
-    // }
+    // Start scope lookup recursion
+    _populate(variable.scope.childScopes, variable);
 
     return variable;
   }
@@ -196,64 +193,29 @@ Context.prototype.end = function() {
       if (!reserved(variable.name)) {
 
         populate(variable);
+        variable.flxs = {};
 
-        var flxs = variable.references.reduce(function(flxs, ref) {
+        variable.references.forEach(function(ref) {
           var name = ref.from.flx.name;
+          var flx = ref.from.flx;
+          var source = variable.scope.flx;
 
-          if (!flxs[name]) {
-            flxs[name] = {
-              flx: ref.from.flx,
-              references: []
-            }
-          }
+          variable.flxs[name] = flx;
 
-          flxs[name].references.push(ref);
-
-          if (ref.modified) {
-            flxs[name].modified = true;
-          }
-
-          return flxs;
-        }, {});
-
-        // TODO there is two iteration, above, and below, one of them is redundant.
-        // The conditional about the number of fluxion could be in the linker
-
-        // Problem #3 and #4 : a variable is shared between 2 fluxions
-        if (Object.keys(flxs).length === 2) {
-
-          for (var name in flxs) { var flx = flxs[name].flx;
-
-            // console.log(variable);
-            // TODO find whether this modifier is in the receiveing fluxion or not : if it's with the declaration or not.
-            // so TODO find the root fluxion for each variable
-
-            // if (variable)
-
-            if (!flx.modifiers[variable.name]) {
-              flx.modifiers[variable.name] = {
-                source: flx,
+          if (flx !== source) {
+            if (!flx.dependencies[variable.name]) {
+              flx.dependencies[variable.name] = {
+                source: variable.scope.flx,
                 variable: variable,
-                references: flxs[name].references,
-                modified: flxs[name].modified,
+                references: [ref],
+                modified: ref.modified
               }
             } else {
-              throw multipleOccurences();
+              flx.dependencies[variable.name].references.push(ref);
+              flx.dependencies[variable.name].modified = ref.modified || flx.dependencies[variable.name].modified;
             }
-            
-            
           }
-        }
-
-        // Problem #5 : a variable is shared between more than 2 fluxions
-        if (Object.keys(flxs).length > 2) {
-
-
-          throw "TODO";
-
-        }
-
-
+        }, {});
       }
     })
   })
@@ -272,7 +234,7 @@ function FlxScope(name, ast, root) {
   this.outputs = [];
   this.parents = [];
   this.root = root;
-  this.modifiers = {};
+  this.dependencies = {};
 }
 
 FlxScope.prototype._registerScopes = function(scopes) {
