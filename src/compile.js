@@ -1,7 +1,22 @@
-var parse = require('esprima').parse;
-var prune = require('./pruner');
-var link = require('./linker');
+'use strict';
 
-module.exports = function (code, filename) {
-    return link(prune(parse(code, {loc: true}), filename));
-};
+var parse = require('esprima').parse,
+    prune = require('./pruner'),
+    link = require('./linker'),
+    jsPrinter = require('./js-printer'),
+    flxPrinter = require('./flx-printer');
+//     graphicPrinter = require('./graphic-printer'); // TODO
+
+function _compile(code, filename) {
+  return link(prune(parse(code, {loc: true}), filename));
+}
+
+module.exports = {
+  toJs: function (ctx) {
+    return jsPrinter(_compile(ctx));
+  },
+
+  toFlx: function (ctx) {
+    return flxPrinter(_compile(ctx));
+  }
+}

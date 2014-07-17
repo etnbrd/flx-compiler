@@ -1,61 +1,5 @@
-var escodegen = require("escodegen")
-,   bld = require("./builders")
-//,    map = require("../lib/traverse").map
-,   iterator = require("./iterators/main")
-,   estraverse = require("estraverse")
-,   util = require("util")
-,   log = require('../lib/log')
-;
-
-
-const options = {
-  format: {
-    indent: {
-      style: '  ',
-      base: 0,
-      adjustMultilineComment: false
-    },
-    newline: '\n',
-    space: ' ',
-    json: false,
-    renumber: false,
-    hexadecimal: false,
-    quotes: 'single',
-    escapeless: true,
-    compact: false,
-    parentheses: true,
-    semicolons: true,
-    safeConcatenation: false
-  },
-  moz: {
-    starlessGenerator: false,
-    parenthesizedComprehensionBlock: false,
-    comprehensionExpressionStartsWithAssignment: false
-  },
-  parse: null,
-  comment: false,
-  sourceMap: undefined,
-  sourceMapRoot: null,
-  sourceMapWithCode: false,
-  // sourceContent: originalSource, // TODO
-  directive: false,
-  verbatim: undefined
-};
-
-function printAst(ast) {
-  return escodegen.generate(ast, options);
-}
-
-function printFlx(flx) { // TODO this belongs in the flx printer
-  if (flx.outputs.length) {
-    return flx.outputs.map(function (obj) {
-      return obj.name + ' [' + Object.keys(obj.signature) + ']';
-    }).join(', ');
-  }
-  else {
-    return 'ø';
-  }
-}
+var util = require("util"),
+    log = require('../lib/log');
 
 function debug(dep, type) {
 
@@ -94,15 +38,13 @@ function modifier(type) {
 }
 
 function link(ctx) {
-  var code = ""
-  ,   flx
-  ,   _flx
-  ,   _ast
-  ,   card
-  ,   mcard
-  ,   _mod
-  ,   dep
-  ;
+  var flx,
+      _flx,
+      _ast,
+      card,
+      mcard,
+      _mod,
+      dep;
 
   log.start("LINKER");
 
@@ -123,6 +65,7 @@ function link(ctx) {
       if ((card === 2 && mcard === 0)
       // 2 fluxions, the non root fluxion modify the variable : Problem #4
       ||  (card === 2 && mcard === 1 && !dep.variable.modifierFlxs[dep.source.name])) {
+
         debug(dep, "scope");
         dep.references.filter(bySource(dep.source))
                       .forEach(modifier("scope"));
@@ -137,26 +80,10 @@ function link(ctx) {
       //   flx.signature[dep.variable.name] = dep;
       // }
     }
-
-    _ast = estraverse.replace(flx.ast, iterator(flx));
-
-    if (flx.root) {
-      // Add the flx library
-      _ast.body.unshift(bld.requireflx());
-
-      code = printAst(_ast) + code;
-    } else {
-
-      _ast = bld.register(flx.name, _ast, flx.scope);
-
-      // This is only the comment :
-      code += "\n\n// " + flx.name + " >> " + printFlx(flx) + "\n\n" + printAst(_ast);
-    }
-
     log.out();
   }
 
-  return code;
+  return ctx;
 }
 
 module.exports = link;

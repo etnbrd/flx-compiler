@@ -7,8 +7,16 @@ function parseArgs(args) {
 
   function options() {
   
-    function output(arg) {
-      this.output = arg;
+    function javascript(arg) {
+      this.jsOutput = arg;
+    }
+
+    function fluxion(arg) {
+      this.flxOutput = arg;
+    }
+
+    function graph(arg) {
+      this.gOutput = arg;
     }
 
     function verbose() { // TODO can't handle this flag for the moment, need refactoring
@@ -20,8 +28,12 @@ function parseArgs(args) {
     }
 
     const avaliableOptions = {
-      '-o' : output,
-      '--output' : output,
+      '-j' : javascript,
+      '--javascript' : javascript,
+      '-f' : fluxion,
+      '--fluxion' : fluxion,
+      // '-g' : graph, // TODO
+      // '--graph' : graph, // TODO
       '-v' : verbose,
       '--verbose' : verbose
     };
@@ -53,7 +65,7 @@ function parseArgs(args) {
   });
 }
 
-function pipe(fn) {
+function pipe(compile) {
 
   var options = parseArgs(process.argv);
 
@@ -75,14 +87,31 @@ function pipe(fn) {
     var filename = options.input.split('/');
     filename = filename[filename.length - 1];
 
-    var output = fn(file, filename);
-    if (options.output) {
-      fs.writeFile(options.output, output, function(err) {
+    if (options.jsOutpout) {
+      var output = compile.toJs(file, filename);
+      fs.writeFile(options.jsOutput, output, function(err) {
         if (err) throw err;
       });
-    } else {
-      log.start("OUTPUT");
-      log.code(output);
+    } if (options.flxOutpout) {
+      var output = compile.toFlx(file, filename);
+      fs.writeFile(options.jsOutput, output, function(err) {
+        if (err) throw err;
+      });
+    } /*if (options.gOutpout) {
+      var output = compile.toJs(file, filename);
+      fs.writeFile(options.jsOutput, output, function(err) {
+        if (err) throw err;
+      });
+    } */else {
+      var js = compile.toJs(file, filename);
+      var flx = compile.toFlx(file, filename);
+      
+      log.start("JAVASCRIPT MIDDLEWARE OUTPUT");
+      log.code(js);
+
+      log.start("FLUXIONNAL OUTPUT");
+      log.code(flx);
+
     }
   });
 

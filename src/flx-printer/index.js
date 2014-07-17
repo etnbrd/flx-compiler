@@ -1,4 +1,4 @@
-var print = require('recast').print;
+var print = require('escodegen').print;
 
 const start = '↠'; // fallback '>>'
 const post = '→'; // fallback '->'

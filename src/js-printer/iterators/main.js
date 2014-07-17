@@ -1,4 +1,4 @@
-var bld = require('../../linker/builders'),
+var bld = require('../builders'),
     iteratorFactory = require('../../lib/iterators');
 
 var _types = {};
