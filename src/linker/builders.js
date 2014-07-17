@@ -10,6 +10,14 @@ function requireflx() {
 }
 
 function startPlaceholder(next, signature) {
+
+  var _signature = [];
+  if (signature) {
+    _signature = Object.keys(signature).map(function(need) {
+      return b.property('init', b.identifier(need), b.identifier(need));
+    })
+  }
+
   return b.functionExpression(b.identifier('placeholder'), [
       ],
       b.blockStatement([
@@ -32,9 +40,7 @@ function startPlaceholder(next, signature) {
               b.objectExpression([
                 b.property('init', b.identifier('_args'), b.identifier('arguments')),
                 b.property('init', b.identifier('_sign'), b.objectExpression(
-                    Object.keys(signature).map(function(need) {
-                      return b.property('init', b.identifier(need), b.identifier(need));
-                    })
+                    _signature
                     ))
                 ])
               ]
@@ -56,7 +62,7 @@ function register(name, fn, scope) {
   // })
 
   function _register(name, fn, scope) { // TODO duplicate with register
-    var _scope;
+    var _scope = b.objectExpression([]);
     if (scope) {
       _scope = b.objectExpression(
             Object.keys(scope).map(function(id) {
@@ -69,11 +75,10 @@ function register(name, fn, scope) {
         b.callExpression(
           b.memberExpression(b.identifier('flx'), b.identifier('register'), false),
           [
-          b.literal(name),
-          fn,
-          _scope
-          ]
-          )
+            b.literal(name),
+            fn,
+            _scope
+          ])
         );
   }
 

@@ -4,17 +4,25 @@ var bld = require('../../linker/builders'),
 var _types = {};
 
 _types.Identifier = {
-  enter: function(c, node) {
-    if (node.modifier) {
-      if (node.modifier.target === 'signature')
-        return bld.signatureModifier(node.name);
+  leave: function(n, p, c) {
 
-      if (node.modifier.target === 'scope')
-        return bld.scopeModifier(node.name);
+    if (n.modifier) {
+      if (n.modifier.target === 'signature') {
+        return bld.signatureModifier(n.name);
+      }
+
+      if (n.modifier.target === 'scope') {
+        return bld.scopeModifier(n.name);
+      }
     }
 
-    if (node.kind === 'start')
-      return bld.start(node.name.substring(1), node.signature);
+    if (n.kind === 'start'){
+      return bld.start(n.name, n.signature);
+    }
+
+    if (n.kind === 'post'){
+      return bld.post(n.name, n.signature);
+    }
   }
 };
 

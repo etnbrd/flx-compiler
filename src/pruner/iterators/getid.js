@@ -3,7 +3,7 @@ var iteratorFactory = require('../../lib/iterators');
 var _types = {};
 
 _types.Identifier = {
-    enter: function (c, n) {
+    enter: function (n, p, c) {
         c.ids.push(n.name);
     }
 };

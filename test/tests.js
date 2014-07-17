@@ -66,8 +66,31 @@ module.exports = {
     //     "  Same with requires"
     //   ].join("\n"),
     //   expectations: ['42']
-    // }
+    // },
+    // {
+    //   name : 'count8',
+    //   desc : [
+    //     "  Same with requires"
+    //   ].join("\n"),
+    //   expectations: ['42']
+    // },
+    {
+      name : "graph",
+      desc : [
+        "  Write a graph printer to display fluxions box and arrows stuffs"
+      ].join("\n")
+    },
+    {
+      name : "communication",
+      desc : [
+        "  Write a communication TODO file to make the roadmap from test and this TODO file",
+       "   Then, put in this TODO file :",
+       "   - write documentation about ES* and generally about the compiler",
+       "   - write master subjects about compiler problem spin off (like fluxion placement, debit ...)"
+      ].join("\n")
+    }
   ],
+
   requires : [
     {
       name : 'app.get',
@@ -75,7 +98,7 @@ module.exports = {
        "   The trigger is app.get.",
        "   app is directly required in a 'app' var."
       ].join("\n"),
-      expectations: ['reply']
+      expectations: ['↠reply']
     },
     {
       name : 'application.get',
@@ -83,7 +106,7 @@ module.exports = {
        "   The trigger is application.get.",
        "   app is directly required in a 'application' var."
       ].join("\n"),
-      expectations: ['reply']
+      expectations: ['↠reply']
     },
   ]
 };

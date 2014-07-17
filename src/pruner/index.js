@@ -1,17 +1,14 @@
 var iterator = require('./iterators/main'),
     constructors = require('./constructors'),
     estraverse = require('estraverse'),
-    escope = require('escope');
+    escope = require('escope'),
+    log = require("../lib/log");
 
 
 module.exports = function(ast) {
-    var scopes = escope.analyze(ast);
-    var context = new constructors.Context(ast, scopes);
-    context.enterFlx('Main', ast);
-
+    log.start("PRUNER");
+    var context = new constructors.Context(ast);
     estraverse.traverse(ast, iterator(context));
-
-    context.leaveFlx();
+    context.end();
     return context;
 };
-

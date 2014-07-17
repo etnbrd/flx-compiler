@@ -27,8 +27,10 @@ var magenta       = colorFactory('\x1B[35m', '\x1B[39m');
 var red           = colorFactory('\x1B[31m', '\x1B[39m');
 var yellow        = colorFactory('\x1B[33m', '\x1B[39m');
 
+const pre = '>> ';
+
 function prefix(color) {
-    return bold(color('>> '));
+    return bold(color(pre));
 }
 
 var _indentLevel = 0;
@@ -55,6 +57,34 @@ function log(prefix, suffix, incrementIndentLevel) {
     };
 }
 
+function start() {
+    if (!process.env.verbose)
+        return;
+
+    var args = Array.prototype.slice.call(arguments, 0);
+
+    args.unshift('\x1B[34m\x1B[1m');
+    args.push('\x1B[39m\x1B[22m');
+
+    var underline = "";
+    for (var i = args[1].length; i > 0; i--) {
+        underline += "-";
+    };
+
+    console.log("");
+    console.log.call(undefined, args.join(''));
+    console.log('\x1B[34m\x1B[1m' + underline + '\x1B[39m\x1B[22m');
+}
+
+function code(code) {
+    const indent = "";
+    // TODO syntaxic coloration
+
+    code = indent + code.replace(/\n/g, "\n" + indent);
+
+    console.log(code);
+}
+
 module.exports = {
     bold : bold,
     italic : italic,
@@ -71,6 +101,8 @@ module.exports = {
     red : red,
     yellow : yellow,
 
+    start : start,
+    code  : code,
     enter : log(prefix(yellow),  bold(yellow('+ ')),               1),
     leave : log(prefix(yellow),  bold(yellow('- ')),               -1),
     error : log(prefix(red),     bold(red('   error')) + '   : ',  0),
@@ -78,5 +110,10 @@ module.exports = {
     vard  : log(prefix(grey),    green('   var'),                  0),
     sig   : log(prefix(grey),    blue('   sig'),                   0),
     mod   : log(prefix(grey),    magenta('   mod'),                0),
-    info  : log(bold(grey('>> ')),    '  ',                             0)
+    info  : log(bold(grey(pre)), '',                               0),
+
+    in : log(bold(green(pre)), ' in ',                           1),
+    out: log('', '', -1),
+
+
 };
