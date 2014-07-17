@@ -4,7 +4,7 @@ var _types = {};
 
 _types.Identifier = {
     enter: function (c, n) {
-        c.id += (c.id === '' ? '' : '.') + n.name;
+        c.ids.push(n.name);
     }
 };
 

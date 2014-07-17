@@ -4,11 +4,14 @@
   "version": "0.0.1",
   "author": "Etienne Brodu <etn@etnbrd.com>",
   "dependencies": {
+    "ast-types": "*",
+    "codeclimate-test-reporter": "0.0.3",
+    "coveralls": "^2.11.1",
+    "escodegen": "*",
+    "escope": "*",
     "esprima": "*",
     "estraverse": "*",
-    "escope": "*",
-    "escodegen": "*",
-    "ast-types": "*"
+    "mocha-lcov-reporter": "0.0.1"
   },
   "devDependencies": {
     "flx": "*",

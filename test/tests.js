@@ -1,11 +1,10 @@
 module.exports = {
 
-  // TODO this object should generate two things : the tests, and the roadmap.md file.
   counts : [
     {
       name : 'count1',
       desc : [
-        "  The server reply a constant value to every request.",
+       "   The server reply a constant value to every request.",
        "   There isn't any variable used."
       ].join("\n"),
       expectations: ['42']
@@ -13,7 +12,7 @@ module.exports = {
     {
       name : 'count2',
       desc : [
-        "  The server reply a constant value to every request,",
+       "   The server reply a constant value to every request,",
        "   using a variable declared **inside** the reply function.  ",
        "   This variable shouldn't be exchanged between fluxions,",
        "   as it's declared and used in the same function."
@@ -23,7 +22,7 @@ module.exports = {
     {
       name : 'count3',
       desc : [
-        "  The server of problem #3 reply a constant value to every request,",
+       "   The server of problem #3 reply a constant value to every request,",
        "   using a variable declared **outside** the reply function.  ",
        "   This variable should be in the signature of the second fluxions."
       ].join("\n"),
@@ -32,7 +31,7 @@ module.exports = {
     {
       name : 'count4',
       desc : [
-        "  The server of problem #4 reply a value incremented at every request,",
+       "   The server of problem #4 reply a value incremented at every request,",
        "   using a variable declared outside the reply function.  ",
        "   This variable should be in the scope of the fluxions",
        "   as it is used only in this fluxion."
@@ -42,7 +41,7 @@ module.exports = {
     {
       name : 'count5',
       desc : [
-        "  The server of problem #5 uses two different handler for two different request routes.",
+       "   The server of problem #5 uses two different handler for two different request routes.",
        "   Both handlers modify the same variable, so the fluxions needs to synchronize this value after each modification."
       ].join("\n"),
       expectations: ['42', '43']
@@ -68,5 +67,23 @@ module.exports = {
     //   ].join("\n"),
     //   expectations: ['42']
     // }
+  ],
+  requires : [
+    {
+      name : 'app.get',
+      desc : [
+       "   The trigger is app.get.",
+       "   app is directly required in a 'app' var."
+      ].join("\n"),
+      expectations: ['reply']
+    },
+    {
+      name : 'application.get',
+      desc : [
+       "   The trigger is application.get.",
+       "   app is directly required in a 'application' var."
+      ].join("\n"),
+      expectations: ['reply']
+    },
   ]
 };
