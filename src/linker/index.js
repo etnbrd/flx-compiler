@@ -4,6 +4,7 @@ var escodegen = require("escodegen")
 ,   iterator = require("./iterators/main")
 ,   estraverse = require("estraverse")
 ,   util = require("util")
+,   log = require('../lib/log')
 ;
 
 
@@ -56,6 +57,28 @@ function printFlx(flx) { // TODO this belongs in the flx printer
   }
 }
 
+function debug(dep, type) {
+
+  log.info( "" +
+    log.blue(dep.variable.name) + log.grey(" [") + log.bold(type) + log.grey("] ") +
+    Object.keys(dep.variable.flxs).reduce(function(prev, name) {
+      var _name = name;
+
+      if (dep.source.name === name) {
+        _name += log.blue("$");
+      }
+
+      if (dep.variable.modifierFlxs[name]) {
+        _name += log.yellow("⚡");
+      }
+
+      prev.push(_name);
+      return prev;
+    }, []).join(', ')
+  );
+
+}
+
 function bySource (source) {
   return function (reference) {
     return (reference.from.flx !== source)
@@ -83,10 +106,14 @@ function link(ctx) {
   ,   dep
   ;
 
+  log.start("LINKER");
+
   for (_flx in ctx.flx) {
     flx = ctx.flx[_flx];
 
-    console.log("in " + flx.name);
+
+    // console.log("in " + flx.name);
+    log.in(flx.name);
     for (_mod in flx.dependencies) { dep = flx.dependencies[_mod];
 
       card = Object.keys(dep.variable.flxs).length;
@@ -94,27 +121,23 @@ function link(ctx) {
 
       // CORE DEPENDENCIES RESOLVER // TODO might be better suited in the constructor.
 
-      // TODO debug function
-
-      console.log("  " + dep.variable.name + " is used in " + card + " flx, and modified in " + mcard + " flx");
-      console.log("    + used in : " + Object.keys(dep.variable.flxs).join(', '));
-      console.log("    + modified in : " + Object.keys(dep.variable.modifierFlxs).join(', '));
-
       // 2 fluxions, none modify the variable : Problem #3
       if ((card === 2 && mcard === 0)
       // 2 fluxions, the non root fluxion modify the variable : Problem #4
       ||  (card === 2 && mcard === 1 && !dep.variable.modifierFlxs[dep.source.name])) {
-        console.log("      -> therfore, it's in the scope");
+        debug(dep, "scope");
         dep.references.filter(bySource(dep.source))
                       .forEach(modifier("scope"));
 
         flx.scope[dep.variable.name] = dep;
-      } else {
-        console.log("      -> therfore, it's in the signature");
-        dep.references.filter(bySource(dep.source))
-                      .forEach(modifier("signature"));
-        flx.signature[dep.variable.name] = dep;
       }
+
+      // else {
+      //   log.info("  in " + log.bold("signature"));
+      //   dep.references.filter(bySource(dep.source))
+      //                 .forEach(modifier("signature"));
+      //   flx.signature[dep.variable.name] = dep;
+      // }
     }
 
     _ast = estraverse.replace(flx.ast, iterator(flx));
@@ -131,6 +154,8 @@ function link(ctx) {
       // This is only the comment :
       code += "\n\n// " + flx.name + " >> " + printFlx(flx) + "\n\n" + print(_ast);
     }
+
+    log.out();
   }
 
   return code;

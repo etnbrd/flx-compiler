@@ -5,14 +5,16 @@ var iterator = require("./iterators/main")
 ,   estraverse = require("estraverse")
 ,   escope = require("escope")
 ,   util = require("util")
+,   log = require("../lib/log")
 ;
 
 
 function start(ast, filename) {
-    var context = new cons.Context(ast, filename);
-    estraverse.traverse(ast, iterator(context));
-    context.end();
-    return context;
+  log.start("PRUNER");
+  var context = new cons.Context(ast, filename);
+  estraverse.traverse(ast, iterator(context));
+  context.end();
+  return context;
 }
 
 module.exports = start;

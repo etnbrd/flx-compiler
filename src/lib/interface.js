@@ -1,4 +1,6 @@
-var fs = require('fs');
+var fs = require('fs')
+,   log = require('./log')
+;
 
 function parseArgs(args) {
 
@@ -79,8 +81,8 @@ function pipe(fn) {
         if (err) throw err;
       });
     } else {
-      console.log("\n====================================\n");
-      console.log(output);
+      log.start("OUTPUT");
+      log.code(output);
     }
   });
 
