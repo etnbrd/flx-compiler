@@ -1,13 +1,13 @@
 var errors = require('./errors');
 
 module.exports = function iteratorFactory(typesWalker) {
-    return function iterator(c) {
+    return function iterator(carriedData) {
         function handlerFactory(visitorEvent) {
             return function handler(currentNode, previousNode) {
                 if (!currentNode.type)
                     throw errors.missingType(currentNode);
                 if (!!typesWalker[currentNode.type] && typesWalker[currentNode.type][visitorEvent])
-                    return typesWalker[currentNode.type][visitorEvent](c, currentNode, previousNode);
+                    return typesWalker[currentNode.type][visitorEvent](carriedData, currentNode, previousNode);
             };
         }
 
