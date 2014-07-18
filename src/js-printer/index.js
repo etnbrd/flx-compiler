@@ -58,8 +58,12 @@ function printFlx(flx) { // TODO this belongs in the flx printer
 function print(ctx) {
 
   var _flx,
+      _ast,
+      root,
+      flxRegistrations = "",
       code = "";
 
+  var asts = [];
 
   for (_flx in ctx.flx) {
     flx = ctx.flx[_flx];
@@ -67,19 +71,44 @@ function print(ctx) {
 
     _ast = estraverse.replace(flx.ast, iterator(flx));
 
-    if (flx.root) {
-      // Add the flx library
-      _ast.body.unshift(bld.requireflx());
+    // TODO sync the dependencies that need it.
+    if (_ast.type === "FunctionExpression") {
+      _ast.body.body.push(bld.syncBuilder(flx.sync, flx));
+    }
 
-      code = printAst(_ast) + code;
+    if (flx.root) {
+      root = flx;
     } else {
 
-      _ast = bld.register(flx.name, _ast, flx.scope);
+      var _scope = {};
 
-      // This is only the comment :
+      for (var i in flx.scope) {
+        _scope[i] = true;
+      }
+
+      for (var i in flx.sync) {
+        _scope[i] = true;
+      }
+
+      _ast = bld.register(flx.name, _ast, _scope);
+
+      asts.push(_ast);
+
       code += "\n\n// " + flx.name + " >> " + printFlx(flx) + "\n\n" + printAst(_ast);
-    }  
+    }
   }
+  
+  // asts.forEach(function(ast) {
+  //   root.ast.body.push(ast);
+  // })
+
+  // _ast = bld.register(flx.name, bld.fnCapsule(root.ast.body), flx.scope);
+
+  // code = printAst(_ast);
+  code = printAst(root.ast) + code;
+
+  code = printAst(bld.requireflx()) + "\n" + code;
+   // + "\n" + printAst(bld.starter(root.name));
 
   return code;
 }

@@ -246,6 +246,7 @@ function FlxScope(name, ast, root) {
   this.dependencies = {};
   this.scope = {};
   this.signature = {};
+  this.sync = {};
 }
 
 FlxScope.prototype.enter = function () {

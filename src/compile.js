@@ -8,15 +8,17 @@ var parse = require('esprima').parse,
 //     graphicPrinter = require('./graphic-printer'); // TODO
 
 function _compile(code, filename) {
-  return link(prune(parse(code, {loc: true}), filename));
-}
+  var ctx = link(prune(parse(code, {loc: true}), filename));
 
-module.exports = {
-  toJs: function (ctx) {
-    return jsPrinter(_compile(ctx));
-  },
+  return {
+    toJs: function () {
+      return jsPrinter(ctx);
+    },
 
-  toFlx: function (ctx) {
-    return flxPrinter(_compile(ctx));
+    toFlx: function () {
+      return flxPrinter(ctx);
+    }
   }
 }
+
+module.exports = _compile;

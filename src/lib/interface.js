@@ -87,14 +87,14 @@ function pipe(compile) {
     var filename = options.input.split('/');
     filename = filename[filename.length - 1];
 
+    var output = compile(file, filename);
+
     if (options.jsOutpout) {
-      var output = compile.toJs(file, filename);
-      fs.writeFile(options.jsOutput, output, function(err) {
+      fs.writeFile(options.jsOutput, output.toJs(), function(err) {
         if (err) throw err;
       });
     } if (options.flxOutpout) {
-      var output = compile.toFlx(file, filename);
-      fs.writeFile(options.jsOutput, output, function(err) {
+      fs.writeFile(options.jsOutput, output.toFlx(), function(err) {
         if (err) throw err;
       });
     } /*if (options.gOutpout) {
@@ -103,14 +103,14 @@ function pipe(compile) {
         if (err) throw err;
       });
     } */else {
-      var js = compile.toJs(file, filename);
-      var flx = compile.toFlx(file, filename);
+      var js = output.toJs();
+      var flx = output.toFlx();
       
       log.start("JAVASCRIPT MIDDLEWARE OUTPUT");
       log.code(js);
 
-      log.start("FLUXIONNAL OUTPUT");
-      log.code(flx);
+      // log.start("FLUXIONNAL OUTPUT");
+      // log.code(flx);
 
     }
   });
