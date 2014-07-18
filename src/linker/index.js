@@ -39,32 +39,23 @@ function modifier(type) {
   };
 }
 
-var _types = {}; // TODO rename _types to a better suited name, and move to another files, it might grow
+// TODO this function is only meant to temporarly avoid code duplication.
+// The types might differ a lot.
+function metaType(type) {
+  return function (dep, flx) {
+    debug(dep, type);
+    dep.references.filter(bySource(flx))
+                  .forEach(modifier(type));
 
-_types.scope = function (dep, flx) {
-  debug(dep, 'scope');
-  dep.references.filter(bySource(flx))
-                .forEach(modifier('scope'));
+    flx[type][dep.variable.name] = dep;
+  }
+}
 
-  flx.scope[dep.variable.name] = dep;
-};
-
-_types.signature = function (dep, flx) {
-  debug(dep, 'signature');
-  dep.references.filter(bySource(flx))
-                .forEach(modifier('signature'));
-  flx.signature[dep.variable.name] = dep;
-  // TODO there is some inconsistency with outputs.
-  // flx has scope, outputs has signature.
-  // We shouldn't add this dependency to the flx signature, but to the output signature (corresponding to the child fluxion signature)
-};
-
-_types.sync = function (dep, flx) {
-  debug(dep, 'sync');
-  dep.references.filter(bySource(flx))
-                .forEach(modifier('sync'));
-  flx.sync[dep.variable.name] = dep;
-};
+var _types = {
+  signature: metaType('signature'),
+  scope: metaType('scope'),
+  sync: metaType('sync')
+}; // TODO rename _types to a better suited name, and move to another files, it might grow
 
 _types.default = function(dep, flx) {
   // Default behavior
