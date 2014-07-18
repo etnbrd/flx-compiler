@@ -4,9 +4,7 @@ var escope = require('escope')
 ,   helpers = require('../lib/helpers')
 ;
 
-module.exports = {
-  Context: Context
-}
+module.exports = Context;
 
 
 // HELPERS TODO move these into the helpers file
