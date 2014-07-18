@@ -1,9 +1,9 @@
-var escodegen = require("escodegen"),
-    bld = require("./builders"),
-    iterator = require("./iterators/main"),
-    estraverse = require("estraverse");
+'use strict';
 
-module.exports = print;
+var escodegen = require('escodegen'),
+    bld = require('./builders'),
+    iterator = require('./iterators/main'),
+    estraverse = require('estraverse');
 
 const options = {
   format: {
@@ -57,13 +57,14 @@ function printFlx(flx) { // TODO this belongs in the flx printer
 
 function print(ctx) {
 
-  var _flx,
+  var i,
+      flx,
+      _flx,
       _ast,
+      _scope,
       root,
-      flxRegistrations = "",
-      code = "";
-
-  var asts = [];
+      asts = [],
+      code = '';
 
   for (_flx in ctx.flx) {
     flx = ctx.flx[_flx];
@@ -71,8 +72,7 @@ function print(ctx) {
 
     _ast = estraverse.replace(flx.ast, iterator(flx));
 
-    // TODO sync the dependencies that need it.
-    if (_ast.type === "FunctionExpression") {
+    if (_ast.type === 'FunctionExpression') {
       _ast.body.body.push(bld.syncBuilder(flx.sync, flx));
     }
 
@@ -80,13 +80,13 @@ function print(ctx) {
       root = flx;
     } else {
 
-      var _scope = {};
+      _scope = {};
 
-      for (var i in flx.scope) {
+      for (i in flx.scope) {
         _scope[i] = true;
       }
 
-      for (var i in flx.sync) {
+      for (i in flx.sync) {
         _scope[i] = true;
       }
 
@@ -94,21 +94,11 @@ function print(ctx) {
 
       asts.push(_ast);
 
-      code += "\n\n// " + flx.name + " >> " + printFlx(flx) + "\n\n" + printAst(_ast);
+      code += '\n\n// ' + flx.name + ' >> ' + printFlx(flx) + '\n\n' + printAst(_ast);
     }
   }
   
-  // asts.forEach(function(ast) {
-  //   root.ast.body.push(ast);
-  // })
-
-  // _ast = bld.register(flx.name, bld.fnCapsule(root.ast.body), flx.scope);
-
-  // code = printAst(_ast);
-  code = printAst(root.ast) + code;
-
-  code = printAst(bld.requireflx()) + "\n" + code;
-   // + "\n" + printAst(bld.starter(root.name));
-
-  return code;
+  return printAst(bld.requireflx()) + '\n' + printAst(root.ast) + code;
 }
+
+module.exports = print;

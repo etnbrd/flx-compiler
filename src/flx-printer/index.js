@@ -1,3 +1,5 @@
+'use strict';
+
 var escodegen = require('escodegen');
 
 const options = {
@@ -51,11 +53,11 @@ const arrow = {
 };
 
 function code(ast) {
-  return indent + escodegen.generate(ast, options).replace(/\n/g, "\n" + indent);
+  return indent + escodegen.generate(ast, options).replace(/\n/g, '\n' + indent);
 }
 
 function declaration(d) {
-  return Flx  + " " + d.name + "\n";
+  return Flx  + ' ' + d.name + '\n';
 }
 
 function signature(s) {
@@ -63,7 +65,7 @@ function signature(s) {
 }
 
 function output(o) {
-  return arrow[o.type] + ' ' + o.name + ' ' + signature(o.signature) +  "\n";
+  return arrow[o.type] + ' ' + o.name + ' ' + signature(o.signature) +  '\n';
 }
 
 function flx(f) {
@@ -72,14 +74,14 @@ function flx(f) {
   if (f.outputs.length > 0) {
     res += f.outputs.map(output);
   } else {
-    res += arrow[f.type] + ' ' + empty + "\n";
+    res += arrow[f.type] + ' ' + empty + '\n';
   }
 
   res += code(f.ast);
 
   return res;
 
-  // console.log("\n" + flx.name + " >> " + ((flx.outputs.length) ? flx.outputs.map(function(o) {return o.name + " [" + Object.keys(o.signature) + "]"}).join(", ") : "ø") );
+  // console.log('\n' + flx.name + ' >> ' + ((flx.outputs.length) ? flx.outputs.map(function(o) {return o.name + ' [' + Object.keys(o.signature) + ']'}).join(', ') : 'ø') );
 
   // flx.parents.forEach(function(parent) {
   //   // console.log(parent);

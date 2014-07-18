@@ -1,3 +1,6 @@
+'use strict';
+
+
 var b = require('ast-types').builders,
     esprima = require('esprima');
 
@@ -39,7 +42,7 @@ function startPlaceholder(next, signature) {
   if (signature) {
     _signature = Object.keys(signature).map(function(need) {
       return b.property('init', b.identifier(need), b.identifier(need));
-    })
+    });
   }
 
   return b.functionExpression(b.identifier('placeholder'), [
@@ -111,14 +114,14 @@ function register(name, fn, scope) {
     // TODO this is way nicer than complex ast building, stop using b.
     // TODO precompile every snippet to reduce compilation time.
     var code = [
-      "if (msg._update) {",
-      "  for (var i in msg._update) {",
-      "    this[i] = msg._update[i]",
-      "  }",
-      "} else {",
-      "  PLACEHOLDER;",
-      "}"
-    ].join("\n");
+      'if (msg._update) {',
+      '  for (var i in msg._update) {',
+      '    this[i] = msg._update[i]',
+      '  }',
+      '} else {',
+      '  PLACEHOLDER;',
+      '}'
+    ].join('\n');
 
     var ast = esprima.parse(code).body[0];
 
@@ -137,7 +140,7 @@ function register(name, fn, scope) {
           ]
         )
       )
-    ]
+    ];
 
     return b.functionExpression(b.identifier('capsule'), //name, args, body, isGenerator, isExpression
         [b.identifier('msg')],
@@ -199,10 +202,10 @@ function syncBuilder(sync, flx) {
 
   var deps = Object.keys(sync).reduce(function(deps, sync) {
     return deps += sync + ': this.' + sync;
-  }, "")
+  }, '');
 
   var code = [
-    "flx.start(flx.m('" + Object.keys(upstreams).join("', '") + "', {_update: {" + deps + "}}))"
+    'flx.start(flx.m("' + Object.keys(upstreams).join('", "') + '", {_update: {' + deps + '}}))'
   ].join('\n');
 
   return esprima.parse(code);
@@ -210,7 +213,7 @@ function syncBuilder(sync, flx) {
 }
 
 function fn(body) {
-  return b.functionExpression(b.identifier("root"), [], b.blockStatement(body));
+  return b.functionExpression(b.identifier('root'), [], b.blockStatement(body));
 }
 
 module.exports = {

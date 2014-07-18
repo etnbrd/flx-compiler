@@ -1,6 +1,7 @@
-var fs = require('fs')
-,   log = require('./log')
-;
+'use strict';
+
+var fs = require('fs'),
+    log = require('./log');
 
 function parseArgs(args) {
 
@@ -32,8 +33,8 @@ function parseArgs(args) {
       '--javascript' : javascript,
       '-f' : fluxion,
       '--fluxion' : fluxion,
-      // '-g' : graph, // TODO
-      // '--graph' : graph, // TODO
+      '-g' : graph, // TODO
+      '--graph' : graph, // TODO
       '-v' : verbose,
       '--verbose' : verbose
     };
@@ -104,12 +105,12 @@ function pipe(compile) {
       });
     } */else {
       var js = output.toJs();
-      var flx = output.toFlx();
+      // var flx = output.toFlx();
       
-      log.start("JAVASCRIPT MIDDLEWARE OUTPUT");
+      log.start('JAVASCRIPT MIDDLEWARE OUTPUT');
       log.code(js);
 
-      // log.start("FLUXIONNAL OUTPUT");
+      // log.start('FLUXIONNAL OUTPUT');
       // log.code(flx);
 
     }
