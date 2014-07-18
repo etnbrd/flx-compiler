@@ -74,21 +74,21 @@ module.exports = {
     //   ].join("\n"),
     //   expectations: ['42']
     // },
-    {
-      name : "graph",
-      desc : [
-        "  Write a graph printer to display fluxions box and arrows stuffs"
-      ].join("\n")
-    },
-    {
-      name : "communication",
-      desc : [
-        "  Write a communication TODO file to make the roadmap from test and this TODO file",
-       "   Then, put in this TODO file :",
-       "   - write documentation about ES* and generally about the compiler",
-       "   - write master subjects about compiler problem spin off (like fluxion placement, debit ...)"
-      ].join("\n")
-    }
+    // {
+    //   name : "graph",
+    //   desc : [
+    //     "  Write a graph printer to display fluxions box and arrows stuffs"
+    //   ].join("\n")
+    // },
+    // {
+    //   name : "communication",
+    //   desc : [
+    //     "  Write a communication TODO file to make the roadmap from test and this TODO file",
+    //    "   Then, put in this TODO file :",
+    //    "   - write documentation about ES* and generally about the compiler",
+    //    "   - write master subjects about compiler problem spin off (like fluxion placement, debit ...)"
+    //   ].join("\n")
+    // }
   ],
 
   requires : [
