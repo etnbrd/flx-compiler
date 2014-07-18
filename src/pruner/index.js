@@ -1,5 +1,5 @@
 var iterator = require('./iterators/main'),
-    constructors = require('./constructors'),
+    Context = require('./context'),
     estraverse = require('estraverse'),
     escope = require('escope'),
     log = require("../lib/log");
@@ -7,7 +7,7 @@ var iterator = require('./iterators/main'),
 
 module.exports = function(ast, filename) {
     log.start("PRUNER");
-    var context = new constructors.Context(ast, filename);
+    var context = new Context(ast, filename);
     estraverse.traverse(ast, iterator(context));
     context.end();
     return context;

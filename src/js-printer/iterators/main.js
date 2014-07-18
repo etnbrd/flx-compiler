@@ -14,14 +14,18 @@ _types.Identifier = {
       if (n.modifier.target === 'scope') {
         return bld.scopeModifier(n.name);
       }
+
+      if (n.modifier.target === 'sync') {
+        return bld.syncModifier(n.name);
+      }
     }
 
     if (n.kind === 'start'){
-      return bld.start(n.name, n.signature);
+      return bld.start(n.name, c.signature); // TODO inconsistency with signature, see linker/index.js
     }
 
     if (n.kind === 'post'){
-      return bld.post(n.name, n.signature);
+      return bld.post(n.name, c.signature);
     }
   }
 };

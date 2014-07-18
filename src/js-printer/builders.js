@@ -9,6 +9,29 @@ function requireflx() {
       ]);
 }
 
+function starter(next) {
+  return b.callExpression(
+    b.memberExpression(
+      b.identifier('flx'),
+      b.identifier('start'),
+      false
+    ),
+    [
+      b.callExpression(
+        b.memberExpression(
+          b.identifier('flx'),
+          b.identifier('m'),
+          false
+        ),
+        [
+          b.literal(next),
+          b.objectExpression([])
+        ]
+      )
+    ]
+  );
+}
+
 function startPlaceholder(next, signature) {
 
   var _signature = [];
@@ -19,37 +42,36 @@ function startPlaceholder(next, signature) {
   }
 
   return b.functionExpression(b.identifier('placeholder'), [
-      ],
-      b.blockStatement([
-        b.returnStatement(
+    ],
+    b.blockStatement([
+      b.returnStatement(
+        b.callExpression(
+          b.memberExpression(
+            b.identifier('flx'),
+            b.identifier('start'),
+            false
+            ),
+          [
           b.callExpression(
             b.memberExpression(
               b.identifier('flx'),
-              b.identifier('start'),
+              b.identifier('m'),
               false
               ),
             [
-            b.callExpression(
-              b.memberExpression(
-                b.identifier('flx'),
-                b.identifier('m'),
-                false
-                ),
-              [
-              b.literal(next),
-              b.objectExpression([
-                b.property('init', b.identifier('_args'), b.identifier('arguments')),
-                b.property('init', b.identifier('_sign'), b.objectExpression(
-                    _signature
-                    ))
-                ])
-              ]
-              )
-            ]
-            )
-            )
+            b.literal(next),
+            b.objectExpression([
+              b.property('init', b.identifier('_args'), b.identifier('arguments')),
+              b.property('init', b.identifier('_sign'), b.objectExpression(
+                  _signature
+                  ))
+              ])
             ])
-            );
+          ]
+        )
+      )
+    ])
+  );
 }
 
 function register(name, fn, scope) {
@@ -119,17 +141,54 @@ function signatureModifier(name) {
 
 function scopeModifier(name) {
   return b.memberExpression (
-    b.identifier('this'),
+    b.thisExpression(),
     b.identifier(name),
     false
   );
 }
 
+function syncModifier(name) {
+  return b.memberExpression(
+    b.memberExpression(
+      b.identifier('msg'),
+      b.identifier('_sign'),
+      false
+    ),
+    b.identifier(name),
+    false
+  );
+}
+
+function syncBuilder(sync) {
+
+
+  console.log(sync);
+
+  // TODO publish the variables in sync to their root.
+  // TODO the root need to be able to receive messages.
+
+  return b.expressionStatement(
+    b.identifier("// TODO here we need to publish synced variable : " + Object.keys(sync).join(', '))
+  ); 
+
+}
+
+function fn(body) {
+  return b.functionExpression(b.identifier("root"), [], b.blockStatement(body));
+}
+
 module.exports = {
   requireflx: requireflx,
+  starter: starter,
+
   register: register,
   start: startPlaceholder,
 
   signatureModifier: signatureModifier,
-  scopeModifier: scopeModifier
+  scopeModifier: scopeModifier,
+  syncModifier: syncModifier,
+
+  syncBuilder: syncBuilder,
+
+  fnCapsule: fn
 };

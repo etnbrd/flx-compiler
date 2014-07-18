@@ -11,13 +11,13 @@ function read(filename) {
 }
 
 function compile(src, filename) {
-    var res = _compile.toJs(src);
+    var res = _compile(src, filename).toJs();
     t.writeFile(filename, res, __dirname + '/../results/');
     return res;
 }
 
 function compileAndLoad(filename) {
-    var src = _compile.toJs(read(filename));
+    var src = _compile(read(filename), filename).toJs();
     t.writeFile(filename, src, __dirname + '/../results/');
     var l = lint(src);
     if (l.length)
