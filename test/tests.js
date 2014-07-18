@@ -98,7 +98,7 @@ module.exports = {
        "   The trigger is app.get.",
        "   app is directly required in a 'app' var."
       ].join("\n"),
-      expectations: ['↠reply', 'app.get.js']
+      expectations: ['↠reply']
     },
     {
       name : 'application.get',
@@ -106,7 +106,7 @@ module.exports = {
        "   The trigger is application.get.",
        "   app is directly required in a 'application' var."
       ].join("\n"),
-      expectations: ['↠reply', 'application.get.js']
+      expectations: ['↠reply']
     },
   ]
 };

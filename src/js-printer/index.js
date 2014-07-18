@@ -63,6 +63,7 @@ function print(ctx) {
       flxRegistrations = "",
       code = "";
 
+  var asts = [];
 
   for (_flx in ctx.flx) {
     flx = ctx.flx[_flx];
@@ -71,27 +72,43 @@ function print(ctx) {
     _ast = estraverse.replace(flx.ast, iterator(flx));
 
     // TODO sync the dependencies that need it.
-    // if (_ast.type === "FunctionExpression") {
-    //   _ast.body.body.push(bld.syncBuilder(flx.sync));
-    // }
+    if (_ast.type === "FunctionExpression") {
+      _ast.body.body.push(bld.syncBuilder(flx.sync, flx));
+    }
 
     if (flx.root) {
       root = flx;
     } else {
-      _ast = bld.register(flx.name, _ast, flx.scope);
 
+      var _scope = {};
 
-      // TODO we want to put every fluxion registration inside the root fluxion (mainly to avoid dependencies problems while registering scopes from rooted variable).
-      // we need to find the root flx, encapsulated it, push every other regstration at the top in the ast, then print everything.
-      // so find the root, encapsulate it, find every other flx, register them, and shift them in the body, print, done.
+      for (var i in flx.scope) {
+        _scope[i] = true;
+      }
+
+      for (var i in flx.sync) {
+        _scope[i] = true;
+      }
+
+      _ast = bld.register(flx.name, _ast, _scope);
+
+      asts.push(_ast);
 
       code += "\n\n// " + flx.name + " >> " + printFlx(flx) + "\n\n" + printAst(_ast);
     }
   }
   
-  _ast = bld.register(flx.name, bld.fnCapsule(flx.ast.body), flx.scope);
+  // asts.forEach(function(ast) {
+  //   root.ast.body.push(ast);
+  // })
 
-  code = printAst(bld.requireflx()) + "\n" + code + "\n" + printAst(bld.starter(rootName));
+  // _ast = bld.register(flx.name, bld.fnCapsule(root.ast.body), flx.scope);
+
+  // code = printAst(_ast);
+  code = printAst(root.ast) + code;
+
+  code = printAst(bld.requireflx()) + "\n" + code;
+   // + "\n" + printAst(bld.starter(root.name));
 
   return code;
 }

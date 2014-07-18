@@ -28,9 +28,9 @@ function detectDependency(dep, flx) {
     return "sync";
   }
  
-  if ((card > 2 && isSourcePristine(dep) && inSource(dep, flx))) {
-    return "signature";
-  }
+  // if ((card > 2 && isSourcePristine(dep) && inSource(dep, flx))) {
+  //   return "signature";
+  // }
 
  return "default"; 
 }

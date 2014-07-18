@@ -3,13 +3,13 @@ var app = require('express')();
 var _rep = 42;
 
 app.get("/A", function replyA(req, res){
-  res.send("" + _rep);
   _rep += 1;
+  res.send("" + _rep);
 });
 
 app.get("/B", function replyB(req, res){
-  res.send("" + _rep);
   _rep += 2;
+  res.send("" + _rep);
 });
 
 if (!module.parent) {

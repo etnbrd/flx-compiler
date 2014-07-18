@@ -1,4 +1,5 @@
-var b = require('ast-types').builders;
+var b = require('ast-types').builders,
+    esprima = require('esprima');
 
 function requireflx() {
   return b.variableDeclaration('var', [
@@ -105,19 +106,43 @@ function register(name, fn, scope) {
   }
 
   function _capsule(fn) {
+
+
+    // TODO this is way nicer than complex ast building, stop using b.
+    // TODO precompile every snippet to reduce compilation time.
+    var code = [
+      "if (msg._update) {",
+      "  for (var i in msg._update) {",
+      "    this[i] = msg._update[i]",
+      "  }",
+      "} else {",
+      "  PLACEHOLDER;",
+      "}"
+    ].join("\n");
+
+    var ast = esprima.parse(code).body[0];
+
+
+    ast.alternate.body = [
+      b.expressionStatement(
+        b.callExpression(
+          b.memberExpression(
+            fn,
+            b.identifier('apply'),
+            false
+          ),
+          [
+            b.thisExpression(),
+            b.memberExpression(b.identifier('msg'), b.identifier('_args'), false)
+          ]
+        )
+      )
+    ]
+
     return b.functionExpression(b.identifier('capsule'), //name, args, body, isGenerator, isExpression
         [b.identifier('msg')],
         b.blockStatement([
-          b.expressionStatement(
-            b.callExpression(
-              b.memberExpression(fn,
-                b.identifier('apply'), false),
-              [
-              b.thisExpression(),
-              b.memberExpression(b.identifier('msg'), b.identifier('_args'), false)
-              ]
-              )
-            )
+            ast
           ]),
         false, // isGenerator
         false  // isExpression
@@ -148,28 +173,39 @@ function scopeModifier(name) {
 }
 
 function syncModifier(name) {
-  return b.memberExpression(
-    b.memberExpression(
-      b.identifier('msg'),
-      b.identifier('_sign'),
-      false
-    ),
-    b.identifier(name),
-    false
-  );
+  return scopeModifier(name);
 }
 
-function syncBuilder(sync) {
+function syncBuilder(sync, flx) {
+
+  // TODO this is a quick fix.
+  // we need to make sure we don't send a variable to a fluxion that don't need it.
+
+  // TODO remove the second argument, and retrieve the current flx by other means.
+
+  // TODO there is still some bugs with Problem#5 : the value of _rep sent to the client is delayed by one request.
+  var i,
+      upstreams = {};
 
 
-  console.log(sync);
+  for (i in sync) { var dep = sync[i];
+    upstreams = dep.variable.references.reduce(function(upstreams, ref) {
+      if (ref.from.flx.name !== flx.name && !ref.from.flx.root) {
+        upstreams[ref.from.flx.name] = ref.from.flx;
+      }
+      return upstreams;
+    }, upstreams);
+  }
 
-  // TODO publish the variables in sync to their root.
-  // TODO the root need to be able to receive messages.
+  var deps = Object.keys(sync).reduce(function(deps, sync) {
+    return deps += sync + ': this.' + sync;
+  }, "")
 
-  return b.expressionStatement(
-    b.identifier("// TODO here we need to publish synced variable : " + Object.keys(sync).join(', '))
-  ); 
+  var code = [
+    "flx.start(flx.m('" + Object.keys(upstreams).join("', '") + "', {_update: {" + deps + "}}))"
+  ].join('\n');
+
+  return esprima.parse(code);
 
 }
 
