@@ -41,41 +41,61 @@ function startPlaceholder(next, signature) {
   var _signature = [];
   if (signature) {
     _signature = Object.keys(signature).map(function(need) {
-      return b.property('init', b.identifier(need), b.identifier(need));
+      return need + ': ' + need + ',\n'; 
+
+      // b.property('init', b.identifier(need), b.identifier(need));
     });
   }
 
-  return b.functionExpression(b.identifier('placeholder'), [
-    ],
-    b.blockStatement([
-      b.returnStatement(
-        b.callExpression(
-          b.memberExpression(
-            b.identifier('flx'),
-            b.identifier('start'),
-            false
-            ),
-          [
-          b.callExpression(
-            b.memberExpression(
-              b.identifier('flx'),
-              b.identifier('m'),
-              false
-              ),
-            [
-            b.literal(next),
-            b.objectExpression([
-              b.property('init', b.identifier('_args'), b.identifier('arguments')),
-              b.property('init', b.identifier('_sign'), b.objectExpression(
-                  _signature
-                  ))
-              ])
-            ])
-          ]
-        )
-      )
-    ])
-  );
+  _signature = _signature.join('\n');
+
+  var code = [
+    'function placeholder() {',
+    '  return flx.start(flx.m(\'' + next + '\', {',
+    '    _args: arguments,',
+    '    _sign: {' + _signature + '}',
+    '  }));',
+    '}'
+  ].join('\n');
+
+  var ast = esprima.parse(code);
+
+  // TODO WAT ?
+  ast.body[0].type = "FunctionExpression";
+
+  return ast.body[0];
+
+  // return b.functionExpression(b.identifier('placeholder'), [
+  //   ],
+  //   b.blockStatement([
+  //     b.returnStatement(
+  //       b.callExpression(
+  //         b.memberExpression(
+  //           b.identifier('flx'),
+  //           b.identifier('start'),
+  //           false
+  //           ),
+  //         [
+  //         b.callExpression(
+  //           b.memberExpression(
+  //             b.identifier('flx'),
+  //             b.identifier('m'),
+  //             false
+  //             ),
+  //           [
+  //           b.literal(next),
+  //           b.objectExpression([
+  //             b.property('init', b.identifier('_args'), b.identifier('arguments')),
+  //             b.property('init', b.identifier('_sign'), b.objectExpression(
+  //                 _signature
+  //                 ))
+  //             ])
+  //           ])
+  //         ]
+  //       )
+  //     )
+  //   ])
+  // );
 }
 
 function register(name, fn, scope) {
@@ -205,7 +225,7 @@ function syncBuilder(sync, flx) {
   }, '');
 
   var code = [
-    'flx.start(flx.m("' + Object.keys(upstreams).join('", "') + '", {_update: {' + deps + '}}))'
+    'flx.start(flx.m(\'' + Object.keys(upstreams).join('\', \'') + '\', {_update: {' + deps + '}}))'
   ].join('\n');
 
   return esprima.parse(code);

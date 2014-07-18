@@ -1,5 +1,3 @@
-'use strict';
-
 var escodegen = require('escodegen');
 
 const options = {

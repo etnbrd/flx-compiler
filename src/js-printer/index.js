@@ -5,7 +5,7 @@ var escodegen = require('escodegen'),
     iterator = require('./iterators/main'),
     estraverse = require('estraverse');
 
-const options = {
+var options = {
   format: {
     indent: {
       style: '  ',
@@ -72,7 +72,7 @@ function print(ctx) {
 
     _ast = estraverse.replace(flx.ast, iterator(flx));
 
-    if (_ast.type === 'FunctionExpression') {
+    if (_ast.type === 'FunctionExpression' && flx.sync.length) {
       _ast.body.body.push(bld.syncBuilder(flx.sync, flx));
     }
 
