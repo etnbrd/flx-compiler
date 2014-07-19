@@ -1,5 +1,5 @@
 var fs = require('fs'),
-    log = require('./log');
+    log = require('../lib/lib/log');
 
 function parseArgs(args) {
 

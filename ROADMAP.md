@@ -50,7 +50,6 @@ flx.register('↠reply', function capsule(msg) {
   } else {
     (function reply(req, res) {
       res.send('42');
-            flx.start(flx.m('', { _update: {} }));
     }.apply(this, msg._args));
   }
 }, {});
@@ -112,7 +111,6 @@ flx.register('↠reply', function capsule(msg) {
     (function reply(req, res) {
       var _rep = '42';
       res.send(_rep);
-            flx.start(flx.m('', { _update: {} }));
     }.apply(this, msg._args));
   }
 }, {});
@@ -173,7 +171,6 @@ flx.register('↠reply', function capsule(msg) {
   } else {
     (function reply(req, res) {
       res.send(this._rep);
-            flx.start(flx.m('', { _update: {} }));
     }.apply(this, msg._args));
   }
 }, { _rep: _rep });
@@ -238,7 +235,6 @@ flx.register('↠reply', function capsule(msg) {
     (function reply(req, res) {
       res.send('' + this._rep);
       this._rep += 1;
-            flx.start(flx.m('', { _update: {} }));
     }.apply(this, msg._args));
   }
 }, { _rep: _rep });
@@ -311,7 +307,6 @@ flx.register('↠replyA', function capsule(msg) {
     (function replyA(req, res) {
       this._rep += 1;
       res.send('' + this._rep);
-            flx.start(flx.m('↠replyB', { _update: { _rep: this._rep } }));
     }.apply(this, msg._args));
   }
 }, { _rep: _rep });
@@ -327,7 +322,6 @@ flx.register('↠replyB', function capsule(msg) {
     (function replyB(req, res) {
       this._rep += 2;
       res.send('' + this._rep);
-            flx.start(flx.m('↠replyA', { _update: { _rep: this._rep } }));
     }.apply(this, msg._args));
   }
 }, { _rep: _rep });

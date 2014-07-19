@@ -21,9 +21,7 @@
     "supertest": "*",
     "jshint": "*",
     "blanket": "*",
-    "coffee-script": "*",
-    "esprima": "*",
-    "escope": "*"
+    "coffee-script": "*"
   },
   "engine": "node >= 0.10.0",
   "main": "src/index.js",

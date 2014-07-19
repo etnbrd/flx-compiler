@@ -1,7 +1,7 @@
 var fs = require('fs'),
-    t = require('../src/lib/tools'),
-    _compile = require('../src/compile'),
-    lint = require('../src/lib/lint').lint,
+    t = require('../lib/lib/tools'),
+    _compile = require('../lib'),
+    lint = require('../lib/lib/lint').lint,
     assert = require('assert');
 
 // TODO refactor needed !!
