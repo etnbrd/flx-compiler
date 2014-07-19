@@ -1,9 +1,0 @@
-{
-  "name": "result",
-  "author": "Etienne Brodu <etn@etnbrd.com>",
-  "dependencies": {
-    "flx": "*",
-    "express": "*"
-  },
-  "engine": "node >= 0.10.0"
-}
