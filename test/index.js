@@ -4,10 +4,15 @@ require('blanket')({
   }
 });
 
-var t = require('./tools'),
+var fs = require('fs'),
+    t = require('./tools'),
     assert = require('assert'),
     tests = require('./tests'),
     generateRoadmap = require('./genRM');
+
+before(function(done) {
+  fs.mkdir('results', done);
+});
 
 describe('Compilation', function () {
   describe('Problem #0 : \n', function () {
@@ -56,4 +61,4 @@ describe('Compilation', function () {
   });
 });
 
-// after(generateRoadmap);
+after(generateRoadmap);
