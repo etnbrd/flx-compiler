@@ -6,7 +6,8 @@ require('blanket')({
 
 var t = require('./tools'),
     assert = require('assert'),
-    tests = require('./tests');
+    tests = require('./tests'),
+    generateRoadmap = require('./genRM');
 
 describe('Compilation', function () {
   describe('Problem #0 : \n', function () {
@@ -54,3 +55,5 @@ describe('Compilation', function () {
     });
   });
 });
+
+// after(generateRoadmap);
