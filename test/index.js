@@ -58,7 +58,7 @@ describe('Compilation', function () {
   tests.requires.forEach(function(test, index) {
     describe('Require : ' + test.name + " : \n", function() {
       it(test.desc, function (done) {
-        var compiledCode = t.compile(t.read(test.name + '.js'), test.name + '.js');
+        var compiledCode = t.compile(t.read(test.name + '.js'), test.name + '.js').toJs();
         var flxRegisterMatcher = /flx.register\('(.+?)'/g
 
         var flxs = [];

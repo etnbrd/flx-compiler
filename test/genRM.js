@@ -18,10 +18,15 @@ function generateRoadmap() {
 
       try {    
         var compileFile = fs.readFileSync("results/" + test.name + ".js");
+        var flxFile = fs.readFileSync("results/" + test.name + ".flx");
         var compile = [
           "The compiled result is in `results/" + test.name + ".js` : ",
           "\n```",
           compileFile,
+          "```\n\n",
+          "The fluxionnal result is in `results/" + test.name + ".flx` : ",
+          "\n```",
+          flxFile,
           "```\n\n"
           ].join('\n');
       } catch (e) {

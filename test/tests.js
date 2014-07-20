@@ -70,13 +70,6 @@ module.exports = {
       expectations: false
     },
     {
-      name : 'count8',
-      desc : [
-        "  Same with requires"
-      ].join("\n"),
-      expectations: false
-    },
-    {
       name : "graph",
       desc : [
         "  Write a graph printer to display fluxions box and arrows stuffs"

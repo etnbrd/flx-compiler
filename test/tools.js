@@ -11,14 +11,14 @@ function read(filename) {
 }
 
 function compile(src, filename) {
-    var res = _compile(src, filename).toJs();
-    t.writeFile(filename, res, __dirname + '/../results/');
+    var res = _compile(src, filename);
+    t.writeFile(filename, res.toJs(), __dirname + '/../results/');
+    t.writeFile(filename.replace('.js', '.flx'), res.toFlx(), __dirname + '/../results/');
     return res;
 }
 
 function compileAndLoad(filename) {
-    var src = _compile(read(filename), filename).toJs();
-    t.writeFile(filename, src, __dirname + '/../results/');
+    var src = compile(read(filename), filename).toJs();
     var l = lint(src);
     if (l.length)
         assert.fail(false, true, 'Des variables globales sont référencez dans des fluxions :\n' + JSON.stringify(l, null, '\t'));

@@ -55,6 +55,32 @@ flx.register('↠reply', function capsule(msg) {
 }, {});
 ```
 
+
+The fluxionnal result is in `results/count1.flx` : 
+
+```
+flx ↠reply
+→ ø
+  function reply(req, res) {
+    res.send('42');
+  }
+
+flx count1.js
+↠ ↠reply []
+  var app = require('express')();
+  app.get('/', function placeholder() {
+    return flx.start(flx.m('↠reply', {
+      _args: arguments,
+      _sign: {}
+    }));
+  });
+  if (!module.parent) {
+    app.listen(8080);
+    console.log('>> listening 8080');
+  }
+  exports.app = app;
+```
+
 ### Problem #2
 
 
@@ -116,6 +142,33 @@ flx.register('↠reply', function capsule(msg) {
 }, {});
 ```
 
+
+The fluxionnal result is in `results/count2.flx` : 
+
+```
+flx ↠reply
+→ ø
+  function reply(req, res) {
+    var _rep = '42';
+    res.send(_rep);
+  }
+
+flx count2.js
+↠ ↠reply []
+  var app = require('express')();
+  app.get('/', function placeholder() {
+    return flx.start(flx.m('↠reply', {
+      _args: arguments,
+      _sign: {}
+    }));
+  });
+  if (!module.parent) {
+    app.listen(8080);
+    console.log('>> listening 8080');
+  }
+  exports.app = app;
+```
+
 ### Problem #3
 
 
@@ -174,6 +227,33 @@ flx.register('↠reply', function capsule(msg) {
     }.apply(this, msg._args));
   }
 }, { _rep: _rep });
+```
+
+
+The fluxionnal result is in `results/count3.flx` : 
+
+```
+flx ↠reply
+→ ø
+  function reply(req, res) {
+    res.send(this._rep);
+  }
+
+flx count3.js
+↠ ↠reply []
+  var app = require('express')();
+  var _rep = '42';
+  app.get('/', function placeholder() {
+    return flx.start(flx.m('↠reply', {
+      _args: arguments,
+      _sign: {}
+    }));
+  });
+  if (!module.parent) {
+    app.listen(8080);
+    console.log('>> listening 8080');
+  }
+  exports.app = app;
 ```
 
 ### Problem #4
@@ -238,6 +318,34 @@ flx.register('↠reply', function capsule(msg) {
     }.apply(this, msg._args));
   }
 }, { _rep: _rep });
+```
+
+
+The fluxionnal result is in `results/count4.flx` : 
+
+```
+flx ↠reply
+→ ø
+  function reply(req, res) {
+    res.send('' + this._rep);
+    this._rep += 1;
+  }
+
+flx count4.js
+↠ ↠reply []
+  var app = require('express')();
+  var _rep = 42;
+  app.get('/', function placeholder() {
+    return flx.start(flx.m('↠reply', {
+      _args: arguments,
+      _sign: {}
+    }));
+  });
+  if (!module.parent) {
+    app.listen(8080);
+    console.log('>> listening 8080');
+  }
+  exports.app = app;
 ```
 
 ### Problem #5
@@ -327,6 +435,48 @@ flx.register('↠replyB', function capsule(msg) {
 }, { _rep: _rep });
 ```
 
+
+The fluxionnal result is in `results/count5.flx` : 
+
+```
+flx ↠replyA
+→ ø
+  function replyA(req, res) {
+    this._rep += 1;
+    res.send('' + this._rep);
+  }
+
+flx ↠replyB
+→ ø
+  function replyB(req, res) {
+    this._rep += 2;
+    res.send('' + this._rep);
+  }
+
+flx count5.js
+↠ ↠replyA []
+↠ ↠replyB []
+  var app = require('express')();
+  var _rep = 42;
+  app.get('/A', function placeholder() {
+    return flx.start(flx.m('↠replyA', {
+      _args: arguments,
+      _sign: {}
+    }));
+  });
+  app.get('/B', function placeholder() {
+    return flx.start(flx.m('↠replyB', {
+      _args: arguments,
+      _sign: {}
+    }));
+  });
+  if (!module.parent) {
+    app.listen(8080);
+    console.log('>> listening 8080');
+  }
+  exports.app = app;
+```
+
 ### Problem #6
 
 
@@ -354,20 +504,12 @@ the test has not yet be implemented
 ### Problem #9
 
 
-Same with requires
-
-
-the test has not yet be implemented
-
-### Problem #10
-
-
 Write a graph printer to display fluxions box and arrows stuffs
 
 
 the test has not yet be implemented
 
-### Problem #11
+### Problem #10
 
 
 Write a communication TODO file to make the roadmap from test and this TODO file
