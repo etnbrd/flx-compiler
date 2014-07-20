@@ -12,7 +12,7 @@ var fs = require('fs'),
 
 before(function(done) {
   fs.mkdir('results', function(e) {
-    if (e.code === "EEXIST")
+    if (e && e.code === "EEXIST")
       done();
     else
       throw e;
