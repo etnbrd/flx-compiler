@@ -10,13 +10,13 @@ var fs = require('fs'),
     tests = require('./tests'),
     generateRoadmap = require('./genRM');
 
-before(function(done) {
-  fs.mkdir('results', function(e) {
-    if (e && e.code !== "EEXIST")
-      throw e;
-    done();
-  });
-});
+// before(function(done) {
+//   fs.mkdir('results', function(e) {
+//     if (e && e.code !== "EEXIST")
+//       throw e;
+//     done();
+//   });
+// });
 
 describe('Compilation', function () {
   describe('Problem #0 : \n', function () {

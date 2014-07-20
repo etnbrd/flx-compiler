@@ -31,7 +31,7 @@
     "example": "examples"
   },
   "scripts": {
-    "test": "multi='dot=- mocha-lcov-reporter=results/lcov.info' ./node_modules/.bin/mocha -R mocha-multi test lib/*/test",
+    "test": "mkdir -p results; multi='dot=- mocha-lcov-reporter=results/lcov.info' ./node_modules/.bin/mocha -R mocha-multi test lib/*/test",
     "graph": "for i in graphs/*; do dot -Tpng $i -o ${i/%.dot}.png; done;",
     "graph-pdf": "for i in graphs/*; do dot -Tpdf $i -o ${i/%.dot}.pdf; done;",
     "compile": "for i in examples/*.js; do node src $i -o results/$(basename $i); done;",
