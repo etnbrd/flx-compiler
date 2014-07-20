@@ -11,7 +11,12 @@ var fs = require('fs'),
     generateRoadmap = require('./genRM');
 
 before(function(done) {
-  fs.mkdir('results', done);
+  fs.mkdir('results', function(e) {
+    if (e.code === "EEXIST")
+      done();
+    else
+      throw e;
+  });
 });
 
 describe('Compilation', function () {
@@ -23,10 +28,12 @@ describe('Compilation', function () {
   });
 
   tests.counts.forEach(function(test, index) {
+    if(test.expectations === false)
+      return;
+
     describe('Problem #' + (index + 1) + " : \n", function() {
       it(test.desc, function (done) {
-        var p = t.compileAndMock(test.name + '.js');
-        var runExpectations = function (index) {
+        function runExpectations (index) {
           return function () {
             if (index >= test.expectations.length)
               done();
@@ -38,7 +45,13 @@ describe('Compilation', function () {
           };
         };
 
-        runExpectations(0)();
+        try {
+          var p = t.compileAndMock(test.name + '.js');
+          runExpectations(0)();
+        } catch (e) {
+          console.log(e);
+          skip();
+        }
       });
     });
   });

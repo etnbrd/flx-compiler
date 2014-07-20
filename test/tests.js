@@ -1,5 +1,7 @@
 module.exports = {
 
+  // TODO turn this into a yaml file.
+
   counts : [
     {
       name : 'count1',
@@ -46,49 +48,51 @@ module.exports = {
       ].join("\n"),
       expectations: ['42', '43']
     },
-    // {
-    //   name : 'count6',
-    //   desc : [
-    //     "  Same with objects"
-    //   ].join("\n"),
-    //   expectations: ['42']
-    // },
-    // {
-    //   name : 'count7',
-    //   desc : [
-    //     "  Same with arrays"
-    //   ].join("\n"),
-    //   expectations: ['42']
-    // },
-    // {
-    //   name : 'count8',
-    //   desc : [
-    //     "  Same with requires"
-    //   ].join("\n"),
-    //   expectations: ['42']
-    // },
-    // {
-    //   name : 'count8',
-    //   desc : [
-    //     "  Same with requires"
-    //   ].join("\n"),
-    //   expectations: ['42']
-    // },
-    // {
-    //   name : "graph",
-    //   desc : [
-    //     "  Write a graph printer to display fluxions box and arrows stuffs"
-    //   ].join("\n")
-    // },
-    // {
-    //   name : "communication",
-    //   desc : [
-    //     "  Write a communication TODO file to make the roadmap from test and this TODO file",
-    //    "   Then, put in this TODO file :",
-    //    "   - write documentation about ES* and generally about the compiler",
-    //    "   - write master subjects about compiler problem spin off (like fluxion placement, debit ...)"
-    //   ].join("\n")
-    // }
+    {
+      name : 'count6',
+      desc : [
+        "  Same with objects"
+      ].join("\n"),
+      expectations: false
+    },
+    {
+      name : 'count7',
+      desc : [
+        "  Same with arrays"
+      ].join("\n"),
+      expectations: false
+    },
+    {
+      name : 'count8',
+      desc : [
+        "  Same with requires"
+      ].join("\n"),
+      expectations: false
+    },
+    {
+      name : 'count8',
+      desc : [
+        "  Same with requires"
+      ].join("\n"),
+      expectations: false
+    },
+    {
+      name : "graph",
+      desc : [
+        "  Write a graph printer to display fluxions box and arrows stuffs"
+      ].join("\n"),
+      expectations: false
+    },
+    {
+      name : "communication",
+      desc : [
+        "  Write a communication TODO file to make the roadmap from test and this TODO file",
+       "   Then, put in this TODO file :",
+       "   - write documentation about ES* and generally about the compiler",
+       "   - write master subjects about compiler problem spin off (like fluxion placement, debit ...)"
+      ].join("\n"),
+      expectations: false
+    }
   ],
 
   requires : [

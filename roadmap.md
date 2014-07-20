@@ -327,3 +327,54 @@ flx.register('↠replyB', function capsule(msg) {
 }, { _rep: _rep });
 ```
 
+### Problem #6
+
+
+Same with objects
+
+
+the test has not yet be implemented
+
+### Problem #7
+
+
+Same with arrays
+
+
+the test has not yet be implemented
+
+### Problem #8
+
+
+Same with requires
+
+
+the test has not yet be implemented
+
+### Problem #9
+
+
+Same with requires
+
+
+the test has not yet be implemented
+
+### Problem #10
+
+
+Write a graph printer to display fluxions box and arrows stuffs
+
+
+the test has not yet be implemented
+
+### Problem #11
+
+
+Write a communication TODO file to make the roadmap from test and this TODO file
+Then, put in this TODO file :
+- write documentation about ES* and generally about the compiler
+- write master subjects about compiler problem spin off (like fluxion placement, debit ...)
+
+
+the test has not yet be implemented
+
