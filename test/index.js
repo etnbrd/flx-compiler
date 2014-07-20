@@ -12,10 +12,9 @@ var fs = require('fs'),
 
 before(function(done) {
   fs.mkdir('results', function(e) {
-    if (e && e.code === "EEXIST")
-      done();
-    else
+    if (e && e.code !== "EEXIST")
       throw e;
+    done();
   });
 });
 
