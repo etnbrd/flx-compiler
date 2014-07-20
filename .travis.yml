@@ -3,9 +3,11 @@ node_js:
   - "0.11"
   - "0.10"
 
-addons:
- code_climate:
-  repo_token: 53c6731269568016cf01bdba
+# addons:
+#  code_climate:
+#   repo_token: 53c6731269568016cf01bdba
+
+
 
 # Use sed to replace the SSH URL with the public URL, then initialize submodules
 git:
@@ -13,3 +15,9 @@ git:
 before_install:
   - sed -i 's/git@github.com:/git:\/\/github.com\//' .gitmodules
   - git submodule update --init --recursive
+
+# Export coverage data to codeclimate
+after_script:
+  - cat results/lcov.info | codeclimate
+
+secure: "UUDYnuImINsN0dGew9Tpnjsoez9fFHpB1UZiwFHk4xNPcfqFYPjH4WeYqrY3aXgHvMGqbrbqFBLShUQlrL5EVDi6ROwp8BvAGkyQiZCTb9GGaaXIdscRRtBoqz48KroE8lQFZLQAe6+9pLXqUsKC3ZYhLagtvzsku8oe67o9o9M="
