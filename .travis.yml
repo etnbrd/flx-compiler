@@ -8,6 +8,8 @@ addons:
   repo_token: 53c6731269568016cf01bdba
 
 # Use sed to replace the SSH URL with the public URL, then initialize submodules
+git:
+  submodules: false
 before_install:
-  - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+  - sed -i 's/git@github.com:/git:\/\/github.com\//' .gitmodules
   - git submodule update --init --recursive
