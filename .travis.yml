@@ -3,10 +3,10 @@ node_js:
   - "0.11"
   - "0.10"
 
-# addons:
-#   code_climate:
-#     repo_token:
-#       secure: "W60vAQsqOrCnkjfoDYSc7VWyB9lc9BiDOzL5eXsTq7+cHz2R5//LwTDQnR1HvvxXQE/hnTL6/Wy/zDr0HAJCUWJy2tDa/SZl9NnBy9XInVArRpYaphAJhF7SCKvgaitptSejhoq4pWENzAenYi//v1prkm7QcdtegzkN0/UH4uQ="
+addons:
+ code_climate:
+  repo_token:
+   secure: "W60vAQsqOrCnkjfoDYSc7VWyB9lc9BiDOzL5eXsTq7+cHz2R5//LwTDQnR1HvvxXQE/hnTL6/Wy/zDr0HAJCUWJy2tDa/SZl9NnBy9XInVArRpYaphAJhF7SCKvgaitptSejhoq4pWENzAenYi//v1prkm7QcdtegzkN0/UH4uQ="
 
 # Use sed to replace the SSH URL with the public URL, then initialize submodules
 git:
@@ -19,4 +19,4 @@ before_install:
 after_script:
   - cat results/lcov.info | codeclimate
 
-secure: "UUDYnuImINsN0dGew9Tpnjsoez9fFHpB1UZiwFHk4xNPcfqFYPjH4WeYqrY3aXgHvMGqbrbqFBLShUQlrL5EVDi6ROwp8BvAGkyQiZCTb9GGaaXIdscRRtBoqz48KroE8lQFZLQAe6+9pLXqUsKC3ZYhLagtvzsku8oe67o9o9M="
+# secure: "UUDYnuImINsN0dGew9Tpnjsoez9fFHpB1UZiwFHk4xNPcfqFYPjH4WeYqrY3aXgHvMGqbrbqFBLShUQlrL5EVDi6ROwp8BvAGkyQiZCTb9GGaaXIdscRRtBoqz48KroE8lQFZLQAe6+9pLXqUsKC3ZYhLagtvzsku8oe67o9o9M="
