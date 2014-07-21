@@ -46,8 +46,8 @@
     "url": "https://github.com/etnbrd/flx-compiler.git"
   },
   "keywords": [
-    "Fluxion",
-    "Compiler"
+    "fluxion",
+    "compiler"
   ],
   "license": "MIT",
   "bugs": {
