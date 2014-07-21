@@ -1,6 +1,7 @@
 require('blanket')({
   pattern: function (filename) {
-    return !/node_modules/.test(filename);
+    return !/node_modules/.test(filename)
+        && /lib/.test(filename);
   }
 });
 
