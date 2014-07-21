@@ -62,7 +62,8 @@ describe('Compilation', function () {
         var compiledCode = t.compile(t.read(test.name + '.js'), test.name + '.js').toJs();
         var flxRegisterMatcher = /flx.register\('(.+?)'/g
 
-        var flxs = [];
+        var flxs = [],
+            arr;
         while ((arr = flxRegisterMatcher.exec(compiledCode)) !== null) {
           flxs.push(arr[1]);
         }

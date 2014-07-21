@@ -19,6 +19,10 @@
     "coffee-script": "*",
     "express": "*",
     "flx": "*",
+    "grunt": "^0.4.5",
+    "grunt-env": "^0.4.1",
+    "grunt-mkdir": "^0.1.2",
+    "grunt-simple-mocha": "^0.4.0",
     "jshint": "*",
     "mocha": "*",
     "mocha-multi": "^0.4.1",
@@ -31,15 +35,7 @@
     "example": "examples"
   },
   "scripts": {
-    "test": "mkdir -p results; multi='dot=- mocha-lcov-reporter=results/lcov.info' ./node_modules/.bin/mocha -R mocha-multi test lib/*/test",
-    "graph": "for i in graphs/*; do dot -Tpng $i -o ${i/%.dot}.png; done;",
-    "graph-pdf": "for i in graphs/*; do dot -Tpdf $i -o ${i/%.dot}.pdf; done;",
-    "compile": "for i in examples/*.js; do node src $i -o results/$(basename $i); done;",
-    "all": "npm run-script compile && npm run-script graph",
-    "clean-pdf": "rm ./graphs/*.{pdf,png}; true",
-    "clean-dot": "rm ./graphs/*.dot; true",
-    "clean-res": "rm ./results/*.js; true",
-    "clean": "npm run-script clean-dot; npm run-script clean-pdf; npm run-script clean-res"
+    "test": "grunt test"
   },
   "repository": {
     "type": "git",
