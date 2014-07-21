@@ -1,7 +1,7 @@
 {
   "name": "flx-compiler",
   "description": "A compiler to transform javascript to execute on the fluxionnal execution model",
-  "version": "0.0.0-1",
+  "version": "0.0.0-2",
   "author": "Etienne Brodu <etn@etnbrd.com>",
   "dependencies": {
     "ast-types": "*",
