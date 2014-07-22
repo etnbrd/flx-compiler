@@ -43,10 +43,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mkdir');
   grunt.loadNpmTasks('grunt-codeclimate');
 
-  grunt.registerTask('test', ['mkdir:results' ,'env:coverage', 'simplemocha']);
+  if (process.env.TRAVIS)
+    grunt.registerTask('test', ['mkdir:results' ,'env:coverage', 'simplemocha', 'codeclimate']);
+  else
+    grunt.registerTask('test', ['mkdir:results' ,'simplemocha']);
 
   grunt.registerTask('default', 'test');
-
-  grunt.registerTask('cc', 'codeclimate');
-
 };

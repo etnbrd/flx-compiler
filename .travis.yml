@@ -18,5 +18,5 @@ before_install:
   - git submodule update --init --recursive
 
 # Export coverage data to codeclimate
-after_script:
-  - cat results/lcov.info | codeclimate
+# after_script:
+#   - cat results/lcov.info | codeclimate
