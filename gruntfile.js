@@ -28,15 +28,25 @@ module.exports = function(grunt) {
           create: ['results']
         }
       }
+    },
+
+    codeclimate: {
+      options: {
+        file: 'results/lcov.info',
+        token: process.env.CODECLIMATE_REPO_TOKEN
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-simple-mocha');
   grunt.loadNpmTasks('grunt-env');
   grunt.loadNpmTasks('grunt-mkdir');
+  grunt.loadNpmTasks('grunt-codeclimate');
 
   grunt.registerTask('test', ['mkdir:results' ,'env:coverage', 'simplemocha']);
 
   grunt.registerTask('default', 'test');
+
+  grunt.registerTask('cc', 'codeclimate');
 
 };
