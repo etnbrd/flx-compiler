@@ -107,7 +107,7 @@ module.exports = function(grunt) {
   grunt.registerTask('doc', ['docco', 'deploy']);
 
   if (process.env.TRAVIS) {
-    grunt.registerTask('test', ['mkdir:results' ,'env:coverage', 'simplemocha', 'codeclimate', 'doc']);
+    grunt.registerTask('test', ['mkdir:results' ,'env:coverage', 'simplemocha', /*'codeclimate',*/ 'doc']);
   } else {
     grunt.registerTask('test', ['mkdir:results' ,'simplemocha']);
   }
