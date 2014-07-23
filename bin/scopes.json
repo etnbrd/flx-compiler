@@ -1,0 +1,66 @@
+{
+    "name": "undefined",
+    "children": [
+        {
+            "name": "reply1",
+            "flx": "↠reply",
+            "children": [
+                {
+                    "name": "reply11",
+                    "flx": "↠reply",
+                    "variables": [
+                        "arguments",
+                        "req",
+                        "res"
+                    ],
+                    "references": [
+                        "_rep",
+                        "res"
+                    ]
+                }
+            ],
+            "variables": [
+                "reply"
+            ],
+            "references": []
+        },
+        {
+            "name": "reply2",
+            "flx": "↠reply",
+            "children": [
+                {
+                    "name": "reply21",
+                    "flx": "↠reply",
+                    "variables": [
+                        "arguments",
+                        "req",
+                        "res"
+                    ],
+                    "references": [
+                        "_rep",
+                        "res"
+                    ]
+                }
+            ],
+            "variables": [
+                "reply"
+            ],
+            "references": []
+        }
+    ],
+    "variables": [
+        "app",
+        "_rep"
+    ],
+    "references": [
+        "app",
+        "require",
+        "_rep",
+        "app",
+        "module",
+        "app",
+        "console",
+        "app",
+        "exports"
+    ]
+}
