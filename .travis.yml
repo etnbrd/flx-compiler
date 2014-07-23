@@ -5,7 +5,8 @@ node_js:
 
 env:
   global:
-    secure: "eDwWEbH6AzzU8kk0giqisGnl2AE61Ny2O68NNSM5JIc3mwJkW+k1lhbw/XtmB4e4SCtwxLEqAhlGBSL1R/pQ/RujjR6ck/4Gnwnyg/naE3gqvZrnbkff8/NsCz2lQSZcCBiEkvnVTrrBQ/uwB0JdD1OWvfkkF9kY4q9wHoBwFW8="
+    secure: "dWLgXWL7zoT9Wli8BRCY8vLgmhjF52v+NT2+kFdrfReMhzXuqhBGfMx6wr0TmbQOzYj4EMvGINHD9k9B+GxoCuDKfc9KTRbFcp7Px5QrSTjSJEk/IvrvRsB7SEhJ/xvEMXgsQu9KZthWhU5E+t0lHPcUsGFFJWbTMCDrF85fO2I="
+    # secure: "eDwWEbH6AzzU8kk0giqisGnl2AE61Ny2O68NNSM5JIc3mwJkW+k1lhbw/XtmB4e4SCtwxLEqAhlGBSL1R/pQ/RujjR6ck/4Gnwnyg/naE3gqvZrnbkff8/NsCz2lQSZcCBiEkvnVTrrBQ/uwB0JdD1OWvfkkF9kY4q9wHoBwFW8="
 
 addons:
   code_climate:
