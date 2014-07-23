@@ -3,6 +3,9 @@ node_js:
   - "0.11"
   - "0.10"
 
+env:
+  global:
+    secure: "eDwWEbH6AzzU8kk0giqisGnl2AE61Ny2O68NNSM5JIc3mwJkW+k1lhbw/XtmB4e4SCtwxLEqAhlGBSL1R/pQ/RujjR6ck/4Gnwnyg/naE3gqvZrnbkff8/NsCz2lQSZcCBiEkvnVTrrBQ/uwB0JdD1OWvfkkF9kY4q9wHoBwFW8="
 
 addons:
   code_climate:
@@ -20,7 +23,3 @@ before_install:
 # Export coverage data to codeclimate
 # after_script:
 #   - cat results/lcov.info | codeclimate
-
-env:
-  global:
-    secure: "eDwWEbH6AzzU8kk0giqisGnl2AE61Ny2O68NNSM5JIc3mwJkW+k1lhbw/XtmB4e4SCtwxLEqAhlGBSL1R/pQ/RujjR6ck/4Gnwnyg/naE3gqvZrnbkff8/NsCz2lQSZcCBiEkvnVTrrBQ/uwB0JdD1OWvfkkF9kY4q9wHoBwFW8="
