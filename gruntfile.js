@@ -58,10 +58,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-docco');
   grunt.loadNpmTasks('grunt-codeclimate');
 
-  if (process.env.TRAVIS)
+  if (process.env.TRAVIS) {
     grunt.registerTask('test', ['mkdir:results' ,'env:coverage', 'simplemocha', 'codeclimate']);
-  else
+  } else {
     grunt.registerTask('test', ['mkdir:results' ,'simplemocha']);
+  }
 
   grunt.registerTask('default', 'test');
 };
