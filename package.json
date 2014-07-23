@@ -23,6 +23,7 @@
     "grunt-codeclimate": "0.0.1",
     "grunt-docco": "^0.3.3",
     "grunt-env": "^0.4.1",
+    "grunt-gh-pages": "^0.9.1",
     "grunt-mkdir": "^0.1.2",
     "grunt-simple-mocha": "^0.4.0",
     "jshint": "*",
