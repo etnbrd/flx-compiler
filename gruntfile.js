@@ -108,7 +108,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('doc', ['docco', 'deploy']);
 
-  if (process.env.TRAVIS) {
+  if (process.env.TRAVIS || process.env.CI /*wercker*/) {
     grunt.registerTask('test', ['mkdir:results' ,'env:coverage', 'simplemocha', /*'codeclimate',*/ 'doc']);
   } else {
     grunt.registerTask('test', ['mkdir:results' ,'simplemocha']);
