@@ -93,7 +93,7 @@ var link = svg.append("g").selectAll(".link"),
 //     console.log(JSON.stringify(classes, null, 4));
 // 
 d3.json("bundle-test.json", function(error, classes) {
-//     console.log(classes);
+    console.log(classes, error);
     var nodes = cluster.nodes(packageHierarchy(classes)),
     links = packageImports(nodes);
 

@@ -11,6 +11,32 @@
   <div id="container">
     <div id="background"></div>
     
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="index.html">
+                index.js
+              </a>
+            
+              
+              <a class="source" href="core.html">
+                core.js
+              </a>
+            
+              
+              <a class="source" href="context.html">
+                context.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
     <ul class="sections">
         
         
@@ -25,9 +51,6 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-pi">
-'use strict'</span>;</pre></div></div>
-            
         </li>
         
         
@@ -37,11 +60,10 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p><a href="parser">Parser</a></p>
+              <p>The audience’s growth a web application needs to adapt to, often leads its development team to quickly adopt disruptive and continuity-threatening shifts of technology.
+To avoid these shifts, we propose an approach that abstracts web applications into an high-level language, which authorizes code mobility to cope with audience dynamic growth and decrease.</p>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> parse = <span class="hljs-built_in">require</span>(<span class="hljs-string">'esprima'</span>).parse,</pre></div></div>
             
         </li>
         
@@ -52,11 +74,12 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p><a href="pruner">Pruner</a></p>
+              <p>We think a web application can be depicted as a network of small autonomous parts moving from one machine to another and communicating by message streams.
+We named these parts fluxions, by contraction between a stream and a function.
+Fluxions are executed by the <a href="../flx-lib">Fluxionnal execution model</a>.
+Fluxions are distributed over a network of machines according to their interdependencies to minimize overall data transfers.</p>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>    prune = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./pruner'</span>),</pre></div></div>
             
         </li>
         
@@ -67,13 +90,12 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p><a href="parser">Parser</a></p>
+              <p><strong>This compiler aims at extracting fluxions and their streams from traditional Javascript code.</strong></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    link = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./linker'</span>),
-    jsPrinter = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./js-printer'</span>),
-    flxPrinter = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./flx-printer'</span>);</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-pi">
+'use strict'</span>;</pre></div></div>
             
         </li>
         
@@ -84,22 +106,9 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <pre><code>graphicPrinter = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./graphic-printer'</span>); <span class="hljs-comment">// TODO</span>
-</code></pre>
+              <h2 id="compilator-components">Compilator components</h2>
+
             </div>
-            
-            <div class="content"><div class='highlight'><pre>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_compile</span><span class="hljs-params">(code, filename)</span> </span>{
-  <span class="hljs-keyword">var</span> ctx = link(prune(parse(code, {loc: <span class="hljs-literal">true</span>}), filename));
-
-  <span class="hljs-keyword">return</span> {
-    toJs: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-      <span class="hljs-keyword">return</span> jsPrinter(ctx);
-    },
-
-    toFlx: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-      <span class="hljs-keyword">return</span> flxPrinter(ctx);
-    },</pre></div></div>
             
         </li>
         
@@ -110,13 +119,85 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>toGraph: function() {
-  return graphPrinter(ctx);
-}</p>
+              <ul>
+<li>Esprima is a Javascript parser, generating an Abstract Syntax Tree specified by the <a href="">Mozilla Parser API</a></li>
+</ul>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  }
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> parse = <span class="hljs-built_in">require</span>(<span class="hljs-string">'esprima'</span>).parse,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <ul>
+<li><a href="context"><strong>Pruner</strong></a> detects fluxions, and map them to the original program.</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    prune = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./pruner'</span>),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <ul>
+<li><a href="core"><strong>Linker</strong></a> resolve dependencies between fluxions</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    link = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./linker'</span>),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <ul>
+<li>Printers transform the abstract representation of the fluxionnal program, back into code compatible with the <a href="../flx-lib">fluxionnal execution model</a>, into fluxionnal code, or into representation graph.</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    jsPrinter = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./js-printer'</span>),
+    flxPrinter = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./flx-printer'</span>);
+<span class="hljs-comment">/*     graphicPrinter = require('./graphic-printer'); // TODO */</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_compile</span><span class="hljs-params">(code, filename)</span> </span>{
+  <span class="hljs-keyword">var</span> ctx = link(prune(parse(code, {loc: <span class="hljs-literal">true</span>}), filename));
+
+  <span class="hljs-keyword">return</span> {
+    toJs: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> jsPrinter(ctx);
+    },
+
+    toFlx: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> flxPrinter(ctx);
+    },
+
+    <span class="hljs-comment">/*
+    toGraph: function() {
+      return graphPrinter(ctx);
+    }
+    */</span>
+  }
 }
 
 <span class="hljs-built_in">module</span>.exports = _compile;</pre></div></div>

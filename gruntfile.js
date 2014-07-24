@@ -38,8 +38,9 @@ module.exports = function(grunt) {
     },
 
     docco: {
-      debug: {
+      core: {
         src: [
+          'lib/index.js',
           'lib/linker/core.js',
           'lib/pruner/context.js'
         ],
@@ -87,15 +88,12 @@ module.exports = function(grunt) {
   }
 
   function deploy(){
-
-    console.log(process.env.TRAVIS, process.env.TRAVIS_SECURE_ENV_VARS, process.env.TRAVIS_PULL_REQUEST);
-
-    if (process.env.TRAVIS === 'true' && process.env.TRAVIS_SECURE_ENV_VARS === 'true' && process.env.TRAVIS_PULL_REQUEST === 'false') {
+    // if (process.env.TRAVIS === 'true' && process.env.TRAVIS_SECURE_ENV_VARS === 'true' && process.env.TRAVIS_PULL_REQUEST === 'false') {
       grunt.log.writeln('executing deployment');
       grunt.task.run('gh-pages:deploy');
-    } else {
-      grunt.log.writeln('skipped deployment');
-    }
+    // } else {
+      // grunt.log.writeln('skipped deployment');
+    // }
   }
 
   grunt.loadNpmTasks('grunt-simple-mocha');
