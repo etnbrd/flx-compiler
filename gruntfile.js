@@ -45,8 +45,9 @@ module.exports = function(grunt) {
           'lib/pruner/context.js'
         ],
         options: {
-          output: 'docs',
-          layout: 'parallel'
+          output: 'docs/docco',
+          layout: 'parallel',
+          css: 'docs/ink.css'
         }
       }
     },
@@ -55,7 +56,7 @@ module.exports = function(grunt) {
     'gh-pages': {
       options: {
         branch: 'gh-pages',
-        base: 'docs'
+        base: 'docs/docco'
       },
       deploy: {
         options: {

@@ -6,21 +6,11 @@ node_js:
 env:
   global:
     secure: "dWLgXWL7zoT9Wli8BRCY8vLgmhjF52v+NT2+kFdrfReMhzXuqhBGfMx6wr0TmbQOzYj4EMvGINHD9k9B+GxoCuDKfc9KTRbFcp7Px5QrSTjSJEk/IvrvRsB7SEhJ/xvEMXgsQu9KZthWhU5E+t0lHPcUsGFFJWbTMCDrF85fO2I="
-    # secure: "eDwWEbH6AzzU8kk0giqisGnl2AE61Ny2O68NNSM5JIc3mwJkW+k1lhbw/XtmB4e4SCtwxLEqAhlGBSL1R/pQ/RujjR6ck/4Gnwnyg/naE3gqvZrnbkff8/NsCz2lQSZcCBiEkvnVTrrBQ/uwB0JdD1OWvfkkF9kY4q9wHoBwFW8="
 
 addons:
   code_climate:
     repo_token:
       secure: "W60vAQsqOrCnkjfoDYSc7VWyB9lc9BiDOzL5eXsTq7+cHz2R5//LwTDQnR1HvvxXQE/hnTL6/Wy/zDr0HAJCUWJy2tDa/SZl9NnBy9XInVArRpYaphAJhF7SCKvgaitptSejhoq4pWENzAenYi//v1prkm7QcdtegzkN0/UH4uQ="
 
-# Use sed to replace the SSH URL with the public URL, then initialize submodules
-git:
-  submodules: false
 before_install:
   - npm install -g grunt-cli
-  - sed -i 's/git@github.com:/git:\/\/github.com\//' .gitmodules
-  - git submodule update --init --recursive
-
-# Export coverage data to codeclimate
-# after_script:
-#   - cat results/lcov.info | codeclimate
