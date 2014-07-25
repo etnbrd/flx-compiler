@@ -1,35 +1,30 @@
 [
     {
-        "name": "flare.analytics.cluster.AgglomerativeCluster",
-        "size": 3938,
+        "name": "cluster.AgglomerativeCluster",
         "imports": [
-            "flare.analytics.cluster.MergeEdge",
-            "flare.analytics.cluster.HierarchicalCluster"
+            "cluster.MergeEdge",
+            "cluster.HierarchicalCluster"
         ]
     },
     {
-        "name": "flare.analytics.cluster.CommunityStructure",
-        "size": 3812,
+        "name": "cluster.CommunityStructure",
         "imports": [
-            "flare.analytics.cluster.HierarchicalCluster",
-            "flare.analytics.cluster.MergeEdge"
+            "cluster.HierarchicalCluster",
+            "cluster.MergeEdge"
         ]
     },
     {
-        "name": "flare.analytics.cluster.HierarchicalCluster",
-        "size": 6714,
+        "name": "cluster.HierarchicalCluster",
         "imports": [
-            "flare.analytics.cluster.MergeEdge"
+            "cluster.MergeEdge"
         ]
     },
     {
-        "name": "flare.analytics.cluster.MergeEdge",
-        "size": 743,
+        "name": "cluster.MergeEdge",
         "imports": []
     },
     {
-        "name": "flare.analytics.graph.BetweennessCentrality",
-        "size": 3534,
+        "name": "graph.BetweennessCentrality",
         "imports": []
     }
 ]
