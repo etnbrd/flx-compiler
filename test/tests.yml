@@ -85,11 +85,11 @@ requires:
             The trigger is app.get.
             app is directly required in a 'app' var.
       expectations:
-          - ↠reply
+          - reply
     -
       name: application.get
       desc: |
             The trigger is application.get.
             app is directly required in a 'application' var.
       expectations:
-          - ↠reply
+          - reply

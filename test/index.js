@@ -8,7 +8,8 @@ var fs = require('fs'),
     t = require('./tools'),
     assert = require('assert'),
     yaml = require('js-yaml'),
-    generateRoadmap = require('./genRM');
+    generateRoadmap = require('./genRM'),
+    h = require('../lib/lib/helpers');
 
 var tests = yaml.safeLoad(fs.readFileSync(__dirname + '/tests.yml', 'utf8'));
 
@@ -64,7 +65,7 @@ describe('Compilation', function () {
           flxs.push(arr[1]);
         }
 
-        assert.deepEqual(test.expectations, flxs);
+        assert.deepEqual(test.expectations.map(h.generateFluxionName), flxs);
         done();
       });
     });
