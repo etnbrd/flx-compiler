@@ -33,7 +33,7 @@ describe('Compilation', function () {
       return;
 
     describe('Problem #' + (index + 1) + ' : \n', function() {
-      it(test.desc.join('\n'), function (done) {
+      it(test.desc, function (done) {
         function runExpectations (index) {
           return function () {
             if (index >= test.expectations.length)
@@ -54,7 +54,7 @@ describe('Compilation', function () {
 
   tests.requires.forEach(function(test, index) {
     describe('Require : ' + test.name + ' : \n', function() {
-      it(test.desc.join('\n'), function (done) {
+      it(test.desc, function (done) {
         var compiledCode = t.compile(t.read(test.name + '.js'), test.name + '.js').toJs();
         var flxRegisterMatcher = /flx.register\('(.+?)'/g;
 

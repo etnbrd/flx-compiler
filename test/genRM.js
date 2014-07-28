@@ -38,10 +38,9 @@ function generateRoadmap() {
     } catch (e) {
       var source = "the test has not yet be implemented\n";
       var compile = "";
-    }
-    
+    }    
 
-    test.desc = test.desc.join('\n').replace(/(^|\n)[ ]+/g, '$1');
+    test.desc = test.desc.replace(/(^|\n)[ ]+/g, '$1');
 
     var result = [
       "### Problem #" + (1 + i),
