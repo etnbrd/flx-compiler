@@ -30,7 +30,8 @@
     "mocha": "*",
     "mocha-multi": "^0.4.1",
     "pegjs": "*",
-    "supertest": "*"
+    "supertest": "*",
+    "js-yaml": "*"
   },
   "engine": "node >= 0.10.0",
   "main": "lib/index.js",
