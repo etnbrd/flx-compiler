@@ -1,0 +1,49 @@
+{
+  "name": "Program",
+  "variables": 3,
+  "children": [{
+    "name": "ReplyA",
+    "variables": 1,
+    "children": [{
+      "name": "ReplyA",
+      "variables": 2,
+      "children": []
+    }]
+  }, {
+    "name": "ReplyB",
+    "variables": 4,
+    "children": [{
+      "name": "ReplyB",
+      "variables": 2,
+      "children": []
+    },{
+      "name": "ReplyB",
+      "variables": 2,
+      "children": []
+    }, {
+      "name": "ReplyB",
+      "variables": 2,
+      "children": []
+    }]
+  }, {
+    "name": "ReplyC",
+    "variables": 4,
+    "children": [{
+      "name": "ReplyC",
+      "variables": 2,
+      "children": [{
+        "name": "ReplyD",
+        "variables": 2,
+        "children": []
+      }]
+    }]
+  }, {
+    "name": "ReplyE",
+    "variables": 4,
+    "children": [{
+      "name": "ReplyE",
+      "variables": 2,
+      "children": []
+    }]
+  }]
+}

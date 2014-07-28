@@ -1,5 +1,6 @@
 var fs = require('fs'),
-    log = require('../lib/lib/log');
+    log = require('../lib/lib/log'),
+    pjson = require('../package');
 
 function parseArgs(args) {
 
@@ -37,9 +38,10 @@ function parseArgs(args) {
       '--verbose' : verbose
     };
 
+    var prev;
+
     function iterator(opt, arg) {
-      var flagHandler = avaliableOptions[arg],
-          prev;
+      var flagHandler = avaliableOptions[arg];
 
       if (!prev && !flagHandler && !opt.input) {
         prev = first;
@@ -72,10 +74,6 @@ function pipe(compile) {
     console.log('Please specify a name'); // TODO error management
   }
 
-  // if (!options.output) {
-    // options.output = 'result.js';
-  // }
-
   if (options.verbose) {
     process.env.verbose = true;
   }
@@ -88,20 +86,25 @@ function pipe(compile) {
 
     var output = compile(file, filename);
 
-    if (options.jsOutpout) {
+    if (options.jsOutput) {
       fs.writeFile(options.jsOutput, output.toJs(), function(err) {
         if (err) throw err;
       });
-    } if (options.flxOutpout) {
-      fs.writeFile(options.jsOutput, output.toFlx(), function(err) {
+    }
+
+    if (options.flxOutput) {
+      fs.writeFile(options.flxOutput, output.toFlx(), function(err) {
         if (err) throw err;
       });
-    } /*if (options.gOutpout) {
-      var output = compile.toJs(file, filename);
-      fs.writeFile(options.jsOutput, output, function(err) {
+    }
+
+    if (options.gOutput) {
+      fs.writeFile(options.gOutput, output.toGraph(), function(err) {
         if (err) throw err;
       });
-    } */else {
+    }
+
+    if (!options.gOutput && !options.flxOutput && !options.jsOutput) {
       var js = output.toJs();
       // var flx = output.toFlx();
       
