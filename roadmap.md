@@ -1,8 +1,9 @@
 ### Problem #1
 
 
-The server reply a constant value to every request.
-There isn't any variable used.
+The server reply a constant value to every request
+There isn't any variable used
+
 
 
 The source program is in `examples/count1.js` : 
@@ -90,6 +91,7 @@ This variable shouldn't be exchanged between fluxions
 as it's declared and used in the same function.
 
 
+
 The source program is in `examples/count2.js` : 
 
 ```
@@ -175,6 +177,7 @@ flx count2.js
 The server of problem #3 reply a constant value to every request,
 using a variable declared **outside** the reply function.
 This variable should be in the signature of the second fluxions.
+
 
 
 The source program is in `examples/count3.js` : 
@@ -265,6 +268,7 @@ This variable should be in the scope of the fluxions
 as it is used only in this fluxion.
 
 
+
 The source program is in `examples/count4.js` : 
 
 ```
@@ -353,6 +357,7 @@ flx count4.js
 
 The server of problem #5 uses two different handler for two different request routes.,
 Both handlers modify the same variable, so the fluxions needs to synchronize this value after each modification.
+
 
 
 The source program is in `examples/count5.js` : 
@@ -483,12 +488,14 @@ flx count5.js
 Same with objects
 
 
+
 the test has not yet be implemented
 
 ### Problem #7
 
 
 Same with arrays
+
 
 
 the test has not yet be implemented
@@ -499,12 +506,14 @@ the test has not yet be implemented
 Same with requires
 
 
+
 the test has not yet be implemented
 
 ### Problem #9
 
 
 Write a graph printer to display fluxions box and arrows stuffs
+
 
 
 the test has not yet be implemented
@@ -516,6 +525,7 @@ Write a communication TODO file to make the roadmap from test and this TODO file
 Then, put in this TODO file :
 - write documentation about ES* and generally about the compiler
 - write master subjects about compiler problem spin off (like fluxion placement, debit ...)
+
 
 
 the test has not yet be implemented

@@ -2,9 +2,12 @@
 <meta charset="utf-8">
 <style>
 
-.node {
-  cursor: pointer;
-  opacity: 0.2;
+rect.scope {
+  /*cursor: pointer;*/
+  /*opacity: 0.2;*/
+  stroke: #000;
+  stroke-width: .5px;
+  fill: none;
 }
 /*
 .node:hover {
@@ -33,3 +36,9 @@
 <script src="bower_components/d3/d3.js"></script>
 <script src="pack-layout.js"></script>
 <script src="graph.js"></script>
+<script type="text/javascript">
+    d3.json("ctx-mock.json", function(err, root) {
+      if (err) return console.error(err);
+      else return graph(root);
+    });
+</script>

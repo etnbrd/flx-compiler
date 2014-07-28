@@ -1,48 +1,48 @@
 {
   "name": "Program",
-  "variables": 3,
+  "variables": ["res", "rep", "stuff"],
   "children": [{
     "name": "ReplyA",
-    "variables": 1,
+    "variables": ["res", "rep", "stuff"],
     "children": [{
       "name": "ReplyA",
-      "variables": 2,
+      "variables": ["res", "rep", "stuff"],
       "children": []
     }]
   }, {
     "name": "ReplyB",
-    "variables": 4,
+    "variables": ["res", "rep", "stuff"],
     "children": [{
       "name": "ReplyB",
-      "variables": 2,
+      "variables": ["res", "rep", "stuff"],
       "children": []
     },{
       "name": "ReplyB",
-      "variables": 2,
+      "variables": ["res", "rep", "stuff"],
       "children": []
     }, {
       "name": "ReplyB",
-      "variables": 2,
+      "variables": ["res", "rep", "stuff"],
       "children": []
     }]
   }, {
     "name": "ReplyC",
-    "variables": 4,
+    "variables": ["res", "rep", "stuff"],
     "children": [{
       "name": "ReplyC",
-      "variables": 2,
+      "variables": ["res", "rep", "stuff"],
       "children": [{
         "name": "ReplyD",
-        "variables": 2,
+        "variables": ["res", "rep", "stuff"],
         "children": []
       }]
     }]
   }, {
     "name": "ReplyE",
-    "variables": 4,
+    "variables": ["res", "rep", "stuff"],
     "children": [{
       "name": "ReplyE",
-      "variables": 2,
+      "variables": ["res", "rep", "stuff"],
       "children": []
     }]
   }]
