@@ -48,7 +48,8 @@
 
 </style>
 <body>
-<script src="http://d3js.org/d3.v3.min.js"></script>
+<!-- <script src="http://d3js.org/d3.v3.min.js"></script>-->
+<script src="http://d3js.org/d3.v3.js"></script>
 <script>
 
 var diameter = 700,
@@ -57,8 +58,7 @@ var diameter = 700,
 
 var cluster = d3.layout.cluster()
     .size([360, innerRadius])
-    .sort(null)
-    .value(function(d) { return d.size; });
+    .sort(null);
 
 var bundle = d3.layout.bundle();
 
@@ -77,8 +77,6 @@ var svg = d3.select("body").append("svg")
 var link = svg.append("g").selectAll(".link"),
     node = svg.append("g").selectAll(".node");
 
-// BUG
-// n mode normal ça fonctionne, mais dès que je copie-colle la sortie console, ça ne fonctionne pas :'(
 // d3.json("readme-flare-imports.json", function(error, classes) {
 //     // console.log(classes);
 //     var keptClasses = classes.slice(0, 5);
@@ -93,14 +91,20 @@ var link = svg.append("g").selectAll(".link"),
 //     console.log(JSON.stringify(classes, null, 4));
 // 
 d3.json("bundle-test.json", function(error, classes) {
-    console.log(classes, error);
     var nodes = cluster.nodes(packageHierarchy(classes)),
     links = packageImports(nodes);
+    console.log('A');
+    console.log(links);
+});
+d3.json("fluxions.json", function(error, classes) {
+    links = fluxionsToLinks(scopeHierarchy(classes));
+    console.log('B');
+    console.log(links);
 
   link = link
       .data(bundle(links))
     .enter().append("path")
-      .each(function(d) { d.source = d[0], d.target = d[d.length - 1]; })
+      .each(function(d) { console.log(d); d.source = d[0], d.target = d[d.length - 1]; })
       .attr("class", "link")
       .attr("d", line);
 
@@ -181,10 +185,55 @@ function packageImports(nodes) {
   nodes.forEach(function(d) {
     if (d.imports) d.imports.forEach(function(i) {
       imports.push({source: map[d.name], target: map[i]});
+      // imports.push({source: d.name, target: i});
     });
   });
 
   return imports;
+}
+
+function scopeHierarchy(classes) {
+  var map = {};
+
+  function find(name, data) {
+    var node = map[name], i;
+    if (!node) {
+      node = map[name] = data || {name: name, children: []};
+      if (name.length) {
+        node.parent = find(name.substring(0, i = name.lastIndexOf(".")));
+        node.parent.children.push(node);
+        node.key = name.substring(i + 1);
+      }
+    }
+    return node;
+  }
+
+  for (var k in classes) {
+    find(k, classes[k]);
+  }
+
+  return map[""];
+}
+
+function fluxionsToLinks(nodes) {
+  var map = {},
+      links = [];
+
+  // Compute a map from name to node.
+    console.log(nodes);
+  for (var k in nodes) {
+    map[k] = nodes[k];
+    console.log(k);
+  }
+
+  // For each import, construct a link from the source to target node.
+  for (var k in nodes) {
+    for (var t in nodes[k]) {
+      links.push({source: map[k], target: map[t]});
+    }
+  }
+
+  return links;
 }
 
 </script>

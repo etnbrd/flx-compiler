@@ -1,6 +1,8 @@
 var fs = require("fs")
-,   tests = require("./tests")
+,   yaml = require('js-yaml')
 ;
+
+var tests = yaml.safeLoad(fs.readFileSync(__dirname + '/tests.yml', 'utf8'));
 
 function generateRoadmap() {
   var result = tests.counts.reduce(function(prev, test, i) {
@@ -39,7 +41,7 @@ function generateRoadmap() {
     }
     
 
-    test.desc = test.desc.replace(/(^|\n)[ ]+/g, '$1');
+    test.desc = test.desc.join('\n').replace(/(^|\n)[ ]+/g, '$1');
 
     var result = [
       "### Problem #" + (1 + i),

@@ -4,8 +4,6 @@ var fs = require('fs'),
     lint = require('../lib/lib/lint').lint,
     assert = require('assert');
 
-// TODO refactor needed !!
-
 function read(filename) {
     return fs.readFileSync('./examples/' + filename).toString();
 }
@@ -21,7 +19,7 @@ function compileAndLoad(filename) {
     var src = compile(read(filename), filename).toJs();
     var l = lint(src);
     if (l.length)
-        assert.fail(false, true, 'Des variables globales sont référencez dans des fluxions :\n' + JSON.stringify(l, null, '\t'));
+        assert.fail(false, true, 'Des variables globales sont référencées dans des fluxions :\n' + JSON.stringify(l, null, '\t'));
     return require(__dirname + '/../results/' + filename).app;
 }
 

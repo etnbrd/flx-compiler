@@ -85,8 +85,8 @@ flx count1.js
 
 
 The server reply a constant value to every request,
-using a variable declared **inside** the reply function.  
-This variable shouldn't be exchanged between fluxions,
+using a variable declared **inside** the reply function.
+This variable shouldn't be exchanged between fluxions
 as it's declared and used in the same function.
 
 
@@ -173,7 +173,7 @@ flx count2.js
 
 
 The server of problem #3 reply a constant value to every request,
-using a variable declared **outside** the reply function.  
+using a variable declared **outside** the reply function.
 This variable should be in the signature of the second fluxions.
 
 
@@ -260,7 +260,7 @@ flx count3.js
 
 
 The server of problem #4 reply a value incremented at every request,
-using a variable declared outside the reply function.  
+using a variable declared outside the reply function.
 This variable should be in the scope of the fluxions
 as it is used only in this fluxion.
 
@@ -351,7 +351,7 @@ flx count4.js
 ### Problem #5
 
 
-The server of problem #5 uses two different handler for two different request routes.
+The server of problem #5 uses two different handler for two different request routes.,
 Both handlers modify the same variable, so the fluxions needs to synchronize this value after each modification.
 
 
