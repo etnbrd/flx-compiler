@@ -65,7 +65,13 @@ describe('Compilation', function () {
           flxs.push(arr[1]);
         }
 
-        assert.deepEqual(test.expectations.map(h.generateFluxionName), flxs);
+        var l = test.expectations.length;
+        for (var i = 0; i < l; ++i) {
+          assert(h.isMatchingFluxionName(test.expectations[i], flxs[i]));
+          delete flxs[i];
+        }
+
+        assert.deepEqual(flxs, []);
         done();
       });
     });

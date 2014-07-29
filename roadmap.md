@@ -30,7 +30,7 @@ The compiled result is in `results/count1.js` :
 var flx = require('flx');
 var app = require('express')();
 app.get('/', function placeholder() {
-  return flx.start(flx.m('↠reply', {
+  return flx.start(flx.m('reply↠1001', {
     _args: arguments,
     _sign: {}
   }));
@@ -41,9 +41,9 @@ if (!module.parent) {
 }
 exports.app = app;
 
-// ↠reply >> ø
+// reply↠1001 >> ø
 
-flx.register('↠reply', function capsule(msg) {
+flx.register('reply↠1001', function capsule(msg) {
   if (msg._update) {
     for (var i in msg._update) {
       this[i] = msg._update[i];
@@ -60,17 +60,17 @@ flx.register('↠reply', function capsule(msg) {
 The fluxionnal result is in `results/count1.flx` : 
 
 ```
-flx ↠reply
+flx reply↠1001
 → ø
   function reply(req, res) {
     res.send('42');
   }
 
 flx count1.js
-↠ ↠reply []
+↠ reply↠1001 []
   var app = require('express')();
   app.get('/', function placeholder() {
-    return flx.start(flx.m('↠reply', {
+    return flx.start(flx.m('reply↠1001', {
       _args: arguments,
       _sign: {}
     }));
@@ -117,7 +117,7 @@ The compiled result is in `results/count2.js` :
 var flx = require('flx');
 var app = require('express')();
 app.get('/', function placeholder() {
-  return flx.start(flx.m('↠reply', {
+  return flx.start(flx.m('reply↠1002', {
     _args: arguments,
     _sign: {}
   }));
@@ -128,9 +128,9 @@ if (!module.parent) {
 }
 exports.app = app;
 
-// ↠reply >> ø
+// reply↠1002 >> ø
 
-flx.register('↠reply', function capsule(msg) {
+flx.register('reply↠1002', function capsule(msg) {
   if (msg._update) {
     for (var i in msg._update) {
       this[i] = msg._update[i];
@@ -148,7 +148,7 @@ flx.register('↠reply', function capsule(msg) {
 The fluxionnal result is in `results/count2.flx` : 
 
 ```
-flx ↠reply
+flx reply↠1002
 → ø
   function reply(req, res) {
     var _rep = '42';
@@ -156,10 +156,10 @@ flx ↠reply
   }
 
 flx count2.js
-↠ ↠reply []
+↠ reply↠1002 []
   var app = require('express')();
   app.get('/', function placeholder() {
-    return flx.start(flx.m('↠reply', {
+    return flx.start(flx.m('reply↠1002', {
       _args: arguments,
       _sign: {}
     }));
@@ -206,7 +206,7 @@ var flx = require('flx');
 var app = require('express')();
 var _rep = '42';
 app.get('/', function placeholder() {
-  return flx.start(flx.m('↠reply', {
+  return flx.start(flx.m('reply↠1003', {
     _args: arguments,
     _sign: {}
   }));
@@ -217,9 +217,9 @@ if (!module.parent) {
 }
 exports.app = app;
 
-// ↠reply >> ø
+// reply↠1003 >> ø
 
-flx.register('↠reply', function capsule(msg) {
+flx.register('reply↠1003', function capsule(msg) {
   if (msg._update) {
     for (var i in msg._update) {
       this[i] = msg._update[i];
@@ -236,18 +236,18 @@ flx.register('↠reply', function capsule(msg) {
 The fluxionnal result is in `results/count3.flx` : 
 
 ```
-flx ↠reply
+flx reply↠1003
 → ø
   function reply(req, res) {
     res.send(this._rep);
   }
 
 flx count3.js
-↠ ↠reply []
+↠ reply↠1003 []
   var app = require('express')();
   var _rep = '42';
   app.get('/', function placeholder() {
-    return flx.start(flx.m('↠reply', {
+    return flx.start(flx.m('reply↠1003', {
       _args: arguments,
       _sign: {}
     }));
@@ -297,7 +297,7 @@ var flx = require('flx');
 var app = require('express')();
 var _rep = 42;
 app.get('/', function placeholder() {
-  return flx.start(flx.m('↠reply', {
+  return flx.start(flx.m('reply↠1004', {
     _args: arguments,
     _sign: {}
   }));
@@ -308,9 +308,9 @@ if (!module.parent) {
 }
 exports.app = app;
 
-// ↠reply >> ø
+// reply↠1004 >> ø
 
-flx.register('↠reply', function capsule(msg) {
+flx.register('reply↠1004', function capsule(msg) {
   if (msg._update) {
     for (var i in msg._update) {
       this[i] = msg._update[i];
@@ -328,7 +328,7 @@ flx.register('↠reply', function capsule(msg) {
 The fluxionnal result is in `results/count4.flx` : 
 
 ```
-flx ↠reply
+flx reply↠1004
 → ø
   function reply(req, res) {
     res.send('' + this._rep);
@@ -336,11 +336,11 @@ flx ↠reply
   }
 
 flx count4.js
-↠ ↠reply []
+↠ reply↠1004 []
   var app = require('express')();
   var _rep = 42;
   app.get('/', function placeholder() {
-    return flx.start(flx.m('↠reply', {
+    return flx.start(flx.m('reply↠1004', {
       _args: arguments,
       _sign: {}
     }));
@@ -392,13 +392,13 @@ var flx = require('flx');
 var app = require('express')();
 var _rep = 42;
 app.get('/A', function placeholder() {
-  return flx.start(flx.m('↠replyA', {
+  return flx.start(flx.m('replyA↠1005', {
     _args: arguments,
     _sign: {}
   }));
 });
 app.get('/B', function placeholder() {
-  return flx.start(flx.m('↠replyB', {
+  return flx.start(flx.m('replyB↠1006', {
     _args: arguments,
     _sign: {}
   }));
@@ -409,9 +409,9 @@ if (!module.parent) {
 }
 exports.app = app;
 
-// ↠replyA >> ø
+// replyA↠1005 >> ø
 
-flx.register('↠replyA', function capsule(msg) {
+flx.register('replyA↠1005', function capsule(msg) {
   if (msg._update) {
     for (var i in msg._update) {
       this[i] = msg._update[i];
@@ -424,9 +424,9 @@ flx.register('↠replyA', function capsule(msg) {
   }
 }, { _rep: _rep });
 
-// ↠replyB >> ø
+// replyB↠1006 >> ø
 
-flx.register('↠replyB', function capsule(msg) {
+flx.register('replyB↠1006', function capsule(msg) {
   if (msg._update) {
     for (var i in msg._update) {
       this[i] = msg._update[i];
@@ -444,14 +444,14 @@ flx.register('↠replyB', function capsule(msg) {
 The fluxionnal result is in `results/count5.flx` : 
 
 ```
-flx ↠replyA
+flx replyA↠1005
 → ø
   function replyA(req, res) {
     this._rep += 1;
     res.send('' + this._rep);
   }
 
-flx ↠replyB
+flx replyB↠1006
 → ø
   function replyB(req, res) {
     this._rep += 2;
@@ -459,18 +459,18 @@ flx ↠replyB
   }
 
 flx count5.js
-↠ ↠replyA []
-↠ ↠replyB []
+↠ replyA↠1005 []
+↠ replyB↠1006 []
   var app = require('express')();
   var _rep = 42;
   app.get('/A', function placeholder() {
-    return flx.start(flx.m('↠replyA', {
+    return flx.start(flx.m('replyA↠1005', {
       _args: arguments,
       _sign: {}
     }));
   });
   app.get('/B', function placeholder() {
-    return flx.start(flx.m('↠replyB', {
+    return flx.start(flx.m('replyB↠1006', {
       _args: arguments,
       _sign: {}
     }));
