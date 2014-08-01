@@ -81,10 +81,9 @@ function pipe(compile) {
   fs.readFile(options.input, function(err, file) {
     if (err) throw err;
 
-    var filename = options.input.split('/');
-    filename = filename[filename.length - 1];
-
-    var output = compile(file, filename);
+    var filename = options.input.split('/').pop(),
+        dirname = options.input.split('/').slice(0, -1).join('/'),
+        output = compile(file, filename, dirname);
 
     if (options.jsOutput) {
       fs.writeFile(options.jsOutput, output.toJs(), function(err) {
