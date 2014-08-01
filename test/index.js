@@ -53,11 +53,11 @@ describe('Compilation', function () {
     });
   });
 
-  tests.requires.forEach(function(test, index) {
-    describe('Require : ' + test.name + ' : \n', function() {
+  tests.startFluxions.forEach(function(test, index) {
+    describe('startFluxions : ' + test.name + ' : \n', function() {
       it(test.desc, function (done) {
         var compiledCode = t.compile(t.read(test.name + '.js'), test.name + '.js').toJs();
-        var flxRegisterMatcher = /flx.register\('(.+?)'/g;
+        var flxRegisterMatcher = /flx.start\(flx.m\('(.+?)'/g;
 
         var flxs = [],
             arr;
@@ -66,8 +66,38 @@ describe('Compilation', function () {
         }
 
         var l = test.expectations.length;
+        assert.equal(l, flxs.length);
+
         for (var i = 0; i < l; ++i) {
-          assert(h.isMatchingFluxionName(test.expectations[i], flxs[i]));
+          assert(h.isMatchingFluxionName(test.expectations[i], flxs[i]),
+                  test.expectations[i] + ' !== ' + flxs[i]);
+          delete flxs[i];
+        }
+
+        assert.deepEqual(flxs, []);
+        done();
+      });
+    });
+  });
+
+  tests.postFluxions.forEach(function(test, index) {
+    describe('postFluxions : ' + test.name + ' : \n', function() {
+      it(test.desc, function (done) {
+        var compiledCode = t.compile(t.read(test.name + '.js'), test.name + '.js').toJs();
+        var flxRegisterMatcher = /flx.post\(flx.m\('(.+?)'/g;
+
+        var flxs = [],
+            arr;
+        while ((arr = flxRegisterMatcher.exec(compiledCode)) !== null) {
+          flxs.push(arr[1]);
+        }
+
+        var l = test.expectations.length;
+        assert.equal(l, flxs.length);
+
+        for (var i = 0; i < l; ++i) {
+          assert(h.isMatchingFluxionName(test.expectations[i], flxs[i]),
+                  test.expectations[i] + ' !== ' + flxs[i]);
           delete flxs[i];
         }
 
