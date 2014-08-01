@@ -78,7 +78,7 @@ counts:
         disable: true
         expectations:
             - false
-requires:
+startFluxions:
     -
       name: app.get
       desc: |
@@ -93,3 +93,18 @@ requires:
             app is directly required in a 'application' var.
       expectations:
           - reply
+postFluxions:
+    -
+      name: fs.readFile
+      desc: |
+            The trigger is fs.readFile.
+            module is directly required in a 'fs' var.
+      expectations:
+          - anonymous
+    -
+      name: fis.readFile
+      desc: |
+            The trigger is fis.readFile.
+            module is directly required in a 'fis' var.
+      expectations:
+          - anonymous
