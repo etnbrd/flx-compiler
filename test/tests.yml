@@ -108,3 +108,16 @@ postFluxions:
             module is directly required in a 'fis' var.
       expectations:
           - anonymous
+assignments:
+    -
+      name: var
+      desc: |
+            The handler is in a var
+      expectations:
+          - reply
+    -
+      name: plainfunction
+      desc: |
+            The handler is a plain function
+      expectations:
+          - reply
