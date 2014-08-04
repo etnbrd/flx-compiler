@@ -1,6 +1,5 @@
 fs = require 'fs'
 esprima = require 'esprima'
-escope = require 'escope'
 
 globals = (scope) ->
     name = (a) ->

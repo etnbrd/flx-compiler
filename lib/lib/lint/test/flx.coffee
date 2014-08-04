@@ -2,7 +2,6 @@ assert = require 'assert'
 globals = require '../globals'
 flx = require '../flx'
 esprima = require 'esprima'
-escope = require 'escope'
 
 mock = (scope) ->
     assert (globals scope) instanceof Array, 'Not an array'
