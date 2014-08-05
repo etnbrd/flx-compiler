@@ -3,59 +3,68 @@ var fs = require("fs")
 ;
 
 var tests = yaml.safeLoad(fs.readFileSync(__dirname + '/tests.yml', 'utf8'));
+var todos = yaml.safeLoad(fs.readFileSync(__dirname + '/../todos.yml', 'utf8'));
 
-function generateRoadmap() {
-  var result = tests.counts.reduce(function(prev, test, i) {
+function generateTodo(todo) {
+  return "+ " + todo.replace(/\n/g, '\n  ');
+}
 
-    try {
-      var sourceFile = fs.readFileSync("examples/" + test.name + ".js");
+function generateTest(test) {
 
-      var source = [
-        "The source program is in `examples/" + test.name + ".js` : ",
-        "\n```",
-        sourceFile,
-        "```\n",
-      ].join('\n');
+  var sourceFile = "examples/" + test.name + ".js",
+      compileJsFile = "results/" + test.name + ".js",
+      compileFlxFile = "results/" + test.name + ".flx";
 
-
-      try {    
-        var compileFile = fs.readFileSync("results/" + test.name + ".js");
-        var flxFile = fs.readFileSync("results/" + test.name + ".flx");
-        var compile = [
-          "The compiled result is in `results/" + test.name + ".js` : ",
-          "\n```",
-          compileFile,
-          "```\n\n",
-          "The fluxionnal result is in `results/" + test.name + ".flx` : ",
-          "\n```",
-          flxFile,
-          "```\n\n"
-          ].join('\n');
-      } catch (e) {
-        var compile = "The result has not yet be implemented\n"
-      }
-
-    } catch (e) {
-      var source = "the test has not yet be implemented\n";
-      var compile = "";
-    }    
-
-    test.desc = test.desc.replace(/(^|\n)[ ]+/g, '$1');
-
-    var result = [
-      "### Problem #" + (1 + i),
-      "\n",
-      test.desc,
-      "\n",
-      source,
-      compile,
+  if (fs.existsSync(sourceFile)) {
+    var source = [
+      "The source program is in `examples/" + test.name + ".js` : ",
+      "\n```",
+      fs.readFileSync(sourceFile),
+      "```\n",
     ].join('\n');
 
-    return prev + result
+    if (fs.existsSync(compileJsFile)) {
+      var compile = [
+        "The compiled result is in `results/" + test.name + ".js` : ",
+        "\n```",
+        fs.readFileSync(compileJsFile),
+        "```\n\n",
+        "The fluxionnal result is in `results/" + test.name + ".flx` : ",
+        "\n```",
+        fs.readFileSync(compileFlxFile),
+        "```\n\n"
+        ].join('\n');
+    } else {
+      var compile = "The result has not yet be implemented\n";
+    }
 
-  }, "");
+  } else {
+    var source = "the test has not yet be implemented\n";
+    var compile = "";
+  }
 
-  fs.writeFileSync("roadmap.md", result);
+  test.desc = test.desc.replace(/(^|\n)[ ]+/g, '$1');
+
+  return [
+    "### " + test.name,
+    "\n",
+    test.desc,
+    "\n",
+    source,
+    compile,
+  ].join('\n');
+}
+
+function generateRoadmap() {
+
+  fs.writeFileSync('roadmap.md', todos.todos.reduce(function(prev, todo) {
+      return prev + generateTodo(todo);
+    }, '# Todos \n\n') + '\n\n' +
+    Object.keys(tests).reduce(function(prev, categorie) {
+    return prev + tests[categorie].reduce(function(prev, test, i) {
+      return prev + generateTest(test);
+    }, "\n## " + categorie + "\n\n"); 
+  }, '# Tests \n\n'));
 }
 
 module.exports = generateRoadmap;

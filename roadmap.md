@@ -1,4 +1,14 @@
-### Problem #1
+# Todos 
+
++ Write master subjects about compiler problem spin off (like fluxion placement, debit ...)
+  
+
+# Tests 
+
+
+## counts
+
+### count1
 
 
 The server reply a constant value to every request
@@ -81,7 +91,7 @@ flx count1.js
   exports.app = app;
 ```
 
-### Problem #2
+### count2
 
 
 The server reply a constant value to every request,
@@ -170,7 +180,7 @@ flx count2.js
   exports.app = app;
 ```
 
-### Problem #3
+### count3
 
 
 The server of problem #3 reply a constant value to every request,
@@ -258,7 +268,7 @@ flx count3.js
   exports.app = app;
 ```
 
-### Problem #4
+### count4
 
 
 The server of problem #4 reply a value incremented at every request,
@@ -351,7 +361,7 @@ flx count4.js
   exports.app = app;
 ```
 
-### Problem #5
+### count5
 
 
 The server of problem #5 uses two different handler for two different request routes.,
@@ -481,7 +491,7 @@ flx count5.js
   exports.app = app;
 ```
 
-### Problem #6
+### count6
 
 
 Same with objects
@@ -490,7 +500,7 @@ Same with objects
 
 the test has not yet be implemented
 
-### Problem #7
+### count7
 
 
 Same with arrays
@@ -499,7 +509,7 @@ Same with arrays
 
 the test has not yet be implemented
 
-### Problem #8
+### count8
 
 
 Same with requires
@@ -528,24 +538,583 @@ exports.app = app;
 ```
 
 The result has not yet be implemented
-### Problem #9
+
+## startFluxions
+
+### app.get
 
 
-Write a graph printer to display fluxions box and arrows stuffs
-
-
-
-the test has not yet be implemented
-
-### Problem #10
-
-
-Write a communication TODO file to make the roadmap from test and this TODO file
-Then, put in this TODO file :
-- write documentation about ES* and generally about the compiler
-- write master subjects about compiler problem spin off (like fluxion placement, debit ...)
+The trigger is app.get.
+app is directly required in a 'app' var.
 
 
 
-the test has not yet be implemented
+The source program is in `examples/app.get.js` : 
+
+```
+var app = require('express')();
+
+app.get('/', function reply(req, res){
+  var _rep = '42';
+  res.send(_rep);
+});
+
+if (!module.parent) {
+    app.listen(8080);
+    console.log('>> listening 8080');
+}
+
+```
+
+The compiled result is in `results/app.get.js` : 
+
+```
+var flx = require('flx');
+var app = require('express')();
+app.get('/', function placeholder() {
+  return flx.start(flx.m('reply-1007', {
+    _args: arguments,
+    _sign: {}
+  }));
+});
+if (!module.parent) {
+  app.listen(8080);
+  console.log('>> listening 8080');
+}
+
+// reply-1007 >> ø
+
+flx.register('reply-1007', function capsule(msg) {
+  if (msg._update) {
+    for (var i in msg._update) {
+      this[i] = msg._update[i];
+    }
+  } else {
+    (function reply(req, res) {
+      var _rep = '42';
+      res.send(_rep);
+    }.apply(this, msg._args));
+  }
+}, {});
+```
+
+
+The fluxionnal result is in `results/app.get.flx` : 
+
+```
+flx reply-1007
+→ ø
+  function reply(req, res) {
+    var _rep = '42';
+    res.send(_rep);
+  }
+
+flx app.get.js
+↠ reply-1007 []
+  var app = require('express')();
+  app.get('/', function placeholder() {
+    return flx.start(flx.m('reply-1007', {
+      _args: arguments,
+      _sign: {}
+    }));
+  });
+  if (!module.parent) {
+    app.listen(8080);
+    console.log('>> listening 8080');
+  }
+```
+
+### application.get
+
+
+The trigger is application.get.
+app is directly required in a 'application' var.
+
+
+
+The source program is in `examples/application.get.js` : 
+
+```
+var application = require('express')();
+
+application.get('/', function reply(req, res){
+  var _rep = '42';
+  res.send(_rep);
+});
+
+if (!module.parent) {
+    application.listen(8080);
+    console.log('>> listening 8080');
+}
+
+```
+
+The compiled result is in `results/application.get.js` : 
+
+```
+var flx = require('flx');
+var application = require('express')();
+application.get('/', function placeholder() {
+  return flx.start(flx.m('reply-1008', {
+    _args: arguments,
+    _sign: {}
+  }));
+});
+if (!module.parent) {
+  application.listen(8080);
+  console.log('>> listening 8080');
+}
+
+// reply-1008 >> ø
+
+flx.register('reply-1008', function capsule(msg) {
+  if (msg._update) {
+    for (var i in msg._update) {
+      this[i] = msg._update[i];
+    }
+  } else {
+    (function reply(req, res) {
+      var _rep = '42';
+      res.send(_rep);
+    }.apply(this, msg._args));
+  }
+}, {});
+```
+
+
+The fluxionnal result is in `results/application.get.flx` : 
+
+```
+flx reply-1008
+→ ø
+  function reply(req, res) {
+    var _rep = '42';
+    res.send(_rep);
+  }
+
+flx application.get.js
+↠ reply-1008 []
+  var application = require('express')();
+  application.get('/', function placeholder() {
+    return flx.start(flx.m('reply-1008', {
+      _args: arguments,
+      _sign: {}
+    }));
+  });
+  if (!module.parent) {
+    application.listen(8080);
+    console.log('>> listening 8080');
+  }
+```
+
+### deferred-trigger
+
+
+The trigger is `app.get`,
+`app` is the result from the execution of the ex variable which hold the `express` module.
+
+
+
+The source program is in `examples/deferred-trigger.js` : 
+
+```
+var ex = require('express')
+var app = ex();
+
+app.get('/', function reply(req, res){
+  var _rep = '42';
+  res.send(_rep);
+});
+
+if (!module.parent) {
+    app.listen(8080);
+    console.log('>> listening 8080');
+}
+```
+
+The compiled result is in `results/deferred-trigger.js` : 
+
+```
+var flx = require('flx');
+var ex = require('express');
+var app = ex();
+app.get('/', function reply(req, res) {
+  var _rep = '42';
+  res.send(_rep);
+});
+if (!module.parent) {
+  app.listen(8080);
+  console.log('>> listening 8080');
+}
+```
+
+
+The fluxionnal result is in `results/deferred-trigger.flx` : 
+
+```
+flx deferred-trigger.js
+→ ø
+  var ex = require('express');
+  var app = ex();
+  app.get('/', function reply(req, res) {
+    var _rep = '42';
+    res.send(_rep);
+  });
+  if (!module.parent) {
+    app.listen(8080);
+    console.log('>> listening 8080');
+  }
+```
+
+
+## postFluxions
+
+### fs.readFile
+
+
+The trigger is fs.readFile.
+module is directly required in a 'fs' var.
+
+
+
+The source program is in `examples/fs.readFile.js` : 
+
+```
+var app = require('express')(),
+    fs = require('fs');
+
+app.get('/', function reply(req, res){
+  fs.readFile(__filename, function(error, data) {
+    res.send(data);
+  });
+});
+
+if (!module.parent) {
+    app.listen(8080);
+    console.log('>> listening 8080');
+}
+
+```
+
+The compiled result is in `results/fs.readFile.js` : 
+
+```
+var flx = require('flx');
+var app = require('express')(), fs = require('fs');
+app.get('/', function placeholder() {
+  return flx.start(flx.m('reply-1009', {
+    _args: arguments,
+    _sign: {}
+  }));
+});
+if (!module.parent) {
+  app.listen(8080);
+  console.log('>> listening 8080');
+}
+
+// anonymous-1010 >> ø
+
+flx.register('anonymous-1010', function capsule(msg) {
+  if (msg._update) {
+    for (var i in msg._update) {
+      this[i] = msg._update[i];
+    }
+  } else {
+    (function (error, data) {
+      this.res.send(data);
+    }.apply(this, msg._args));
+  }
+}, { res: res });
+
+// reply-1009 >> anonymous-1010 []
+
+flx.register('reply-1009', function capsule(msg) {
+  if (msg._update) {
+    for (var i in msg._update) {
+      this[i] = msg._update[i];
+    }
+  } else {
+    (function reply(req, res) {
+      this.fs.readFile(__filename, function placeholder() {
+        return flx.post(flx.m('anonymous-1010', {
+          _args: arguments,
+          _sign: {}
+        }));
+      });
+    }.apply(this, msg._args));
+  }
+}, { fs: fs });
+```
+
+
+The fluxionnal result is in `results/fs.readFile.flx` : 
+
+```
+flx anonymous-1010
+→ ø
+  function (error, data) {
+    this.res.send(data);
+  }
+
+flx reply-1009
+→ anonymous-1010 []
+  function reply(req, res) {
+    this.fs.readFile(__filename, function placeholder() {
+      return flx.post(flx.m('anonymous-1010', {
+        _args: arguments,
+        _sign: {}
+      }));
+    });
+  }
+
+flx fs.readFile.js
+↠ reply-1009 []
+  var app = require('express')(), fs = require('fs');
+  app.get('/', function placeholder() {
+    return flx.start(flx.m('reply-1009', {
+      _args: arguments,
+      _sign: {}
+    }));
+  });
+  if (!module.parent) {
+    app.listen(8080);
+    console.log('>> listening 8080');
+  }
+```
+
+### fis.readFile
+
+
+The trigger is fis.readFile.
+module is directly required in a 'fis' var.
+
+
+
+The source program is in `examples/fis.readFile.js` : 
+
+```
+var app = require('express')(),
+    fis = require('fs');
+
+app.get('/', function reply(req, res){
+  fis.readFile(__filename, function(error, data) {
+    res.send(data);
+  });
+});
+
+if (!module.parent) {
+    app.listen(8080);
+    console.log('>> listening 8080');
+}
+
+```
+
+The compiled result is in `results/fis.readFile.js` : 
+
+```
+var flx = require('flx');
+var app = require('express')(), fis = require('fs');
+app.get('/', function placeholder() {
+  return flx.start(flx.m('reply-1011', {
+    _args: arguments,
+    _sign: {}
+  }));
+});
+if (!module.parent) {
+  app.listen(8080);
+  console.log('>> listening 8080');
+}
+
+// anonymous-1012 >> ø
+
+flx.register('anonymous-1012', function capsule(msg) {
+  if (msg._update) {
+    for (var i in msg._update) {
+      this[i] = msg._update[i];
+    }
+  } else {
+    (function (error, data) {
+      this.res.send(data);
+    }.apply(this, msg._args));
+  }
+}, { res: res });
+
+// reply-1011 >> anonymous-1012 []
+
+flx.register('reply-1011', function capsule(msg) {
+  if (msg._update) {
+    for (var i in msg._update) {
+      this[i] = msg._update[i];
+    }
+  } else {
+    (function reply(req, res) {
+      this.fis.readFile(__filename, function placeholder() {
+        return flx.post(flx.m('anonymous-1012', {
+          _args: arguments,
+          _sign: {}
+        }));
+      });
+    }.apply(this, msg._args));
+  }
+}, { fis: fis });
+```
+
+
+The fluxionnal result is in `results/fis.readFile.flx` : 
+
+```
+flx anonymous-1012
+→ ø
+  function (error, data) {
+    this.res.send(data);
+  }
+
+flx reply-1011
+→ anonymous-1012 []
+  function reply(req, res) {
+    this.fis.readFile(__filename, function placeholder() {
+      return flx.post(flx.m('anonymous-1012', {
+        _args: arguments,
+        _sign: {}
+      }));
+    });
+  }
+
+flx fis.readFile.js
+↠ reply-1011 []
+  var app = require('express')(), fis = require('fs');
+  app.get('/', function placeholder() {
+    return flx.start(flx.m('reply-1011', {
+      _args: arguments,
+      _sign: {}
+    }));
+  });
+  if (!module.parent) {
+    app.listen(8080);
+    console.log('>> listening 8080');
+  }
+```
+
+
+## assignments
+
+### var
+
+
+The handler is in a var
+
+
+
+The source program is in `examples/var.js` : 
+
+```
+var app = require('express')();
+
+var reply = function(req, res){
+  res.send('42');
+};
+
+app.get('/', reply);
+
+if (!module.parent) {
+    app.listen(8080);
+    console.log('>> listening 8080');
+}
+exports.app = app;
+
+```
+
+The compiled result is in `results/var.js` : 
+
+```
+var flx = require('flx');
+var app = require('express')();
+var reply = function reply(req, res) {
+  res.send('42');
+};
+app.get('/', reply);
+if (!module.parent) {
+  app.listen(8080);
+  console.log('>> listening 8080');
+}
+exports.app = app;
+```
+
+
+The fluxionnal result is in `results/var.flx` : 
+
+```
+flx var.js
+→ ø
+  var app = require('express')();
+  var reply = function reply(req, res) {
+    res.send('42');
+  };
+  app.get('/', reply);
+  if (!module.parent) {
+    app.listen(8080);
+    console.log('>> listening 8080');
+  }
+  exports.app = app;
+```
+
+### plainfunction
+
+
+The handler is a plain function
+
+
+
+The source program is in `examples/plainfunction.js` : 
+
+```
+var app = require('express')();
+
+function reply(req, res){
+  res.send('42');
+}
+
+app.get('/', reply);
+
+if (!module.parent) {
+    app.listen(8080);
+    console.log('>> listening 8080');
+}
+exports.app = app;
+
+```
+
+The compiled result is in `results/plainfunction.js` : 
+
+```
+var flx = require('flx');
+var app = require('express')();
+function reply(req, res) {
+  res.send('42');
+}
+app.get('/', reply);
+if (!module.parent) {
+  app.listen(8080);
+  console.log('>> listening 8080');
+}
+exports.app = app;
+```
+
+
+The fluxionnal result is in `results/plainfunction.flx` : 
+
+```
+flx plainfunction.js
+→ ø
+  var app = require('express')();
+  function reply(req, res) {
+    res.send('42');
+  }
+  app.get('/', reply);
+  if (!module.parent) {
+    app.listen(8080);
+    console.log('>> listening 8080');
+  }
+  exports.app = app;
+```
 

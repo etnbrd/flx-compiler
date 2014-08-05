@@ -13,14 +13,6 @@ var fs = require('fs'),
 
 var tests = yaml.safeLoad(fs.readFileSync(__dirname + '/tests.yml', 'utf8'));
 
-// before(function(done) {
-//   fs.mkdir('results', function(e) {
-//     if (e && e.code !== "EEXIST")
-//       throw e;
-//     done();
-//   });
-// });
-
 describe('Compilation', function () {
   describe('Problem #0 : \n', function () {
     it('source and result should be different', function () {
@@ -120,6 +112,8 @@ describe('Compilation', function () {
         }
 
         var l = test.expectations.length;
+
+        console.log(flxs);
         assert.equal(l, flxs.length);
 
         for (var i = 0; i < l; ++i) {
