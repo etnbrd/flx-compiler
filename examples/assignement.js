@@ -1,12 +1,13 @@
 var app = require('express')();
+var fs = require('fs');
 
-var reply, _reply;
+// module.exports =  function(req, res){
+//                 res.send('42');
+//               };
 
-_reply = function(req, res){
-  res.send('42');
-};
-
-reply = _reply;
+var reply = function(req, res){
+                res.send('42');
+              };
 
 app.get('/', reply);
 
@@ -14,4 +15,9 @@ if (!module.parent) {
     app.listen(8080);
     console.log('>> listening 8080');
 }
+
+fs.writeLog(function log() {
+  return '{pho,fun}ny log';
+});
+
 exports.app = app;
