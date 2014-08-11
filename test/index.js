@@ -15,7 +15,7 @@ var fs = require('fs'),
 
 var tests = yaml.safeLoad(fs.readFileSync(__dirname + '/tests.yml', 'utf8'));
 
-describe('Compilation', function () { /*
+describe('Compilation', function () {
   describe('Problem #0 : \n', function () {
     it('source and result should be different', function () {
       var s = t.read('compile.js');
@@ -75,7 +75,7 @@ describe('Compilation', function () { /*
       });
     });
   });
-*/
+
   tests.postFluxions.forEach(function(test, index) {
     describe('postFluxions : ' + test.name + ' : \n', function() {
       it(test.desc, function (done) {
@@ -102,7 +102,7 @@ describe('Compilation', function () { /*
       });
     });
   });
-/*
+
   tests.assignments.forEach(function(test, index) {
     describe('assignments : ' + test.name + ' : \n', function() {
       it(test.desc, function (done) {
@@ -117,7 +117,6 @@ describe('Compilation', function () { /*
 
         var l = test.expectations.length;
 
-        console.log(flxs);
         assert.equal(l, flxs.length);
 
         for (var i = 0; i < l; ++i) {
@@ -131,7 +130,7 @@ describe('Compilation', function () { /*
       });
     });
   });
-*/
+
 });
 
 after(generateRoadmap);
