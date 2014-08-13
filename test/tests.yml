@@ -46,7 +46,7 @@ counts:
             Same with objects
         disable: true
         expectations:
-            - false
+            - 42
     -
         name: count7
         desc: |
