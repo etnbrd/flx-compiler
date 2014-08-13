@@ -99,12 +99,12 @@ postFluxions:
       expectations:
           - anonymous
 assignments:
-    -
-      name: var
-      desc: |
-            The handler is in a var
-      expectations:
-          - reply
+    # -
+    #   name: var
+    #   desc: |
+    #         The handler is in a var
+    #   expectations:
+    #       - reply
     -
       name: plainfunction
       desc: |
