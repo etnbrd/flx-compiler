@@ -1,19 +1,14 @@
 #!/usr/bin/env phantomjs
 
 var args = require('system').args,
-    page = require('webpage').create(),
-    address, output;
+    page = require('webpage').create();
 
-address = args[1];
-output = args[2];
-console.log(address);
-console.log(output);
-page.viewportSize = { width: 800, height: 450 };
-page.open(address, function (status) {
+page.viewportSize = { width: 400, height: 450 };
+page.open(args[1], function (status) {
   if (status !== 'success')
     console.log('Unable to load the address!');
   else
-    page.render(output);
+    page.render(args[2]);
 
   phantom.exit();
 });
