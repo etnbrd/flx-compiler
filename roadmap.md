@@ -760,7 +760,7 @@ The compiled result is in `results/fs.readFile.js` :
 var flx = require('flx');
 var app = require('express')(), fs = require('fs');
 app.get('/', function placeholder() {
-  return flx.start(flx.m('reply-1009', {
+  return flx.start(flx.m('reply-1000', {
     _args: arguments,
     _sign: {}
   }));
@@ -770,9 +770,9 @@ if (!module.parent) {
   console.log('>> listening 8080');
 }
 
-// anonymous-1010 >> ø
+// anonymous-1001 >> ø
 
-flx.register('anonymous-1010', function capsule(msg) {
+flx.register('anonymous-1001', function capsule(msg) {
   if (msg._update) {
     for (var i in msg._update) {
       this[i] = msg._update[i];
@@ -784,9 +784,9 @@ flx.register('anonymous-1010', function capsule(msg) {
   }
 }, { res: res });
 
-// reply-1009 >> ø
+// reply-1000 >> ø
 
-flx.register('reply-1009', function capsule(msg) {
+flx.register('reply-1000', function capsule(msg) {
   if (msg._update) {
     for (var i in msg._update) {
       this[i] = msg._update[i];
@@ -808,13 +808,13 @@ flx.register('reply-1009', function capsule(msg) {
 The fluxionnal result is in `results/fs.readFile.flx` : 
 
 ```
-flx anonymous-1010
+flx anonymous-1001
 → ø
   function (error, data) {
     this.res.send(data);
   }
 
-flx reply-1009
+flx reply-1000
 → ø
   function reply(req, res) {
     (function placeholder() {
@@ -829,120 +829,7 @@ flx fs.readFile.js
 → ø
   var app = require('express')(), fs = require('fs');
   app.get('/', function placeholder() {
-    return flx.start(flx.m('reply-1009', {
-      _args: arguments,
-      _sign: {}
-    }));
-  });
-  if (!module.parent) {
-    app.listen(8080);
-    console.log('>> listening 8080');
-  }
-```
-
-### fis.readFile
-
-
-The trigger is fis.readFile.
-module is directly required in a 'fis' var.
-
-
-
-The source program is in `examples/fis.readFile.js` : 
-
-```
-var app = require('express')(),
-    fis = require('fs');
-
-app.get('/', function reply(req, res){
-  fis.readFile(__filename, function(error, data) {
-    res.send(data);
-  });
-});
-
-if (!module.parent) {
-    app.listen(8080);
-    console.log('>> listening 8080');
-}
-
-```
-
-The compiled result is in `results/fis.readFile.js` : 
-
-```
-var flx = require('flx');
-var app = require('express')(), fis = require('fs');
-app.get('/', function placeholder() {
-  return flx.start(flx.m('reply-1011', {
-    _args: arguments,
-    _sign: {}
-  }));
-});
-if (!module.parent) {
-  app.listen(8080);
-  console.log('>> listening 8080');
-}
-
-// anonymous-1012 >> ø
-
-flx.register('anonymous-1012', function capsule(msg) {
-  if (msg._update) {
-    for (var i in msg._update) {
-      this[i] = msg._update[i];
-    }
-  } else {
-    (function (error, data) {
-      this.res.send(data);
-    }.apply(this, msg._args));
-  }
-}, { res: res });
-
-// reply-1011 >> ø
-
-flx.register('reply-1011', function capsule(msg) {
-  if (msg._update) {
-    for (var i in msg._update) {
-      this[i] = msg._update[i];
-    }
-  } else {
-    (function reply(req, res) {
-      (function placeholder() {
-        return flx.post(flx.m('undefined', {
-          _args: arguments,
-          _sign: {}
-        }));
-      });
-    }.apply(this, msg._args));
-  }
-}, { fis: fis });
-```
-
-
-The fluxionnal result is in `results/fis.readFile.flx` : 
-
-```
-flx anonymous-1012
-→ ø
-  function (error, data) {
-    this.res.send(data);
-  }
-
-flx reply-1011
-→ ø
-  function reply(req, res) {
-    (function placeholder() {
-      return flx.post(flx.m('undefined', {
-        _args: arguments,
-        _sign: {}
-      }));
-    });
-  }
-
-flx fis.readFile.js
-→ ø
-  var app = require('express')(), fis = require('fs');
-  app.get('/', function placeholder() {
-    return flx.start(flx.m('reply-1011', {
+    return flx.start(flx.m('reply-1000', {
       _args: arguments,
       _sign: {}
     }));
@@ -955,6 +842,96 @@ flx fis.readFile.js
 
 
 ## assignments
+
+### var
+
+
+The handler is in a var
+
+
+
+The source program is in `examples/var.js` : 
+
+```
+var app = require('express')();
+
+var reply = function(req, res){
+  res.send('42');
+};
+
+app.get('/', reply);
+
+if (!module.parent) {
+    app.listen(8080);
+    console.log('>> listening 8080');
+}
+exports.app = app;
+
+```
+
+The compiled result is in `results/var.js` : 
+
+```
+var flx = require('flx');
+var app = require('express')();
+var reply = function (req, res) {
+  res.send('42');
+};
+app.get('/', function placeholder() {
+  return flx.start(flx.m('reply-1013', {
+    _args: arguments,
+    _sign: {}
+  }));
+});
+if (!module.parent) {
+  app.listen(8080);
+  console.log('>> listening 8080');
+}
+exports.app = app;
+
+// reply-1013 >> ø
+
+flx.register('reply-1013', function capsule(msg) {
+  if (msg._update) {
+    for (var i in msg._update) {
+      this[i] = msg._update[i];
+    }
+  } else {
+    (function (req, res) {
+      res.send('42');
+    }.apply(this, msg._args));
+  }
+}, {});
+```
+
+
+The fluxionnal result is in `results/var.flx` : 
+
+```
+flx reply-1013
+→ ø
+  function (req, res) {
+    res.send('42');
+  }
+
+flx var.js
+→ ø
+  var app = require('express')();
+  var reply = function (req, res) {
+    res.send('42');
+  };
+  app.get('/', function placeholder() {
+    return flx.start(flx.m('reply-1013', {
+      _args: arguments,
+      _sign: {}
+    }));
+  });
+  if (!module.parent) {
+    app.listen(8080);
+    console.log('>> listening 8080');
+  }
+  exports.app = app;
+```
 
 ### plainfunction
 
@@ -991,7 +968,7 @@ function reply(req, res) {
   res.send('42');
 }
 app.get('/', function placeholder() {
-  return flx.start(flx.m('reply-1000', {
+  return flx.start(flx.m('reply-1014', {
     _args: arguments,
     _sign: {}
   }));
@@ -1002,16 +979,16 @@ if (!module.parent) {
 }
 exports.app = app;
 
-// reply-1000 >> ø
+// reply-1014 >> ø
 
-flx.register('reply-1000', function capsule(msg) {
+flx.register('reply-1014', function capsule(msg) {
   if (msg._update) {
     for (var i in msg._update) {
       this[i] = msg._update[i];
     }
   } else {
-    (function reply(truc) {
-      return this;
+    (function reply(req, res) {
+      res.send('42');
     }.apply(this, msg._args));
   }
 }, {});
@@ -1021,7 +998,7 @@ flx.register('reply-1000', function capsule(msg) {
 The fluxionnal result is in `results/plainfunction.flx` : 
 
 ```
-flx reply-1000
+flx reply-1014
 → ø
   function reply(req, res) {
     res.send('42');
@@ -1034,7 +1011,7 @@ flx plainfunction.js
     res.send('42');
   }
   app.get('/', function placeholder() {
-    return flx.start(flx.m('reply-1000', {
+    return flx.start(flx.m('reply-1014', {
       _args: arguments,
       _sign: {}
     }));

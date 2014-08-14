@@ -91,20 +91,20 @@ postFluxions:
             module is directly required in a 'fs' var.
       expectations:
           - anonymous
-    -
-      name: fis.readFile
-      desc: |
-            The trigger is fis.readFile.
-            module is directly required in a 'fis' var.
-      expectations:
-          - anonymous
-assignments:
     # -
-    #   name: var
+    #   name: fis.readFile
     #   desc: |
-    #         The handler is in a var
+    #         The trigger is fis.readFile.
+    #         module is directly required in a 'fis' var.
     #   expectations:
-    #       - reply
+    #       - anonymous
+assignments:
+    -
+      name: var
+      desc: |
+            The handler is in a var
+      expectations:
+          - reply
     -
       name: plainfunction
       desc: |
