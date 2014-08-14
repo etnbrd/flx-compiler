@@ -1,4 +1,5 @@
 var fs = require('fs'),
+    pth = require('path'),
     t = require('../lib/lib/tools'),
     _compile = require('../lib'),
     lint = require('../lib/lib/lint').lint,
@@ -8,15 +9,27 @@ function read(filename) {
     return fs.readFileSync('./examples/' + filename).toString();
 }
 
-function compile(src, filename) {
-    var res = _compile(src, filename);
-    t.writeFile(filename, res.toJs(), __dirname + '/../results/');
+function compile(src, filename, dirname) {
+    var res = _compile(src, filename, dirname);
+
+
+    res.toJs().forEach(function(file) {
+        t.writeFile(file.filename, file.code, __dirname + '/../results/' + file.dirname);
+    })
+
+    // TODO same with flx.
     t.writeFile(filename.replace('.js', '.flx'), res.toFlx(), __dirname + '/../results/');
     return res;
 }
 
 function compileAndLoad(filename) {
-    var src = compile(read(filename), filename).toJs();
+
+    var dirname = pth.dirname(filename);
+    filename = pth.basename(filename);
+
+    console.log(dirname, filename);
+
+    var src = compile(read(filename), filename, dirname).toJs();
     var l = lint(src);
     if (l.length)
         assert.fail(false, true, 'Des variables globales sont référencées dans des fluxions :\n' + JSON.stringify(l, null, '\t'));

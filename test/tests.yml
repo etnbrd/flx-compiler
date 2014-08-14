@@ -44,7 +44,6 @@ counts:
         name: count6
         desc: |
             Same with objects
-        disable: true
         expectations:
             - 42
     -
@@ -58,9 +57,8 @@ counts:
         name: count8
         desc: |
             Same with requires
-        disable: true
         expectations:
-            - false
+            - 43
 startFluxions:
     -
       name: app.get
@@ -91,13 +89,13 @@ postFluxions:
             module is directly required in a 'fs' var.
       expectations:
           - anonymous
-    # -
-    #   name: fis.readFile
-    #   desc: |
-    #         The trigger is fis.readFile.
-    #         module is directly required in a 'fis' var.
-    #   expectations:
-    #       - anonymous
+    -
+      name: fis.readFile
+      desc: |
+            The trigger is fis.readFile.
+            module is directly required in a 'fis' var.
+      expectations:
+          - anonymous
 assignments:
     -
       name: var
