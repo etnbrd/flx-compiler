@@ -76,7 +76,7 @@ flx reply-1001
   }
 
 flx count1.js
-→ ø
+↠ reply-1001 []
   var app = require('express')();
   app.get('/', function placeholder() {
     return flx.start(flx.m('reply-1001', {
@@ -165,7 +165,7 @@ flx reply-1002
   }
 
 flx count2.js
-→ ø
+↠ reply-1002 []
   var app = require('express')();
   app.get('/', function placeholder() {
     return flx.start(flx.m('reply-1002', {
@@ -252,7 +252,7 @@ flx reply-1003
   }
 
 flx count3.js
-→ ø
+↠ reply-1003 [_rep(scope)]
   var app = require('express')();
   var _rep = '42';
   app.get('/', function placeholder() {
@@ -345,7 +345,7 @@ flx reply-1004
   }
 
 flx count4.js
-→ ø
+↠ reply-1004 [_rep(scope)]
   var app = require('express')();
   var _rep = 42;
   app.get('/', function placeholder() {
@@ -456,21 +456,22 @@ The fluxionnal result is in `results/count5.flx` :
 flx replyA-1005
 → ø
   function replyA(req, res) {
-    this._rep += 1;
-    res.send('' + this._rep);
+    _rep += 1;
+    res.send('' + _rep);
   }
 
 flx replyB-1006
 → ø
   function replyB(req, res) {
-    this._rep += 2;
-    res.send('' + this._rep);
+    _rep += 2;
+    res.send('' + _rep);
   }
 
 flx count5.js
-→ ø
+↠ replyA-1005 []
+↠ replyB-1006 []
   var app = require('express')();
-  var _rep = 42;
+  var msg._sign._rep = 42;
   app.get('/A', function placeholder() {
     return flx.start(flx.m('replyA-1005', {
       _args: arguments,
@@ -573,7 +574,7 @@ flx replyA-1007
   }
 
 flx count6.js
-→ ø
+↠ replyA-1007 [rep(scope)]
   var app = require('express')();
   var rep = 42;
   var handlers = {
@@ -729,7 +730,7 @@ flx reply-1008
   }
 
 flx app.get.js
-→ ø
+↠ reply-1008 []
   var app = require('express')();
   app.get('/', function placeholder() {
     return flx.start(flx.m('reply-1008', {
@@ -812,7 +813,7 @@ flx reply-1009
   }
 
 flx application.get.js
-→ ø
+↠ reply-1009 []
   var application = require('express')();
   application.get('/', function placeholder() {
     return flx.start(flx.m('reply-1009', {
@@ -915,24 +916,20 @@ The fluxionnal result is in `results/fs.readFile.flx` :
 flx anonymous-1011
 → ø
   function (error, data) {
-    this.res.send(data);
+    msg._sign.res.send(data);
   }
 
 flx reply-1010
-→ ø
+→ anonymous-1011 [res(signature)]
   function reply(req, res) {
-    (function placeholder(__filename, function (error, data) {
-      this.res.send(data);
-    }) {
-      return flx.post(flx.m('anonymous-1011', {
-        _args: arguments,
-        _sign: {}
-      }));
-    });
+    flx.post(flx.m('anonymous-1011', {
+      _args: arguments,
+      _sign: { res: res }
+    }));
   }
 
 flx fs.readFile.js
-→ ø
+↠ reply-1010 [res(signature), fs(scope)]
   var app = require('express')(), fs = require('fs');
   app.get('/', function placeholder() {
     return flx.start(flx.m('reply-1010', {
@@ -1032,24 +1029,20 @@ The fluxionnal result is in `results/fis.readFile.flx` :
 flx anonymous-1013
 → ø
   function (error, data) {
-    this.res.send(data);
+    msg._sign.res.send(data);
   }
 
 flx reply-1012
-→ ø
+→ anonymous-1013 [res(signature)]
   function reply(req, res) {
-    (function placeholder(__filename, function (error, data) {
-      this.res.send(data);
-    }) {
-      return flx.post(flx.m('anonymous-1013', {
-        _args: arguments,
-        _sign: {}
-      }));
-    });
+    flx.post(flx.m('anonymous-1013', {
+      _args: arguments,
+      _sign: { res: res }
+    }));
   }
 
 flx fis.readFile.js
-→ ø
+↠ reply-1012 [res(signature), fis(scope)]
   var app = require('express')(), fis = require('fs');
   app.get('/', function placeholder() {
     return flx.start(flx.m('reply-1012', {
@@ -1138,7 +1131,7 @@ flx reply-1014
   }
 
 flx var.js
-→ ø
+↠ reply-1014 []
   var app = require('express')();
   var reply = function (req, res) {
     res.send('42');
@@ -1228,7 +1221,7 @@ flx reply-1015
   }
 
 flx plainfunction.js
-→ ø
+↠ reply-1015 []
   var app = require('express')();
   function reply(req, res) {
     res.send('42');
