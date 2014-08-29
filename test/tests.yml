@@ -44,9 +44,8 @@ counts:
         name: count6
         desc: |
             Same with objects
-        disable: true
         expectations:
-            - false
+            - 42
     -
         name: count7
         desc: |
@@ -58,9 +57,8 @@ counts:
         name: count8
         desc: |
             Same with requires
-        disable: true
         expectations:
-            - false
+            - 43
 startFluxions:
     -
       name: app.get
@@ -76,13 +74,13 @@ startFluxions:
             app is directly required in a 'application' var.
       expectations:
           - reply
-    -
-      name: deferred-trigger
-      desc: |
-            The trigger is `app.get`,
-            `app` is the result from the execution of the ex variable which hold the `express` module.
-      expectations:
-          - reply
+    # - TODO
+    #   name: deferred-trigger
+    #   desc: |
+    #         The trigger is `app.get`,
+    #         `app` is the result from the execution of the ex variable which hold the `express` module.
+    #   expectations:
+    #       - reply
 postFluxions:
     -
       name: fs.readFile
