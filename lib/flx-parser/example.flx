@@ -1,7 +1,9 @@
-flx firstfluxion ↠ secondfluxion []
+fluxion starter [] {
+	function truc() {
+		return async(>> poster (message, content));
+	}
+}
 
-flx secondfluxion
-  → finalfluxion [one, two, three]
-  → finalfluxion [one, two, three]
+fluxion poster [one, two, three] {
 
-flx finalfluxion → ø
+}

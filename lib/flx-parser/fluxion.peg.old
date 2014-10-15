@@ -1,0 +1,103 @@
+{
+  var context = {};
+
+}
+
+
+start
+  = program
+
+program
+  = flx:fluxion (ES program)? {return context}
+
+fluxion
+  = dec:declaration ctx:context? outputs:outputs code:code {return context[dec] = {outputs: outputs, context: (ctx || []), code: code}}
+
+declaration
+  = Flx WS name:name {return name}
+
+outputs
+  = ES o:stream os:outputs? {(os || []).unshift(o); return os}
+  / emptyStream;
+
+stream
+  = ln:link sign:signature? {ln.signature = sign || []; return ln}
+
+emptyStream
+  = arrow WS Empty {}
+
+link 
+  = type:arrow WS name:name {return {type: type, name: name}}
+
+signature
+  = ES signls ids:identifiers? signrs {return ids || []}
+
+context
+  = ES ctxls ids:identifiers? ctxrs {return ids || []}
+
+identifiers
+  = id:Identifier ids:(Sep id:Identifier {return id})* {ids.unshift(id); return ids}
+
+code
+  = ES codels code:CodeBlock (link code)? coders {return code}
+
+name
+  = id:Identifier {return id};
+
+arrow
+  = Start {return "start"}
+  / Post  {return "post"};
+
+CodeBlock
+  = char:[^`]* {return char.join('')}
+
+Flx
+  = 'flx';
+
+Empty
+  = 'null';
+
+Start
+  = '>>';
+
+Post
+  = '->';
+
+Identifier "identifier"
+  = alpha:[a-z]+ {return alpha.join('');}
+
+Sep
+  = ',' WS?;
+
+ctxls "Context left separator"
+  = '{';
+
+ctxrs "Context right separator"
+  = '}';
+
+signls "Signature left separator"
+  = '[';
+
+signrs "Signature right separator"
+  = ']';
+
+codels "Code left separator"
+  = '```';
+
+coders "Code right separator"
+  = '```';
+
+EL "Empty Line"
+  = LT WS LT;
+
+ES "Empty Space"
+  = (LT / WS) ES?;
+
+LT "Line return"
+  = "\n"+
+			
+WS "White space"
+  = " "+
+
+
+
