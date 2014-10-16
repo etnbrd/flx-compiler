@@ -54,7 +54,7 @@ Flx
   = 'flx';
 
 Empty
-  = 'ø' // fallback '#';
+  = 'ø' // fallback 'null';
 
 Start
   = '↠' // fallback '>>';

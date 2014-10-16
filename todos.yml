@@ -1,3 +1,156 @@
-todos:
+- VariableTracker:
+
+  - comment : |
+    The variable tracker is a component that need to understand the source and extract the dependencies between expressions.
+    With these dependencies, it should be possible to determine for each identifier, what is the value of the refereed variable.
+    This value might be uncertain, because of condition branching, in which case, the variable tracker must indicate so.
+    The variable tracker needs to track variables inside an object, or an array, and needs to be able to detect composition between objects.
+    I should be possible, for every module, to access the description of the `module.exports` variable.
+
+  - TODOS :
+    - |
+      analyzer/context:220,277
+      The function `isFunction` was a quick fix to replace the variable tracker.
+      The variable tracker should use an Program Dependency Graph to track the variable to its last known value, and detect if it is a function.
+
+    - |
+      analyzer/context:286
+      The variable tracker should be able to differentiate properties of an object, or key of an array.
+
+    - |
+      analyzer/context:343
+      During the require resolution, we need to track the module.exports to find the functions exposed by modules.
+
+    - |
+      analyzer/context:374
+      In Javascript, object can be composed from other objects.
+      This memory representation is very flexible, but hard to track.
+      We need to track it.
+
+    - |
+      analyzer/iterator:32
+      The variable tracker should be able to understand the tricky case of the express double call : `var app = require('express')();`
+
+    - |
+      analyzer/iterator:39
+      The varable tracker should understand that initialisation of a variable is a modification.
+
+    - |
+      mapper/iterator:28
+      The variable tracker should handle cases like : var A = B = function () {}
+
+    - |
+      mapper/iterator:36
+      When tracking a variable to be sure it is not used elsewhere, we need to track also the child scopes.
+
+- AsyncModulesDict :
+  - comment : |
+    To detect asynchronous functions, the only solution we found, is to track them since the module declaration, as it's the only constant.
+    The dictionnary should hold the public name of the module, along with all the asynchronous functions exposed, and their specifications (start, post). 
+
+  - TODOS :
+    - |
+      analyzer/context:90
+      Build a dictionnary of module exposing async function.
+      This dictionnary is meant to be used during the variable tracker, to know which variable are asynchronous function, or callbacks.
+
+    - |
+      analyzer/trigger:1,28
+      Build a dictionnary to detect the asynchronous function from special modules.
+
+
+
+
+- Analyzer :
+  - comment : |
+    The analyzer is already almost cleaned, but the addition of the variable tracker might change that.
+    The minor modification to do, for now, is to improbe the iterator reducing a member expression in an understandable form.
+    This iterator is very related to the variable tracker, they should use common functions.
+
+  - TODOS :
+    - |
+      analyzer/getId:5
+      Improve the get identifier iterator to handle the full complexity of a member expression.
+      See the specification : a member expression link two expression together. (an identifier is an expression)
+
+- Mapper :
+  - comments : |
+    The mapper is not a key component of the compiler, like the analyzer or the linker are.
+    There is some minor fix, and refactoring, but nothing critical.
+
+  - TODOS :
+    - |
+      mapper/context:91
+      Rupture point should be added in the new fluxion during the constructor of this new fluxion.
+
+    - |
+      mapper/iterator:24, 50
+      If a function is used as a callback, and as a regular function, we need to put its scope in both fluxion.
+      Therefor, a scope is not in only one application part.
+
+- Linker :
+  - comments : |
+    The linker needs a complete redesign to reflect the recent changes in specification.
+    There is now only two way to spread variables : signature and scope.
+    (propagation in the stream, and propagation in time)
+
+  - TODOS :
+    - |
+      js-printer/iterator:31
+      The linker need to be redesigned to reflect the change about the different kind of variable synchronisation.
+      Especially the signature and sync :
+      signature is linked with a rupture point, not a fluxion.
+      sync doesn't exist, it is a strong link between application parts : no distribution.
+
+    - |
+      linker/index:22
+      Fix the dependencies management in the linker
+
+
+
+
+- GlobalHelpers :
   - |
-    Write master subjects about compiler problem spin off (like fluxion placement, debit ...)
+    analyzer/helper:29
+    build a system to distribute common helpers to every modules, with the local modules as well to increase the flexibility, and reduce the number of requires.
+
+- GraphPrinter :
+  - |
+    graph-printer/graph:5
+    graph-printer/pack-layout:1
+    Clean and improve the graph printer.
+
+
+- JsPrinter :
+  - |
+    js-printer/builders:ALL
+    This file needs to be cleaned.
+    Use templates to be parsed instead of building directly the AST.
+
+  - |
+    js-printer/index:47
+    The function printFlx needs to be in the flx-printer, not in the JsPrinter.
+
+  - |
+    js-printer/index:122
+    This printer needs to be redesigned, it is implemented very poorly.
+
+  - |
+    js-printer/iterator:46
+    If a function is not needed anymore, it must be removed.
+    This can happen if a callback is used only once as a callback, but defined in a variable (the variable is used only once in the asynchronous function call).
+
+  - |
+    lib/interface:96
+    The js-printer needs to be able to write a multi-file application. 
+
+- Interface :
+  - |
+    lib/interface:26,71
+    The verbose flag
+  - |
+    lib/interface:80
+    Error management, see lib/errors
+  - |
+    lib/log:82
+    Syntax coloration for the output
