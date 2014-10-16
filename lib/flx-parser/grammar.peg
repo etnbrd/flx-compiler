@@ -1364,7 +1364,8 @@ FunctionBody
 
 FluxionDeclaration
   = FluxionToken __ id:Identifier __
-    "[" __ context:(FormalParameterList)? __ "]" __
+    "[" __ rythm:(FormalParameterList)? __ "]" __
+    "{" __ rythm:(FormalParameterList)? __ "}" __
     "{" __ body:FluxionBody __ "}"
     {
       return {
