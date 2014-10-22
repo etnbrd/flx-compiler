@@ -1,9 +1,13 @@
-fluxion starter [] {
-	function truc() {
-		return async(>> poster (message, content));
-	}
+init {
+  ⚠ truc trqdsfq ⚠
+  truc (one, two, three) {truc: stuff}
+  ⚠ truc trqdsfq ⚠
 }
 
-fluxion poster [one, two, three] {
-
+fluxion truc (one, two, three) {
+  stuff: truc
+} {
+  ⚠ truc trqdsfq ⚠
+  truc (one, two, three) {truc: stuff}
+  ⚠ truc trqdsfq ⚠  
 }

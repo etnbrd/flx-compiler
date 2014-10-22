@@ -1,4 +1,9 @@
 /*
+ * Fluxional Grammar
+ * =================
+ * 
+ * Based on the following Javascript Grammar
+ *
  * JavaScript Grammar
  * ==================
  *
@@ -104,13 +109,10 @@
   }
 }
 
+Start
+  = __ program:Program __ { return program; }
 
 /* ----- A.1 Lexical Grammar ----- */
-
-Start
-  = __ program:Program? __ {
-    return program;
-  }
 
 SourceCharacter
   = .
@@ -223,6 +225,9 @@ Keyword
   / VoidToken
   / WhileToken
   / WithToken
+  / FluxionToken
+  / StartToken
+  / PostToken
 
 FutureReservedWord
   = ClassToken
@@ -499,6 +504,13 @@ VoidToken       = "void"       !IdentifierPart
 WhileToken      = "while"      !IdentifierPart
 WithToken       = "with"       !IdentifierPart
 
+FluxionToken    = "fluxion"    !IdentifierPart
+StartToken      = ">>"         !IdentifierPart
+PostToken       = "->"         !IdentifierPart
+ArrowToken
+  = StartToken {return 'start'}
+  / PostToken {return 'post'}
+
 /* Skipped */
 
 __
@@ -696,9 +708,23 @@ Arguments
     }
 
 ArgumentList
-  = first:AssignmentExpression rest:(__ "," __ AssignmentExpression)* {
+  = first:MetaAssignementExpression rest:(__ "," __ MetaAssignementExpression)* {
       return buildList(first, rest, 3);
     }
+
+StreamIdentifier
+  = type:ArrowToken __ id:Identifier __ "(" __ signature:(FormalParameterList)? __ ")" __
+  {
+    return {
+      type: "Stream",
+      id: id,
+      signature: optionalList(signature)
+    }
+  }
+
+MetaAssignementExpression
+  = AssignmentExpression
+  / StreamIdentifier
 
 LeftHandSideExpression
   = CallExpression
@@ -1294,7 +1320,7 @@ Finally
 DebuggerStatement
   = DebuggerToken EOS { return { type: "DebuggerStatement" }; }
 
-/* ----- A.5 Functions and Programs ----- */
+/* ----- A.5 Functions, Fluxions and Programs ----- */
 
 FunctionDeclaration
   = FunctionToken __ id:Identifier __
@@ -1322,6 +1348,7 @@ FunctionExpression
       };
     }
 
+
 FormalParameterList
   = first:Identifier rest:(__ "," __ Identifier)* {
       return buildList(first, rest, 3);
@@ -1335,13 +1362,39 @@ FunctionBody
       };
     }
 
-/*Program
+FluxionDeclaration
+  = FluxionToken __ id:Identifier __
+    "[" __ context:(FormalParameterList)? __ "]" __
+    "{" __ body:FluxionBody __ "}"
+    {
+      return {
+        type:   "FluxionDeclaration",
+        id:     id,
+        context: optionalList(context),
+        body:   body
+      };
+    }
+
+FluxionBody
   = body:SourceElements? {
+    return {
+      type: "FluxionBody",
+      body: optionalList(body)
+    }
+  }
+
+Program
+  = body:FluxionDeclarations? {
       return {
         type: "Program",
         body: optionalList(body)
       };
-    }*/
+    }
+
+FluxionDeclarations
+  = first:FluxionDeclaration rest:(__ FluxionDeclaration)* {
+      return buildList(first, rest, 1);
+    }
 
 SourceElements
   = first:SourceElement rest:(__ SourceElement)* {
@@ -1352,125 +1405,4 @@ SourceElement
   = Statement
   / FunctionDeclaration
 
-/* ----- A.6 Universal Resource Identifier Character Classes ----- */
-
-/* Irrelevant. */
-
-/* ----- A.7 Regular Expressions ----- */
-
-/* Irrelevant. */
-
-/* ----- A.8 JSON ----- */
-
-/* Irrelevant. */
-
-/* ----- Fluxions ----- */
-
-Program
-  = init:Init fluxions:(__ Fluxion)*{
-      return {
-        type: "Program",
-        init: init,
-        fluxions: buildList(init, fluxions, 1)
-      };
-    }
-
-Init
-  = InitToken __
-    body:FluxionBody
-    {
-      return {
-        type:   "Init",
-        body: body
-      };
-    }
-
-Fluxion
-  = FluxionToken __ id:Identifier __
-    input: Input __
-    context:Context __
-    body:FluxionBody
-    {
-      return {
-        type:   "Fluxion",
-        id:     id,
-        input: input,
-        context: context,
-        body:   body
-      };
-    }
-
-
-Input
-  = "(" __ input:(IdentifierList)? __ ")" {
-      return optionalList(input);
-    }
-
-Context
-  = ObjectLiteral
-
-FluxionBody
-  = "{" __ stuff:CommentOrCall* __ "}" {
-
-    return {
-      type: "FluxionBody",
-      body: stuff,
-      output: stuff.filter(function(n) {
-        return n.type;
-      })
-    }
-  }
-
-CommentOrCall
-  = comment:FluxionComment __ {
-    return comment;
-  } 
-  / call:FluxionCall __ {
-    return call;
-  }
-
-FluxionCall
-  = id:Identifier __
-    arguments:FluxionArguments __
-    rhythm:Rhythm
-    {
-      return {
-        type: "GenericStream",
-        id: id,
-        arguments: arguments,
-        rhythm: rhythm
-      }
-    }
-
-FluxionArguments
-  = "(" __ arguments:(IdentifierList)? __ ")" {
-    return optionalList(arguments);
-  }
-
-Rhythm 
-  = ObjectLiteral
-
-
-IdentifierList
-  = first:Identifier rest:(__ "," __ Identifier)* {
-      return buildList(first, rest, 3);
-    }
-
-FluxionToken
-  = "fluxion"    !IdentifierPart
-
-InitToken
-  = "init"       !IdentifierPart
-
-BreakToken
-  = "⚠"         !IdentifierPart
-
-AnyCharButBreak
-  = (!BreakToken car:SourceCharacter) {
-    return car;
-  }
-
-FluxionComment
-  = BreakToken car:AnyCharButBreak* BreakToken {
-    return car.join('');
-  }
+/* ----- A.5 Functions and Programs ----- */

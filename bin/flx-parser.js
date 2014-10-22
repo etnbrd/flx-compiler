@@ -9,6 +9,12 @@ if (!filename) {
     return 0;
 }
 
-var res = parser.parse('' + fs.readFileSync(filename));
+var file = fs.readFileSync(filename);
+
+console.log(file.toString());
+
+console.log('\n ---- \n');
+
+var res = parser.parse('' + file);
 
 console.log(require('util').inspect(res, false, 12));
