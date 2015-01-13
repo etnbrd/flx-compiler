@@ -1423,11 +1423,11 @@ FluxionBody
 
 CommentOrCall
   = comment:FluxionComment __ {
-    return comment;
-  } 
+      return comment;
+    } 
   / call:FluxionCall __ {
-    return call;
-  }
+      return call;
+    }
 
 FluxionCall
   = id:Identifier __
@@ -1444,8 +1444,8 @@ FluxionCall
 
 FluxionArguments
   = "(" __ arguments:(IdentifierList)? __ ")" {
-    return optionalList(arguments);
-  }
+      return optionalList(arguments);
+    }
 
 Rhythm 
   = ObjectLiteral
@@ -1467,10 +1467,10 @@ BreakToken
 
 AnyCharButBreak
   = (!BreakToken car:SourceCharacter) {
-    return car;
-  }
+      return car;
+    }
 
 FluxionComment
   = BreakToken car:AnyCharButBreak* BreakToken {
-    return car.join('');
-  }
+      return car.join('');
+    }
