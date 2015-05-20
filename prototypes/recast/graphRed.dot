@@ -1,0 +1,14 @@
+digraph G {
+
+  graph [ fontname="HelveticaNeue-Thin", fontcolor=black, fontsize=20 ];
+  node [ fontname="HelveticaNeue-Thin", fontcolor=black, fontsize=20, penwidth=0.5 shape=circle, fixedsize=true, width=1.2, height=1.2 ];
+  edge [ fontname="HelveticaNeue-Thin", fontcolor=black, fontsize=20, penwidth=0.5 splines=line, arrowsize=0.7 ];
+
+  plus [label="+"]
+  ab [label="a,b"]   45 [label="4,5"]   ab [label="a,b"] 
+
+  ab -> plus;
+  plus -> return;
+  return -> c;
+  45 -> ab;
+}

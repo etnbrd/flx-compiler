@@ -1,0 +1,141 @@
+{
+  "program": {
+    "type": "Program",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "app"
+            },
+            "init": {
+              "type": "CallExpression",
+              "callee": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "require"
+                },
+                "arguments": [
+                  {
+                    "type": "Literal",
+                    "value": "express",
+                    "raw": "'express'"
+                  }
+                ]
+              },
+              "arguments": []
+            }
+          }
+        ],
+        "kind": "var"
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "MemberExpression",
+            "computed": false,
+            "object": {
+              "type": "Identifier",
+              "name": "app"
+            },
+            "property": {
+              "type": "Identifier",
+              "name": "get"
+            }
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "value": "/:id",
+              "raw": "\"/:id\""
+            },
+            {
+              "type": "FunctionExpression",
+              "id": {
+                "type": "Identifier",
+                "name": "reply"
+              },
+              "params": [
+                {
+                  "type": "Identifier",
+                  "name": "req"
+                },
+                {
+                  "type": "Identifier",
+                  "name": "res"
+                }
+              ],
+              "defaults": [],
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "expression": {
+                      "type": "CallExpression",
+                      "callee": {
+                        "type": "MemberExpression",
+                        "computed": false,
+                        "object": {
+                          "type": "Identifier",
+                          "name": "res"
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "name": "send"
+                        }
+                      },
+                      "arguments": [
+                        {
+                          "type": "Literal",
+                          "value": "reply",
+                          "raw": "\"reply\""
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "rest": null,
+              "generator": false,
+              "expression": false
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "expression": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "MemberExpression",
+            "computed": false,
+            "object": {
+              "type": "Identifier",
+              "name": "app"
+            },
+            "property": {
+              "type": "Identifier",
+              "name": "listen"
+            }
+          },
+          "arguments": [
+            {
+              "type": "Literal",
+              "value": 8080,
+              "raw": "8080"
+            }
+          ]
+        }
+      }
+    ],
+    "errors": []
+  },
+  "type": "File"
+}

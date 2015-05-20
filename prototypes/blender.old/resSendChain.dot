@@ -1,0 +1,27 @@
+digraph G {
+
+  graph [ fontname="HelveticaNeue-Thin", fontcolor=black, fontsize=10 ];
+  node [ fontname="HelveticaNeue-Thin", fontcolor=black, fontsize=10, penwidth=0.5 shape=circle, fixedsize=true, width=1.2, height=1.2 ];
+  edge [ fontname="HelveticaNeue-Thin", fontcolor=black, fontsize=10, penwidth=0.5 splines=line, arrowsize=0.7 ];
+
+  subgraph cluster_iextract {
+
+   label = <extract<br/><font color="#404040" point-size="5">11111128-1025</font>>;
+
+    i11111128_1025 [label=<count<br/><font color="#404040" point-size="5">VariableDeclarator[1]</font><br/><font color="#404040" point-size="5">11111128-1025</font>>]
+    i11191128_1023 [label=<+<br/><font color="#404040" point-size="5">BinaryExpression</font><br/><font color="#404040" point-size="5">11191128-1023</font>>]
+    i11271128_1024 [label=<1<br/><font color="#404040" point-size="5">Literal</font><br/><font color="#404040" point-size="5">11271128-1024</font>>]
+    i4449_1007 [label=<count<br/><font color="#404040" point-size="5">VariableDeclarator</font><br/><font color="#404040" point-size="5">4449-1007</font>>]
+    i412413_1009 [label=<0<br/><font color="#404040" point-size="5">Literal</font><br/><font color="#404040" point-size="5">412413-1009</font>>]
+    i60122_1010 [label=<app.get<br/><font color="#404040" point-size="5">CallExpression</font><br/><font color="#404040" point-size="5">60122-1010</font>>]
+    i1121129_1020 [label=<res.send<br/><font color="#404040" point-size="5">CallExpression</font><br/><font color="#404040" point-size="5">1121129-1020</font>>]
+
+    i11191128_1023 -> i11111128_1025 [label="Assignment"]
+    i11271128_1024 -> i11191128_1023 [label="BinaryExpression"]
+    i4449_1007 -> i11191128_1023 [label="BinaryExpression"]
+    i412413_1009 -> i4449_1007 [label="VariableDeclarator"]
+    i4449_1007 -> i60122_1010 [label="Before"]
+    i11111128_1025 -> i1121129_1020 [label="Argument"]
+  }
+
+}

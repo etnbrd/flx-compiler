@@ -1,0 +1,7 @@
+\begin{tikzpicture}
+\begin{axis}[xlabel = Number of simultaneous connections, ylabel = Response time]
+\addplot[color = blue] coordinates {(1000, 134302.590078) (4000, 135075.19613275) (7000, 140147.835067)};
+\addplot[color = red] coordinates {(1000, 225630.472074) (4000, 247809.1855825) (7000, 246751.69367514286)};
+\legend{basic, setImmediate};
+\end{axis}
+\end{tikzpicture}
